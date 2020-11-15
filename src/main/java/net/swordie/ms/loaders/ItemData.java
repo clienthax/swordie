@@ -1352,7 +1352,7 @@ public class ItemData {
                         if(ScrollStat.getScrollStatByString(ssName) != null) {
                             item.putScrollStat(ScrollStat.valueOf(ssName), ssVal);
                         } else {
-                            log.info("non existent scroll stat" + ssName);
+                            log.info("non-existent scroll stat " + ssName + " (#"+id+")");
                         }
                     }
                     Node spec = XMLApi.getFirstChildByNameBF(mainNode, "spec");
