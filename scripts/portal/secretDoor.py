@@ -30,7 +30,7 @@ elif sm.hasQuest(passEntry):
         answer = sm.sendAskText("Please enter the passcode.", "", 1, 10)
         if answer == password[:10]:
             successStr = "The security device has been unlocked. "
-            #Store the current society's key into QRvalue
+            # Store the current society's key into QRvalue
             password += societyKey
             # Were both sides already unlocked?
             if any(unlockString in password for unlockString in unlocked):
@@ -44,7 +44,7 @@ elif sm.hasQuest(passEntry):
                 sm.warp(secretPassage, passageSides[currentSociety][1])
                 sm.completeQuest(passEntry)
         else:
-            sm.chat("The security device rejected your password." + str(password))
+            sm.chat("The security device rejected your password.")
 
 else:
     sm.chat("Your name is not on the list.")
