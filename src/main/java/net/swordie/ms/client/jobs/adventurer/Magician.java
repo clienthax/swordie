@@ -185,7 +185,7 @@ public class Magician extends Beginner {
             RESURRECTION,
             INFINITY_BISH,
             BAHAMUT,
-            HEAL,
+            //HEAL, (not a buff)
 
             EPIC_ADVENTURE_FP,
             EPIC_ADVENTURE_IL,
