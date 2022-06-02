@@ -818,6 +818,7 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
             case FireBomb:
             case SurplusSupply:
             case Unk460:
+            case ComboCounter:
                 return true;
             default:
                 return false;
@@ -853,6 +854,7 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
             case Unk488:
             case Unk489:
             case Unk460:
+            case ComboCounter:
                 return true;
             default:
                 return false;
