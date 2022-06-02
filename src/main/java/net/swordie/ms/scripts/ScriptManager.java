@@ -420,7 +420,23 @@ public interface ScriptManager extends Observer {
 	 */
 	void addLevel(int level);
 
+	/**
+	 * Removes the game's UI and completely prevents the character from moving via player input.
+	 * InGameDirectionEvent methods, such as forcedInput and moveCamera, won't take effect without locking the UI.
+	 * @param lock Whether to lock the game UI; false will unlock the UI and re-enable player input to char
+	 * @param blackFrame Whether black bars should appear while the UI is locked. Many older cutscenes set this to true
+	 */
+	void lockInGameUI(boolean lock, boolean blackFrame);
 
+	/**
+	 * Applies the specified emotion to the character locally.
+	 * @param emotion The emotion to use, from 1-44. All cash emotes adhere to wz ordering.
+	 * Order is as follows: 1-7: standard, 8-22 and 23-37: original cash emotes, 38: Ursus KO,
+	 * 39-44: foreign cash emotes.
+	 * @param duration The time (in ms) the emotion is active on the character if it's not overwritten
+	 * @param byItemOption Specifies if the emotion was triggered from using an item (e.g. Lamb Kebabs [2010048])
+	 */
+	void localEmotion(int emotion, int duration, boolean byItemOption);
 
 	// Field-related methods -------------------------------------------------------------------------------------------
 
@@ -1518,6 +1534,18 @@ public interface ScriptManager extends Observer {
 	 * 		The amount of Exp given to the {@link Char}
 	 */
 	void showClearStageExpWindow(long expGiven);
+
+	/**
+	 * Covers the client window with the specified coloration filter.
+	 * Note that changing maps will automatically remove any blind effects.
+	 * @param enable Toggles the blind effect; 1 enables it, 0 disables it regardless of color inputs
+	 * @param alpha The filter's color alpha/opacity, from 0-255
+	 * @param red The filter's red RGB value, from 0-255
+	 * @param green The filter's green RGB value, from 0-255
+	 * @param blue The filter's blue RGB value, from 0-255
+	 * @param time The time (in ms) before the blind effect is completely active
+	 */
+	void blind(int enable, int alpha, int red, int green, int blue, int time);
 
 	/**
 	 * Returns a random integer below the number specified.

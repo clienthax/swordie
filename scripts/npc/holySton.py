@@ -9,7 +9,7 @@ shamanDict = {
     105020200: (3, "000100"), # Cold Wind
     105020300: (4, "000010"), # Chilly Cave
     105020400: (5, "000001") # Cave Exit
-    }
+}
 
 if sm.hasQuest(shooEvil):
     # Which map's rock is the user interacting with?
@@ -37,7 +37,7 @@ if sm.hasQuest(shooEvil):
                 shamanStatus = shamanParse[:shamanIndex] + "1" + shamanParse[shamanIndex+1:]
         
         sm.setQRValue(shooEvil, shamanStatus, False)
-        sm.sendSayOkay("You placed the charm onto the #p" + str(parentID) + "#.")
+        sm.sendSayOkay("You placed the charm onto the Shaman Rock.")
     elif not sm.hasItem(charm) and shamanParse[shamanIndex] != "1" and shamanStatus != "111111":
         sm.sendSayOkay("You do not have any more charms. Forfeit the quest and talk to Chrishrama again.")
     else:

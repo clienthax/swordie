@@ -1,11 +1,7 @@
-# Sky Jewel box (2002016) | Treasure Room of Queen (926000010)
-
-eleska = 3935
-skyJewel = 4031574
+# Empty Box (2002016) | Treasure Room of Queen (926000010)
 
 reactor.incHitCount()
+reactor.increaseState()
 
-if reactor.getHitCount() >= 3:
-	if sm.hasQuest(eleska) and not sm.hasItem(skyJewel):
-	    sm.dropItem(skyJewel, sm.getPosition(objectID).getX(), sm.getPosition(objectID).getY())
+if reactor.getHitCount() >= 4:
 	sm.removeReactor()
