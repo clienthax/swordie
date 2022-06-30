@@ -4,6 +4,7 @@ zhenLong = 9310532
 
 yuGardenVisitor = 3700310
 
+sm.removeEscapeButton()
 sm.setSpeakerID(zhenLong)
 sm.setBoxChat()
 sm.sendNext(''.join(["Here's your #i", repr(yuGardenVisitor), "# #z", repr(yuGardenVisitor), "# to prove you passed the test."]))

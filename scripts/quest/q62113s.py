@@ -8,6 +8,7 @@ zhenLong = 9310532
 redBeanPorridge = 4034643
 garlic = 4034656
 
+sm.removeEscapeButton()
 if sm.getEmptyInventorySlots(InvType.ETC) >= 2:
     if not sm.hasItem(redBeanPorridge):
         sm.giveItem(redBeanPorridge)
@@ -15,6 +16,7 @@ if sm.getEmptyInventorySlots(InvType.ETC) >= 2:
         sm.giveItem(garlic)
     sm.startQuest(62113)
 
+    sm.setBoxChat()
     sm.flipBoxChat()
     sm.flipBoxChatPlayerAsSpeaker()
     sm.sendNext("This town is officially weirding me out. You guys are all freaks.")
@@ -33,4 +35,6 @@ if sm.getEmptyInventorySlots(InvType.ETC) >= 2:
     sm.setBoxChat()
     sm.sendNext("It'll all make sense when #p" + repr(zhenLong) + "# explains it to you.")
 else:
+    sm.setSpeakerID(huangZhen)
+    sm.setBoxChat()
     sm.sendNext("Talk to me again after you free up 2 slots in your Etc. inventory.")

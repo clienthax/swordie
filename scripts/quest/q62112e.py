@@ -8,6 +8,7 @@ zhenLong = 9310532
 redBeanPorridge = 4034643
 garlic = 4034656
 
+sm.removeEscapeButton()
 sm.setSpeakerID(huangZhen)
 sm.setBoxChat()
 sm.sendNext("Hello, stranger. I'd welcome you to Yu Garden, except I'm not sure just yet if you're actually welcome.")
