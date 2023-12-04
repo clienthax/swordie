@@ -3,6 +3,7 @@
 huiKoonKit = 9310537
 
 sm.localEmotion(14, 2000, False)
+sm.removeEscapeButton()
 sm.setBoxChat()
 sm.flipBoxChat()
 sm.flipBoxChatPlayerAsSpeaker()

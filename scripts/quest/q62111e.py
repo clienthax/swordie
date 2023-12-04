@@ -6,6 +6,7 @@ tomo = 9310538
 
 yuGarden = 701100000
 
+sm.removeEscapeButton()
 sm.setSpeakerID(zhenLong)
 sm.setBoxChat()
 sm.sendNext("I'm so sorry to bother you, but could you tell me why you're here?")
@@ -32,4 +33,4 @@ if response:
     sm.giveExp(170598)
     sm.sendNext("Thank you for being so wonderfully cooperative! Talk to me again to take the test!")
 else:
-    sm.sendNext("I can't just let you wander around here as you please if you're don't take the test...")
+    sm.sendNext("I can't just let you wander around here as you please if you don't take the test...")

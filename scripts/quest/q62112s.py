@@ -3,6 +3,7 @@
 zhenLong = 9310532
 huangZhen = 9310536
 
+sm.removeEscapeButton()
 sm.setSpeakerID(zhenLong)
 sm.setBoxChat()
 sm.sendNext("Oh, you're a wonderful human being for not giving me any trouble! At least, I hope you are...")
