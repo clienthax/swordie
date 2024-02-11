@@ -8,6 +8,7 @@ import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
 import org.apache.log4j.Logger;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -40,7 +41,7 @@ public class SkillInfo {
     private Map<Integer, Integer> reqSkills = new HashMap<>();
     private boolean notCooltimeReset;
     private boolean notIncBuffDuration;
-    private static ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+    private static ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine("JavaScript");
     private boolean psd;
     private Set<Integer> addAttackSkills = new HashSet<>();
     private Map<Integer, Integer> extraSkillInfo = new HashMap<>();
