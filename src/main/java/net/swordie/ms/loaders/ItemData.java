@@ -10,7 +10,7 @@ import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.loaders.containerclasses.ItemRewardInfo;
 import net.swordie.ms.loaders.containerclasses.PetInfo;
 import net.swordie.ms.util.*;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -32,7 +32,7 @@ public class ItemData implements DataCreator {
     public static List<ItemOption> filteredItemOptions = new ArrayList<>();
     public static Map<Integer, Integer> skillIdByItemId = new HashMap<>();
     private static final Set<Integer> startingItems = new HashSet<>();
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
 

@@ -16,7 +16,8 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.loaders.StringData;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ import static net.swordie.ms.enums.ChatType.*;
 
 public class ChatHandler {
 
-    private static final Logger log = Logger.getLogger(ChatHandler.class);
+    private static final Logger log = LogManager.getLogger(ChatHandler.class);
 
     @Handler(op = InHeader.USER_CHAT)
     public static void handleUserChat(Client c, InPacket inPacket) {

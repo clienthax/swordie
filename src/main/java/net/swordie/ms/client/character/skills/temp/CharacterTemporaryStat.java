@@ -1,6 +1,6 @@
 package net.swordie.ms.client.character.skills.temp;
 
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -581,7 +581,7 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
     private final int val;
     private final int pos;
     public static final int length = 17;
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
     private static final List<CharacterTemporaryStat> ORDER = Arrays.asList(
             STR, INT, DEX, LUK, PAD, PDD, MAD, MDD, ACC, EVA, EVAR, Craft, Speed, Jump, EMHP, EMMP, EPAD, EMAD, EPDD,

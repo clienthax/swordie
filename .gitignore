@@ -22,3 +22,6 @@ resourcesNpc
 resourcesSkill.txt
 *.iml
 Exclude/
+
+.gradle
+build

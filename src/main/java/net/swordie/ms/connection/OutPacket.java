@@ -8,7 +8,7 @@ import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class OutPacket extends Packet {
     private final boolean loopback = false;
     private final boolean encryptedByShanda = false;
     private short op;
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
     /**
      * Creates a new OutPacket with a given op. Immediately encodes the op.

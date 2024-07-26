@@ -8,7 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.swordie.ms.connection.crypto.MapleCrypto;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import net.swordie.ms.connection.packet.Login;
 
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import static net.swordie.ms.connection.netty.NettyClient.CLIENT_KEY;
 public class ChatAcceptor implements Runnable{
 
     public static Map<String, Channel> channelPool = new HashMap<>();
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     @Override
     public void run() {
         // Taken from http://netty.io/wiki/user-guide-for-4.x.html

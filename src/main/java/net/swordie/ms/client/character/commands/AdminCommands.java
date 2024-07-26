@@ -38,7 +38,7 @@ import net.swordie.ms.util.Util;
 import net.swordie.ms.world.event.InGameEventManager;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.world.field.Portal;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -57,7 +57,7 @@ import static net.swordie.ms.enums.InventoryOperation.Add;
  * Created on 12/22/2017.
  */
 public class AdminCommands {
-    static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
     @Command(names = {"test"}, requiredType = Admin)
     public static class Test extends AdminCommand {

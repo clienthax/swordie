@@ -25,7 +25,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
@@ -37,7 +37,7 @@ import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat
  * Created on 1/3/2018.
  */
 public class TemporaryStatManager {
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     private final Map<CharacterTemporaryStat, List<Option>> currentStats = new HashMap<>();
     private final Map<CharacterTemporaryStat, List<Option>> newStats = new HashMap<>();
     private final Map<CharacterTemporaryStat, List<Option>> removedStats = new HashMap<>();

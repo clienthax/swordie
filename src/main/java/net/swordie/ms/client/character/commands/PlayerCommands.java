@@ -9,7 +9,7 @@ import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.event.InGameEventManager;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static net.swordie.ms.enums.ChatType.Mob;
 
 public class PlayerCommands {
-    static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
     @Command(names = {"check", "dispose", "fix"}, requiredType = AccountType.Player)
     public static class Dispose extends PlayerCommand {

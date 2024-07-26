@@ -19,8 +19,8 @@ import net.swordie.ms.world.World;
 import net.swordie.ms.world.shop.cashshop.CashShop;
 import net.swordie.ms.world.shop.cashshop.CashShopCategory;
 import net.swordie.ms.world.shop.cashshop.CashShopItem;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -56,6 +56,7 @@ public class Server extends Properties {
 	}
 
 	private void init(String[] args) {
+
 		log.info("Starting server.");
 		long startNow = System.currentTimeMillis();
 		DatabaseManager.init();

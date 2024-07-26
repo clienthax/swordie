@@ -11,9 +11,11 @@ import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.life.Merchant.EmployeeTrunk;
 import net.swordie.ms.loaders.StringData;
 import net.swordie.ms.util.Util;
-import org.apache.log4j.Logger;
 
 import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ import java.util.Set;
 public class Account {
 
     @Transient
-    private static final Logger log = Logger.getLogger(Account.class);
+    private static final Logger log = LogManager.getLogger(Account.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

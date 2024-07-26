@@ -9,7 +9,7 @@ import net.swordie.ms.life.Life;
 import net.swordie.ms.life.npc.Npc;
 import net.swordie.ms.life.Reactor;
 import net.swordie.ms.ServerConstants;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -32,7 +32,7 @@ public class FieldData implements DataCreator {
 
     private static final List<Field> fields = new ArrayList<>();
     private static final List<Integer> worldMapFields = new ArrayList<>();
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
     public static void main(String[] args) {
@@ -145,28 +145,7 @@ public class FieldData implements DataCreator {
         Session session = DatabaseManager.getSession();
         Transaction transaction = session.beginTransaction();
 
-        /*
-        Query loadNpcQuery = session.createNativeQuery("SELECT * FROM npc");
 
-        List<Object[]> results = loadNpcQuery.getResultList();
-
-        for(Object[] r : results) {
-            Npc n = NpcData.getNpcDeepCopyById((Integer)r[1]);
-            Field f = getFieldById( (Integer)r[2] );
-
-            Position p = new Position();
-            p.setX((Integer)r[3]);
-            p.setY((Integer)r[4]);
-
-            n.setPosition(p);
-            n.setCy((Integer)r[5]);
-            n.setRx0((Integer)r[6]);
-            n.setRx1((Integer)r[7]);
-            n.setFh((Integer)r[8]);
-
-            f.addLife(n);
-        }
-*/
         Query loadNpcQuery = session.createNativeQuery("SELECT * FROM npc");
 
         List<Object[]> results = loadNpcQuery.getResultList();

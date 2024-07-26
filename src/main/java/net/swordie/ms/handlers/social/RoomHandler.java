@@ -27,14 +27,15 @@ import net.swordie.ms.life.Merchant.MerchantItem;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.world.World;
 import net.swordie.ms.world.field.Field;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 public class RoomHandler {
 
-    private static final Logger log = Logger.getLogger(RoomHandler.class);
+    private static final Logger log = LogManager.getLogger(RoomHandler.class);
 
     @Handler(op = InHeader.MINI_ROOM)
     public static void handleMiniRoom(Char chr, InPacket inPacket) {

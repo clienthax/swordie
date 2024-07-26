@@ -43,7 +43,8 @@ import net.swordie.ms.world.shop.NpcShopItem;
 import net.swordie.ms.world.shop.cashshop.CashItemInfo;
 import net.swordie.ms.world.shop.cashshop.CashShopCategory;
 import net.swordie.ms.world.shop.cashshop.CashShopItem;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -70,7 +71,7 @@ import java.util.stream.Collectors;
  * Created on 12/12/2017.
  */
 public class DatabaseManager {
-    private static final Logger log = Logger.getLogger(DatabaseManager.class);
+    private static final Logger log = LogManager.getLogger(DatabaseManager.class);
     private static final int KEEP_ALIVE_MS = 10 * 60 * 1000; // 10 minutes
 
     private static SessionFactory sessionFactory;
@@ -92,7 +93,7 @@ public class DatabaseManager {
             settings.put(Environment.USER, "root");
             settings.put(Environment.PASS, "cheese");
             settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
-            settings.put(Environment.SHOW_SQL, "true");
+            settings.put(Environment.SHOW_SQL, "false");
             settings.put(Environment.FORMAT_SQL, "true");
             settings.put(Environment.USE_SQL_COMMENTS, "true");
             settings.put(Environment.HBM2DDL_AUTO, "update");
@@ -177,6 +178,9 @@ public class DatabaseManager {
             // Start heart beat
             sendHeartBeat();
         } catch (Exception e) {
+
+            log.fatal("Failed to bring up sql connection", e);
+
             e.printStackTrace();
             throw new ExceptionInInitializerError(e);
         }

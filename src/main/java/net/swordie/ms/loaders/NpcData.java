@@ -5,7 +5,8 @@ import net.swordie.ms.life.npc.Npc;
 import net.swordie.ms.world.shop.NpcShopDlg;
 import net.swordie.ms.world.shop.NpcShopItem;
 import net.swordie.ms.ServerConstants;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Node;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.XMLApi;
@@ -17,7 +18,7 @@ import java.util.*;
  * Created on 2/19/2018.
  */
 public class NpcData implements DataCreator {
-	private static final Logger log = Logger.getLogger(NpcData.class);
+	private static final Logger log = LogManager.getLogger(NpcData.class);
 	private static final boolean LOG_UNKS = false;
 
 	private static final Set<Npc> npcs = new HashSet<>();

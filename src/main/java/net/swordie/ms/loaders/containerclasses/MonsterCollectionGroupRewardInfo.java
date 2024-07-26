@@ -1,8 +1,6 @@
 package net.swordie.ms.loaders.containerclasses;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 /**

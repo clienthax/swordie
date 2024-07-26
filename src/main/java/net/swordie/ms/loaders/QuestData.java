@@ -12,7 +12,7 @@ import net.swordie.ms.enums.QuestStatus;
 import net.swordie.ms.enums.Stat;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.loaders.containerclasses.QuestInfo;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Node;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.XMLApi;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 public class QuestData implements DataCreator {
     private static final Set<QuestInfo> baseQuests = new HashSet<>();
-    private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
+    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
     public static void loadQuestsFromWZ() {
