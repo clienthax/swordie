@@ -1,25 +1,21 @@
 package net.swordie.ms.connection.netty;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import net.swordie.ms.ServerConstants;
 import net.swordie.ms.client.Client;
 import net.swordie.ms.client.User;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
-import net.swordie.ms.util.Util;
 import org.apache.logging.log4j.LogManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static net.swordie.ms.connection.netty.NettyClient.CLIENT_KEY;
 
@@ -33,38 +29,40 @@ public class ChannelHandler extends SimpleChannelInboundHandler<InPacket> {
     private static final Map<InHeader, Method> handlers = new HashMap<>();
 
     public static void initHandlers(boolean mayOverride) {
+        String handlersPackage = Handler.class.getPackage().getName();
+
         long start = System.currentTimeMillis();
-        String handlersDir = ServerConstants.HANDLERS_DIR;
-        Set<File> files = new HashSet<>();
-        Util.findAllFilesInDirectory(files, new File(handlersDir));
-        for (File file : files) {
-            try {
-                // grab all files in the handlers dir, strip them to their package name, and remove .java extension
-                String className = file.getPath()
-                        .replaceAll("[\\\\|/]", ".")
-                        .split("src\\.main\\.java\\.")[1]
-                        .replaceAll("\\.java", "");
-                Class clazz = Class.forName(className);
+
+        try (ScanResult scanResult = new ClassGraph()
+                .enableAllInfo()
+                .acceptPackages(handlersPackage)
+                .scan()) {
+            List<Class<?>> classes = scanResult.getClassesWithMethodAnnotation(Handler.class.getName()).loadClasses();
+
+            for (Class<?> clazz : classes) {
                 for (Method method : clazz.getMethods()) {
                     Handler handler = method.getAnnotation(Handler.class);
-                    if (handler != null) {
-                        InHeader header = handler.op();
-                        if (header != InHeader.NO) {
-                            if (handlers.containsKey(header) && !mayOverride) {
-                                throw new IllegalArgumentException(String.format("Multiple handlers found for header %s! " +
-                                        "Had method %s, but also found %s.", header, handlers.get(header).getName(), method.getName()));
-                            }
-                            handlers.put(header, method);
+                    if (handler == null) {
+                        continue;
+                    }
+
+                    InHeader header = handler.op();
+                    if (header != InHeader.NO) {
+                        if (handlers.containsKey(header) && !mayOverride) {
+                            throw new IllegalArgumentException(String.format("Multiple handlers found for header %s! Had method %s, but also found %s.", header, handlers.get(header).getName(), method.getName()));
                         }
-                        InHeader[] headers = handler.ops();
-                        for (InHeader h : headers) {
-                            handlers.put(h, method);
-                        }
+                        handlers.put(header, method);
+                        log.debug("Added handler for header {} with method {}", header, method.getName());
+                    }
+
+                    InHeader[] headers = handler.ops();
+                    for (InHeader h : headers) {
+                        handlers.put(h, method);
                     }
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         log.info("Initialized {} handlers in {}ms.", handlers.size(), System.currentTimeMillis() - start);
     }
@@ -75,9 +73,9 @@ public class ChannelHandler extends SimpleChannelInboundHandler<InPacket> {
         Client c = (Client) ctx.channel().attr(CLIENT_KEY).get();
         User user = c.getUser();
         Char chr = c.getChr();
-        if (c != null && chr != null && !chr.isChangingChannel()) {
+        if (chr != null && !chr.isChangingChannel()) {
             chr.logout();
-        } else if (c != null && chr != null && chr.isChangingChannel()) {
+        } else if (chr != null && chr.isChangingChannel()) {
             chr.setChangingChannel(false);
         } else if (user != null) {
             user.unstuck();
@@ -108,7 +106,7 @@ public class ChannelHandler extends SimpleChannelInboundHandler<InPacket> {
             if (method == null) {
                 handleUnknown(inPacket, op);
             } else {
-                Class clazz = method.getParameterTypes()[0];
+                Class<?> clazz = method.getParameterTypes()[0];
                 try {
                     if (method.getParameterTypes().length == 3) {
                         method.invoke(this, chr, inPacket, inHeader);

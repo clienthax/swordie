@@ -58,7 +58,7 @@ public enum DBChar {
     All(0xFFFFFFFFFFFFFFFFL),
     ItemSlot(0x7C);
 
-    public long uFlag;
+    public final long uFlag;
 
     DBChar(long uFlag) {
         this.uFlag = uFlag;

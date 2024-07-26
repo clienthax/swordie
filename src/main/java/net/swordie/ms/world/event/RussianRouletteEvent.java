@@ -36,8 +36,8 @@ public class RussianRouletteEvent implements InGameEvent {
     private boolean started = false;
     private boolean active = false;
     private long startTimeMillis;
-    private ScheduledFuture startTimer;
-    private ScheduledFuture killTimer;
+    private ScheduledFuture<?> startTimer;
+    private ScheduledFuture<?> killTimer;
     private int currentRound = 1;
     private Channel channelInstance;
 

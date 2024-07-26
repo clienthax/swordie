@@ -34,7 +34,7 @@ public class Instance {
     private final Map<Integer, Field> fields = new HashMap<>();
     private final Map<String, Object> properties = new HashMap<>();
     private final FieldInstanceType instanceType;
-    private ScheduledFuture warpOutTimer;
+    private ScheduledFuture<?> warpOutTimer;
     private long warpOutTimeout;
     private List<Char> chars = new ArrayList<>();
     private int forcedReturnPortalId = -1;
@@ -173,7 +173,7 @@ public class Instance {
      * Returns the timer of the event that will warp everyone out of this Instance.
      * @return warp out event timer
      */
-    public ScheduledFuture getWarpOutTimer() {
+    public ScheduledFuture<?> getWarpOutTimer() {
         return warpOutTimer;
     }
 

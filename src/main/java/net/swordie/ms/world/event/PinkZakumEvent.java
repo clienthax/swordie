@@ -30,8 +30,8 @@ public class PinkZakumEvent implements InGameEvent {
     private boolean started = false;
     private boolean active = false;
     private long startTimeMillis;
-    private ScheduledFuture startTimer;
-    private ScheduledFuture endTimer;
+    private ScheduledFuture<?> startTimer;
+    private ScheduledFuture<?> endTimer;
     private Channel channelInstance;
     private Map<Integer, Boolean> winners = new HashMap<>();
     private final int eventNpc = 9000155; // dizzy the roulette event administrator

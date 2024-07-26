@@ -84,8 +84,8 @@ public class Xenon extends Job {
     private int supply;
     private int supplyProp;
     private int hybridDefenseCount;
-    private ScheduledFuture supplyTimer;
-    private static ScheduledFuture temporalPodTimer;
+    private ScheduledFuture<?> supplyTimer;
+    private static ScheduledFuture<?> temporalPodTimer;
 
     private final int[] addedSkills = new int[]{
             SUPPLY_SURPLUS,

@@ -50,49 +50,37 @@ public class CathingScheduledThreadPoolExecutor extends ScheduledThreadPoolExecu
         return new LogOnExceptionCallable<>(command);
     }
 
-    private class LogOnExceptionRunnable implements Runnable {
-        private final Runnable runnable;
-
-        public LogOnExceptionRunnable(Runnable runnable) {
-            super();
-            this.runnable = runnable;
-        }
+    private record LogOnExceptionRunnable(Runnable runnable) implements Runnable {
 
         @Override
-        public void run() {
-            try {
-                runnable.run();
-            } catch (Exception e) {
-                log.error(String.format("error in executing: %s. It will no longer be run!", runnable));
-                e.printStackTrace();
+            public void run() {
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    log.error(String.format("error in executing: %s. It will no longer be run!", runnable));
+                    e.printStackTrace();
 
-                // and re throw it so that the Executor also gets this error so that it can do what it would
-                // usually do
-                throw new RuntimeException(e);
+                    // and re throw it so that the Executor also gets this error so that it can do what it would
+                    // usually do
+                    throw new RuntimeException(e);
+                }
             }
         }
-    }
 
-    private class LogOnExceptionCallable<V> implements Callable<V> {
-        private final Callable<V> callable;
-
-        public LogOnExceptionCallable(Callable<V> callable) {
-            super();
-            this.callable = callable;
-        }
+    private record LogOnExceptionCallable<V>(Callable<V> callable) implements Callable<V> {
 
         @Override
-        public V call() throws Exception {
-            try {
-                return callable.call();
-            } catch (Exception e) {
-                log.error(String.format("error in executing: %s. It will no longer be run!", callable));
-                e.printStackTrace();
+            public V call() throws Exception {
+                try {
+                    return callable.call();
+                } catch (Exception e) {
+                    log.error(String.format("error in executing: %s. It will no longer be run!", callable));
+                    e.printStackTrace();
 
-                // and re throw it so that the Executor also gets this error so that it can do what it would
-                // usually do
-                throw new RuntimeException(e);
+                    // and re throw it so that the Executor also gets this error so that it can do what it would
+                    // usually do
+                    throw new RuntimeException(e);
+                }
             }
         }
-    }
 }

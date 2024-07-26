@@ -57,8 +57,8 @@ import static net.swordie.ms.client.jobs.cygnus.Mihile.*;
  * Created on 1/2/2018.
  */
 public abstract class Job {
-    protected Char chr;
-	protected Client c;
+    protected final Char chr;
+	protected final Client c;
 
 	public static final int MONOLITH = 80011261;
 	public static final int ELEMENTAL_SYLPH = 80001518;

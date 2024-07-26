@@ -158,7 +158,7 @@ public class Warrior extends Beginner {
     private static int killCount;
     private int lastCharge = 0;
     private int divShieldAmount = 0;
-    private ScheduledFuture parashockGuardTimer;
+    private ScheduledFuture<?> parashockGuardTimer;
 
     public Warrior(Char chr) {
         super(chr);

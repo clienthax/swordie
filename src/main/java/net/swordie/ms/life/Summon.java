@@ -30,7 +30,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import java.util.stream.Collectors;
 
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.IndieEmpty;
 
@@ -366,7 +365,7 @@ public class Summon extends Life {
     public void broadcastSpawnPacket(Char onlyChar) {
         Field field = getField();
         if (getSummonTerm() > 0) {
-            ScheduledFuture sf = EventManager.addEvent(() -> field.removeLife(getObjectId(), true), getSummonTerm());
+            ScheduledFuture<?> sf = EventManager.addEvent(() -> field.removeLife(getObjectId(), true), getSummonTerm());
             field.addLifeSchedule(this, sf);
         }
         field.broadcastPacket(Summoned.summonedCreated(getChr().getId(), this));

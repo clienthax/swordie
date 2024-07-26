@@ -24,7 +24,7 @@ public class AttackInfo {
     public byte reduceCount;
     public int psdTargetPlus;
     public int someId;
-    public List<MobAttackInfo> mobAttackInfo = new ArrayList<>();
+    public final List<MobAttackInfo> mobAttackInfo = new ArrayList<>();
     public int y;
     public int x;
     public short forcedY;
@@ -42,16 +42,16 @@ public class AttackInfo {
     public int grenadeId;
     public byte zero;
     public int bySummonedID;
-    public Position ptTarget = new Position();
+    public final Position ptTarget = new Position();
     public int finalAttackLastSkillID;
     public byte finalAttackByte;
     public boolean ignorePCounter;
     public int spiritCoreEnhance;
-    public Position ptAttackRefPoint = new Position();
+    public final Position ptAttackRefPoint = new Position();
     public Position idkPos = new Position();
     public Position pos = new Position();
     public byte fh;
-    public Position teleportPt = new Position();
+    public final Position teleportPt = new Position();
     public short Vx;
     public Position grenadePos;
     public Rect rect;

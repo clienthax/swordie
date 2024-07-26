@@ -44,7 +44,7 @@ public class Server extends Properties {
 	private final Set<Integer> users = new HashSet<>(); // just save the ids, no need to save the references
 	private CashShop cashShop;
 
-	private CommandHandler commandHandler = new CommandHandler();
+	private final CommandHandler commandHandler = new CommandHandler();
 
 	public static Server getInstance() {
 		return server;
@@ -122,10 +122,10 @@ public class Server extends Properties {
 		}
 	}
 
-	// TODO Haxy: unfuck this..
 	public void loadWzData() throws IllegalAccessException, InvocationTargetException {
 		String datFolder = ServerConstants.DAT_DIR;
-		for (Class c : DataClasses.dataClasses) {
+
+		for (Class<?> c : DataClasses.dataClasses) {
 			for (Method method : c.getMethods()) {
 				String name;
 				Loader annotation = method.getAnnotation(Loader.class);

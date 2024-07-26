@@ -84,8 +84,8 @@ public class Mihile extends Job {
             SACRED_CUBE,
     };
 
-    private ScheduledFuture soulLinkBuffsTimer;
-    private ScheduledFuture soulLinkHPRegenTimer;
+    private ScheduledFuture<?> soulLinkBuffsTimer;
+    private ScheduledFuture<?> soulLinkHPRegenTimer;
 
     public Mihile(Char chr) {
         super(chr);

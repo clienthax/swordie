@@ -15,11 +15,11 @@ import java.util.*;
  * Created on 1/11/2018.
  */
 public class StringData implements DataCreator {
-    public static Map<Integer, SkillStringInfo> skillString = new HashMap<>();
-    public static Map<Integer, String> itemStrings = new HashMap<>();
-    public static Map<Integer, String> mapStrings = new HashMap<>();
-    public static Map<Integer, String> mobStrings = new HashMap<>(); // name + health
-    public static Map<Integer, String> npcStrings = new HashMap<>();
+    public static final Map<Integer, SkillStringInfo> skillString = new HashMap<>();
+    public static final Map<Integer, String> itemStrings = new HashMap<>();
+    public static final Map<Integer, String> mapStrings = new HashMap<>();
+    public static final Map<Integer, String> mobStrings = new HashMap<>(); // name + health
+    public static final Map<Integer, String> npcStrings = new HashMap<>();
 
     private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 

@@ -17,7 +17,7 @@ public enum ForcedInputType {
     JumpDown(8),
     ;
 
-    int val;
+    final int val;
 
     ForcedInputType(int val) {
         this.val = val;

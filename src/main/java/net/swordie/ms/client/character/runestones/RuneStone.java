@@ -34,7 +34,7 @@ public class RuneStone {
     private RuneType runeType;
     private Position position;
     private boolean flip;
-    private ScheduledFuture thunderTimer;
+    private ScheduledFuture<?> thunderTimer;
 
     public static final int LIBERATE_THE_SWIFT_RUNE = 80001427;
     public static final int LIBERATE_THE_RECOVERY_RUNE = 80001428;

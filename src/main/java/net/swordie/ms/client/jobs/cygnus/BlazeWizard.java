@@ -115,7 +115,7 @@ public class BlazeWizard extends Noblesse {
     Position chrPos;
     int prevmap;
     private final HashMap<Mob, ScheduledFuture> hashMap = new HashMap<>();
-    private ScheduledFuture schFuture;
+    private ScheduledFuture<?> schFuture;
     private Summon summonFox;
     private Summon summonLion;
 

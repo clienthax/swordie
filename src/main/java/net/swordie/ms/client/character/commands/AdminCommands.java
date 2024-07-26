@@ -615,8 +615,6 @@ public class AdminCommands {
             npcQuery.setParameter("rx1",npc.getRx1());
             npcQuery.setParameter("fh",npc.getFh());
 
-
-
             npcQuery.executeUpdate();
 
             transaction.commit();

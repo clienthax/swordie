@@ -20,7 +20,7 @@ public class OpenGate {
     private Party party;
     private byte gateId;
     private int duration; // seconds
-    private ScheduledFuture openGateDuration;
+    private ScheduledFuture<?> openGateDuration;
 
 
     public OpenGate(Char chr, Position position, Party party, byte gateId, int duration) {

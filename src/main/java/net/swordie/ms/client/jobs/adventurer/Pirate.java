@@ -205,7 +205,7 @@ public class Pirate extends Beginner {
     };
 
     private int corsairSummonID = 0;
-    private ScheduledFuture stimulatingConversationTimer;
+    private ScheduledFuture<?> stimulatingConversationTimer;
 
 
     public Pirate(Char chr) {

@@ -8,7 +8,7 @@ public class HitInfo {
     public int templateID;
     public int mobID;
     public int mpDamage;
-    public int type = -1;
+    public final int type = -1;
     public int skillID;
     public int otherUserID;
     public boolean isCrit;

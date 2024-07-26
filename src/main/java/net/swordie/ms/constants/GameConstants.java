@@ -186,7 +186,7 @@ public class GameConstants {
     public static final int MOBS_PER_PAGE = 25;
     public static final int MOBS_PER_GROUP = 5;
 
-    public static long[] charExp = new long[251];
+    public static final long[] charExp = new long[251];
     private static int[][] enchantSuccessRates = new int[25][2];
     private static int[][] enchantSuccessRatesSuperior = new int[15][2];
     private static final int[] guildExp = new int[MAX_GUILD_LV];
@@ -223,7 +223,7 @@ public class GameConstants {
     };
 
     private static List<QuickMoveInfo> quickMoveInfos;
-    public static int[][][] INC_HP_MP = {
+    public static final int[][][] INC_HP_MP = {
             // first array = per job
             // then a list of tuples (minHP, maxHP, minMP, maxMP, randMP)
             // 1st value is for levelup, 2nd for assigning sp

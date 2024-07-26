@@ -71,7 +71,7 @@ public class GuildHandler {
                 List<Guild> guilds;
                 try (Session s = Server.getInstance().getNewDatabaseSession()) {
                     Transaction t = s.beginTransaction();
-                    Query q = s.createQuery("FROM Guild WHERE name = ?");
+                    Query<Guild> q = s.createQuery("FROM Guild WHERE name = ?", Guild.class);
                     q.setParameter(0, name);
                     guilds = q.list();
                     t.commit();

@@ -171,7 +171,7 @@ public class Demon extends Job {
 
     private long leechAuraCD = Long.MIN_VALUE;
     private int lastExceedSkill;
-    private ScheduledFuture diabolicRecoveryTimer;
+    private ScheduledFuture<?> diabolicRecoveryTimer;
 
     public Demon(Char chr) {
         super(chr);

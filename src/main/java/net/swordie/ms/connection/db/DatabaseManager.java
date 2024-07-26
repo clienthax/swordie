@@ -86,10 +86,10 @@ public class DatabaseManager {
 
             // Hibernate settings equivalent to hibernate.cfg.xml's properties
             Map<String, Object> settings = new HashMap<>();
-            settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-            settings.put(Environment.URL, "jdbc:mysql://127.0.0.1:3306/mydatabase?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-            settings.put(Environment.USER, "root");
-            settings.put(Environment.PASS, "cheese");
+            settings.put(Environment.JAKARTA_JDBC_DRIVER, "com.mysql.cj.jdbc.Driver");
+            settings.put(Environment.JAKARTA_JDBC_URL, "jdbc:mysql://127.0.0.1:3306/mydatabase?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            settings.put(Environment.JAKARTA_JDBC_USER, "root");
+            settings.put(Environment.JAKARTA_JDBC_PASSWORD, "cheese");
             settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
             settings.put(Environment.SHOW_SQL, "false");
             settings.put(Environment.FORMAT_SQL, "true");
@@ -212,7 +212,7 @@ public class DatabaseManager {
         synchronized (obj) {
             try (Session session = getSession()) {
                 Transaction t = session.beginTransaction();
-                session.saveOrUpdate(obj);
+                session.merge(obj);
                 t.commit();
             }
         }
@@ -224,7 +224,7 @@ public class DatabaseManager {
         synchronized (obj) {
             try (Session session = getSession()) {
                 Transaction t = session.beginTransaction();
-                session.delete(obj);
+                session.remove(obj);
                 t.commit();
             }
         }

@@ -1629,7 +1629,7 @@ public class Mob extends Life {
         elite.setEliteGrade(eliteGrade);
         Map<Integer, Integer> possibleSkillsMap = Loaders.getInstance().getSkillData().getEliteMobSkillsByGrade(eliteGrade);
         List<Tuple<Integer, Integer>> possibleSkills = new ArrayList<>();
-        possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple(k, v)));
+        possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple<>(k, v)));
         for (int i = 0; i < GameConstants.ELITE_MOB_SKILL_COUNT; i++) {
             Tuple<Integer, Integer> randomSkill = Util.getRandomFromCollection(possibleSkills);
             elite.addEliteSkill(randomSkill.getLeft(), randomSkill.getRight());
@@ -1658,7 +1658,7 @@ public class Mob extends Life {
         elite.setEliteGrade(eliteGrade);
         Map<Integer, Integer> possibleSkillsMap = Loaders.getInstance().getSkillData().getEliteMobSkillsByGrade(eliteGrade);
         List<Tuple<Integer, Integer>> possibleSkills = new ArrayList<>();
-        possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple(k, v)));
+        possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple<>(k, v)));
         for (int i = 0; i < GameConstants.ELITE_MOB_SKILL_COUNT; i++) {
             Tuple<Integer, Integer> randomSkill = Util.getRandomFromCollection(possibleSkills);
             elite.addEliteSkill(randomSkill.getLeft(), randomSkill.getRight());

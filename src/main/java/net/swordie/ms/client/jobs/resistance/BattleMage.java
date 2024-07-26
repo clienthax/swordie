@@ -99,7 +99,7 @@ public class BattleMage extends Citizen {
 
     private Summon death;
     private long drainAuraCD = Long.MIN_VALUE;
-    private ScheduledFuture WeaknessAuraTimer;
+    private ScheduledFuture<?> WeaknessAuraTimer;
     private long lastCondemnationAttack = Long.MIN_VALUE;
     private int hitCountBoss = 0;
 

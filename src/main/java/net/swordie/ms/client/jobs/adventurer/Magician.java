@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static net.swordie.ms.client.character.skills.SkillStat.*;
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.*;
@@ -200,7 +199,7 @@ public class Magician extends Beginner {
     private int infinityStack = 0;
     private static Summon viralSlime;
     private static List<Summon> viralSlimeList;
-    private ScheduledFuture infinityTimer;
+    private ScheduledFuture<?> infinityTimer;
 
     public Magician(Char chr) {
         super(chr);

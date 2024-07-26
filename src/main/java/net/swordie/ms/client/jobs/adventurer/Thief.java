@@ -132,7 +132,7 @@ public class Thief extends Beginner {
     private int critAmount;
     private int supposedCrit;
     private final int MAX_CRIT = 100;
-    private ScheduledFuture critGrowthTimer;
+    private ScheduledFuture<?> critGrowthTimer;
     public static long lastShadowMeld = Long.MIN_VALUE;
 
     private final int[] addedSkills = new int[] {

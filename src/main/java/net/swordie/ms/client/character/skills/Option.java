@@ -36,7 +36,7 @@ public class Option {
     public int pOption;
     public int slv;
     public Summon summon;
-    public List<Option> extraOpts = new ArrayList<>();
+    public final List<Option> extraOpts = new ArrayList<>();
     public boolean isInMillis = false;
 
     public Option(int skillID) {

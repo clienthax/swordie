@@ -202,7 +202,7 @@ public class SkillData implements DataCreator {
                             String mainName = XMLApi.getNamedAttribute(mainLevelNode, "name");
                             String mainValue = XMLApi.getNamedAttribute(mainLevelNode, "value");
                             int intVal = -1337;
-                            if (mainValue != null && Util.isNumber(mainValue)) {
+                            if (Util.isNumber(mainValue)) {
                                 intVal = Integer.parseInt(mainValue);
                             }
                             switch (mainName) {
@@ -471,7 +471,7 @@ public class SkillData implements DataCreator {
 
         if (!exists) {
             skillData.loadEliteMobSkillsFromWZ();
-            skillData.saveEliteMobSkills(file);
+            saveEliteMobSkills(file);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int gradeSize = dis.readInt();

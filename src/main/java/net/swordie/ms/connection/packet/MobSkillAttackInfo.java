@@ -13,6 +13,6 @@ public class MobSkillAttackInfo {
     public byte action;
     public int targetInfo;
     public short skillID;
-    public List<Position> multiTargetForBalls = new ArrayList<>();
-    public List<Short> randTimeForAreaAttacks = new ArrayList<>();
+    public final List<Position> multiTargetForBalls = new ArrayList<>();
+    public final List<Short> randTimeForAreaAttacks = new ArrayList<>();
 }

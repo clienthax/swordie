@@ -167,8 +167,7 @@ public class JobSkillHandler {
             FieldAttackObj fao = new FieldAttackObj(1, chr.getId(), chr.getPosition().deepCopy(), flip);
             field.spawnLife(fao, chr);
             field.broadcastPacket(FieldAttackObjPool.objCreate(fao), chr);
-            ScheduledFuture sf = EventManager.addEvent(() -> field.removeLife(fao.getObjectId(), true),
-                    si.getValue(SkillStat.u, slv), TimeUnit.SECONDS);
+            ScheduledFuture<?> sf = EventManager.addEvent(() -> field.removeLife(fao.getObjectId(), true), si.getValue(SkillStat.u, slv), TimeUnit.SECONDS);
             field.addLifeSchedule(fao, sf);
             field.broadcastPacket(FieldAttackObjPool.setAttack(fao.getObjectId(), 0));
         }

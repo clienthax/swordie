@@ -46,7 +46,7 @@ public class ItemConstants {
     public static final int HYPER_TELEPORT_ROCK = 5040004;
 
     //CUBING CONSTANTS BELOW
-    public static int GLOBAL_TIER_UP_MULTIPLIER = 1; //For DMT uses? 2 = 2x, 3 = 3x, etc etc
+    public static final int GLOBAL_TIER_UP_MULTIPLIER = 1; //For DMT uses? 2 = 2x, 3 = 3x, etc etc
     public static final int THIRD_LINE_CHANCE = 50;
 
     //Chances are out of 1k (10* typical 100 values so we don't have to use doubles)

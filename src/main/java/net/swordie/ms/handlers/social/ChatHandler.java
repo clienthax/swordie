@@ -4,7 +4,6 @@ import net.swordie.ms.Server;
 import net.swordie.ms.ServerConfig;
 import net.swordie.ms.client.Client;
 import net.swordie.ms.client.character.Char;
-import net.swordie.ms.client.character.commands.*;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.connection.packet.ChatSocket;
 import net.swordie.ms.connection.packet.FieldPacket;

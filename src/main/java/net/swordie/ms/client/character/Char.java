@@ -366,9 +366,9 @@ public class Char {
 	@Transient
 	private int comboCounter;
 	@Transient
-	private ScheduledFuture comboKillResetTimer;
+	private ScheduledFuture<?> comboKillResetTimer;
 	@Transient
-	private ScheduledFuture timeLimitTimer;
+	private ScheduledFuture<?> timeLimitTimer;
 	@Transient
 	private int deathCount = -1;
 	@Transient
@@ -523,12 +523,12 @@ public class Char {
 		// DAO?
 		Session session = DatabaseManager.getSession();
 		Transaction transaction = session.beginTransaction();
-		Query query = session.createQuery("FROM Char chr WHERE chr.avatarData.characterStat.name = :name");
+		Query<Char> query = session.createQuery("FROM Char chr WHERE chr.avatarData.characterStat.name = :name", Char.class);
 		query.setParameter("name", name);
-		List l = query.list();
+		List<Char> l = query.list();
 		Char chr = null;
 		if (l != null && !l.isEmpty()) {
-			chr = (Char) l.get(0);
+			chr = l.get(0);
 		}
 		transaction.commit();
 		session.close();
@@ -538,14 +538,13 @@ public class Char {
 	public static Char getFromDBByNameAndWorld(String name, int worldId) {
 		Session session = DatabaseManager.getSession();
 		Transaction transaction = session.beginTransaction();
-		Query query = session.createQuery("FROM Char chr " +
-				"WHERE chr.avatarData.characterStat.name = :name AND chr.avatarData.characterStat.worldIdForLog = :world");
+		Query<Char> query = session.createQuery("FROM Char chr WHERE chr.avatarData.characterStat.name = :name AND chr.avatarData.characterStat.worldIdForLog = :world", Char.class);
 		query.setParameter("name", name);
 		query.setParameter("world", worldId);
-		List l = query.list();
+		List<Char> l = query.list();
 		Char chr = null;
 		if (l != null && !l.isEmpty()) {
-			chr = (Char) l.get(0);
+			chr = l.get(0);
 		}
 		transaction.commit();
 		session.close();

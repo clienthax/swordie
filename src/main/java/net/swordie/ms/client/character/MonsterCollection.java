@@ -12,7 +12,6 @@ import net.swordie.ms.util.FileTime;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Sjonnie
@@ -27,7 +26,7 @@ public class MonsterCollection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Transient
-    private Map<Integer, MonsterCollectionRegion> collection = new HashMap<>();
+    private final Map<Integer, MonsterCollectionRegion> collection = new HashMap<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "monster_collection_mobs", joinColumns = @JoinColumn(name = "collectionid"))

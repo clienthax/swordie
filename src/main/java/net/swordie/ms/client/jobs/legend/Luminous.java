@@ -94,7 +94,7 @@ public class Luminous extends Job {
     };
 
     private long darkCrescendoTimer;
-    private ScheduledFuture equilibriumTimer;
+    private ScheduledFuture<?> equilibriumTimer;
 
     public Luminous(Char chr) {
         super(chr);

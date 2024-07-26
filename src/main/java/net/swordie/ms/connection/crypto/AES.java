@@ -114,7 +114,7 @@ public final class AES {
                 : 0;
     }
     
-    public byte[] encrypt(byte[] a) {
+    public void encrypt(byte[] a) {
         ta = new byte[BLOCK_SIZE];
         int i, k, row, col;
         if (a == null) {
@@ -162,7 +162,6 @@ public final class AES {
         }
         ta = null;
         Ker = null;
-        return a;
     }
 
     public void setKey(byte[] key) {

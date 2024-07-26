@@ -154,15 +154,13 @@ public class Party implements Encodable {
         for (Char chr : getOnlineChars()) {
             chr.setParty(null);
         }
-        for (int i = 0; i < getPartyMembers().length; i++) {
-            getPartyMembers()[i] = null;
-        }
+        Arrays.fill(getPartyMembers(), null);
         getWorld().removeParty(this);
         setWorld(null);
     }
 
     public List<Char> getOnlineChars() {
-        return getOnlineMembers().stream().map(PartyMember::getChr).filter(chr -> chr != null).collect(Collectors.toList());
+        return getOnlineMembers().stream().map(PartyMember::getChr).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public List<PartyMember> getOnlineMembers() {

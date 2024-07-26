@@ -57,7 +57,7 @@ public class PinkBean extends Job {
 
     private int yoyo;
     private final int MAX_YOYO_STACK = 8;
-    private ScheduledFuture yoyoStackTimer;
+    private ScheduledFuture<?> yoyoStackTimer;
 
     private final int[] buffs = new int[]{
             CHILL_OUT_ZZZ,

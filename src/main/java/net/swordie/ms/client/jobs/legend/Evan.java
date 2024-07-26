@@ -89,7 +89,7 @@ public class Evan extends Job {
 
     private int prevSkill = 0;
     private Dragon dragon;
-    public HashMap<Integer, Position> debrisPos = new HashMap<>();
+    public final HashMap<Integer, Position> debrisPos = new HashMap<>();
     private int debrisCount = 0;
     private Field oldField;
 

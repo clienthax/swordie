@@ -12,7 +12,6 @@ import net.swordie.ms.world.event.InGameEventManager;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static net.swordie.ms.enums.ChatType.Mob;
 

@@ -21,7 +21,7 @@ import static net.swordie.ms.connection.netty.NettyClient.CLIENT_KEY;
  */
 public class ChatAcceptor implements Runnable{
 
-    public static Map<String, Channel> channelPool = new HashMap<>();
+    public static final Map<String, Channel> channelPool = new HashMap<>();
     private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     @Override
     public void run() {

@@ -40,7 +40,7 @@ public class EventManager {
      * @param delay The time it should (in ms) take between the start of execution n and execution n+1
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addFixedRateEvent(Runnable runnable, long initialDelay, long delay) {
+    public static ScheduledFuture<?> addFixedRateEvent(Runnable runnable, long initialDelay, long delay) {
         return scheduler.scheduleAtFixedRate(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
@@ -54,7 +54,7 @@ public class EventManager {
      * @param executes The amount of times the
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addFixedRateEvent(Runnable runnable, long initialDelay, long delay, int executes) {
+    public static ScheduledFuture<?> addFixedRateEvent(Runnable runnable, long initialDelay, long delay, int executes) {
         ScheduledFuture sf = scheduler.scheduleAtFixedRate(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
         addEvent(() -> sf.cancel(false), 10 + initialDelay + delay * executes);
         return sf;
@@ -70,7 +70,7 @@ public class EventManager {
      * @param timeUnit The time unit of the delays
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addFixedRateEvent(Runnable runnable, long initialDelay, long delay, TimeUnit timeUnit) {
+    public static ScheduledFuture<?> addFixedRateEvent(Runnable runnable, long initialDelay, long delay, TimeUnit timeUnit) {
         return scheduler.scheduleAtFixedRate(runnable, initialDelay, delay, timeUnit);
     }
 
@@ -83,7 +83,7 @@ public class EventManager {
      * @param delay The time it should (in ms) take between the start of execution n and execution n+1
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addFixedDelayEvent(Runnable runnable, long initialDelay, long delay) {
+    public static ScheduledFuture<?> addFixedDelayEvent(Runnable runnable, long initialDelay, long delay) {
         return scheduler.scheduleWithFixedDelay(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
@@ -97,7 +97,7 @@ public class EventManager {
      * @param timeUnit The time unit of the delay
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addFixedDelayEvent(Runnable runnable, long initialDelay, long delay, TimeUnit timeUnit) {
+    public static ScheduledFuture<?> addFixedDelayEvent(Runnable runnable, long initialDelay, long delay, TimeUnit timeUnit) {
         return scheduler.scheduleWithFixedDelay(runnable, initialDelay, delay, timeUnit);
     }
 
@@ -107,7 +107,7 @@ public class EventManager {
      * @param delay The delay (in ms) after which the call should start
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addEvent(Runnable runnable, long delay) {
+    public static ScheduledFuture<?> addEvent(Runnable runnable, long delay) {
         return scheduler.schedule(runnable, delay, TimeUnit.MILLISECONDS);
     }
 
@@ -118,7 +118,7 @@ public class EventManager {
      * @param timeUnit The time unit of the delay
      * @return The created event (ScheduledFuture)
      */
-    public static ScheduledFuture addEvent(Runnable runnable, long delay, TimeUnit timeUnit) {
+    public static ScheduledFuture<?> addEvent(Runnable runnable, long delay, TimeUnit timeUnit) {
         return scheduler.schedule(runnable, delay, timeUnit);
     }
 }

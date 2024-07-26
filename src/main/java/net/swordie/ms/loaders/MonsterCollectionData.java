@@ -44,17 +44,20 @@ public class MonsterCollectionData {
         long start = System.currentTimeMillis();
         Session session = DatabaseManager.getSession();
         Transaction t = session.beginTransaction();
-        Query q = session.createQuery("from MonsterCollectionSessionRewardInfo");
-        List<MonsterCollectionSessionRewardInfo> sessionRewardInfos = new ArrayList<>(q.list());
-        q = session.createQuery("from MonsterCollectionGroupRewardInfo");
-        List<MonsterCollectionGroupRewardInfo> groupRewardInfos = new ArrayList<>(q.list());
-        q = session.createQuery("from MonsterCollectionMobInfo");
-        List<MonsterCollectionMobInfo> mobInfos = new ArrayList<>(q.list());
+        Query<MonsterCollectionSessionRewardInfo> q1 = session.createQuery("from MonsterCollectionSessionRewardInfo", MonsterCollectionSessionRewardInfo.class);
+        List<MonsterCollectionSessionRewardInfo> sessionRewardInfos = new ArrayList<>(q1.list());
+
+        Query<MonsterCollectionGroupRewardInfo> q2 = session.createQuery("from MonsterCollectionGroupRewardInfo", MonsterCollectionGroupRewardInfo.class);
+        List<MonsterCollectionGroupRewardInfo> groupRewardInfos = new ArrayList<>(q2.list());
+
+        Query<MonsterCollectionMobInfo> q3 = session.createQuery("from MonsterCollectionMobInfo", MonsterCollectionMobInfo.class);
+        List<MonsterCollectionMobInfo> mobInfos = new ArrayList<>(q3.list());
+
         t.commit();
         session.close();
         mobInfos.forEach(mi -> {
             put(mi);
-            monsterInfo.put(mi.getMobID(), new Triple(mi.getRegion(), mi.getSession(), mi.getPosition()));
+            monsterInfo.put(mi.getMobID(), new Triple<>(mi.getRegion(), mi.getSession(), mi.getPosition()));
         });
         for (MonsterCollectionSessionRewardInfo mcsri : sessionRewardInfos) {
             monsterCollectionInfo.get(mcsri.getRegion()).getMonsterCollectionSessions().get(mcsri.getSession())

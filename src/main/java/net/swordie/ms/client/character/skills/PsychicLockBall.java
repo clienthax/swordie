@@ -9,7 +9,7 @@ import net.swordie.ms.util.Util;
  * Created on 1/13/2018.
  */
 public class PsychicLockBall {
-    public boolean success = true;
+    public final boolean success = true;
     public int localKey;
     public Mob mob;
     public int psychicLockKey;

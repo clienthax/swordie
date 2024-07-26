@@ -19,7 +19,7 @@ public class TownPortal {
     private Channel channel;
     private int skillid;
     private int duration;
-    private ScheduledFuture despawnTimer;
+    private ScheduledFuture<?> despawnTimer;
 
     private Position townPosition;
     private int townFieldId;

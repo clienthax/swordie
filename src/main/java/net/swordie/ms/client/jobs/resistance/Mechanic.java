@@ -108,8 +108,8 @@ public class Mechanic extends Citizen {
             HOMING_BEACON_RESEARCH,
     };
 
-    private ScheduledFuture botsNTotsTimer;
-    private ScheduledFuture supportUnitTimer;
+    private ScheduledFuture<?> botsNTotsTimer;
+    private ScheduledFuture<?> supportUnitTimer;
     private byte gateId = 0;
 
     public Mechanic(Char chr) {

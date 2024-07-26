@@ -424,7 +424,7 @@ public class EtcData implements DataCreator {
         EtcData etcData = Loaders.getInstance().getEtcData();
         if (!exists) {
             etcData.loadFamiliarSkillsFromWz();
-            etcData.saveFamiliarSkills(file);
+            saveFamiliarSkills(file);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int gradeSkillSize = dis.readInt();

@@ -16,8 +16,8 @@ public class PsychicLock {
     public int action;
     public int actionSpeed;
     public int time;
-    public boolean success = true;
-    public List<PsychicLockBall> psychicLockBalls = new ArrayList<>();
+    public final boolean success = true;
+    public final List<PsychicLockBall> psychicLockBalls = new ArrayList<>();
 
     public void encode(OutPacket outPacket) {
         outPacket.encodeInt(skillID);

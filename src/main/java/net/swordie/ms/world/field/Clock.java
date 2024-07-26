@@ -17,7 +17,7 @@ public class Clock {
     private Field field;
     private int seconds;
     private long timeInMillis; // Time (in millis) when the Clock will be removed
-    private ScheduledFuture clockRemovalTimer;
+    private ScheduledFuture<?> clockRemovalTimer;
 
     public Clock(ClockType clockType, Field field, int seconds) {
         this.clockType = clockType;

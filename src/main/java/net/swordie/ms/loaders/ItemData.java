@@ -24,12 +24,12 @@ import static net.swordie.ms.enums.ScrollStat.*;
  * Created on 11/17/2017.
  */
 public class ItemData implements DataCreator {
-    public Map<Integer, Equip> equips = new HashMap<>();
-    public Map<Integer, ItemInfo> items = new HashMap<>();
-    public Map<Integer, PetInfo> pets = new HashMap<>();
-    public Map<Integer, ItemOption> itemOptions = new HashMap<>();
+    public final Map<Integer, Equip> equips = new HashMap<>();
+    public final Map<Integer, ItemInfo> items = new HashMap<>();
+    public final Map<Integer, PetInfo> pets = new HashMap<>();
+    public final Map<Integer, ItemOption> itemOptions = new HashMap<>();
     public List<ItemOption> filteredItemOptions = new ArrayList<>();
-    public Map<Integer, Integer> skillIdByItemId = new HashMap<>();
+    public final Map<Integer, Integer> skillIdByItemId = new HashMap<>();
     private final Set<Integer> startingItems = new HashSet<>();
     private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
     private final boolean LOG_UNKS = false;
@@ -1919,7 +1919,7 @@ public class ItemData implements DataCreator {
         for (Node node : subNodes) {
             String name = XMLApi.getNamedAttribute(node, "name");
             String value = XMLApi.getNamedAttribute(node, "value");
-            if (Util.isNumber(name) && value != null && Util.isNumber(value)) {
+            if (Util.isNumber(name) && Util.isNumber(value)) {
                 startingItems.add(Integer.parseInt(value));
             }
             startingItems.addAll(searchForStartingItems(node));

@@ -29,7 +29,6 @@ import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static net.swordie.ms.client.character.skills.SkillStat.*;
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.*;

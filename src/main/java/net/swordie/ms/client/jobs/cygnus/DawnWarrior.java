@@ -85,7 +85,7 @@ public class DawnWarrior extends Noblesse {
             GLORY_OF_THE_GUARDIANS_DW,
     };
 
-    private ScheduledFuture willOfSteelTimer;
+    private ScheduledFuture<?> willOfSteelTimer;
 
     public DawnWarrior(Char chr) {
         super(chr);

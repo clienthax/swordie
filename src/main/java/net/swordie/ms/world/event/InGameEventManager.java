@@ -18,8 +18,8 @@ public class InGameEventManager {
     public static final int REGISTRATION_DURATION_MINS = ServerConfig.DEBUG_MODE ? 1 : 5; // devs want fast
 
     private final HashMap<InGameEventType, InGameEvent> events = new HashMap<>();
-    private ScheduledFuture schedule;
-    private ScheduledFuture reminderTimer;
+    private ScheduledFuture<?> schedule;
+    private ScheduledFuture<?> reminderTimer;
     private InGameEventType previousEvent;
     private int remindersSent = 0;
 
