@@ -33,8 +33,6 @@ import net.swordie.ms.world.field.Field;
 import net.swordie.ms.world.field.fieldeffect.FieldEffect;
 import org.apache.log4j.Logger;
 
-import static net.swordie.ms.enums.ChatType.Mob;
-
 public class AttackHandler {
 
     private static final Logger log = Logger.getLogger(AttackHandler.class);
@@ -61,7 +59,7 @@ public class AttackHandler {
             chr.dbgChatMsg("SkillID: " + skillID);
             Job sourceJobHandler = chr.getJobHandler();
             SkillInfo si = SkillData.getSkillInfoById(skillID);
-            if (si != null && si.getExtraSkillInfo().size() > 0) {
+            if (si != null && !si.getExtraSkillInfo().isEmpty()) {
                 chr.getField().broadcastPacket(FieldPacket.registerExtraSkill(chr.getPosition(), skillID, si.getExtraSkillInfo().keySet(), attackInfo.left));
             }
             if (si != null && si.isMassSpell() && sourceJobHandler.isBuff(skillID) && chr.getParty() != null) {

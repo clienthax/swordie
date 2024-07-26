@@ -37,12 +37,9 @@ import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
-import net.swordie.ms.world.Channel;
-import net.swordie.ms.world.event.InGameEventManager;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
@@ -71,16 +68,16 @@ public class Field {
     private boolean town, swim, fly, reactorShuffle, expeditionOnly, partyOnly, needSkillForFly;
     private Set<Portal> portals;
     private Set<Foothold> footholds;
-    private Map<Integer, Life> lifes;
-    private List<Char> chars;
+    private final Map<Integer, Life> lifes;
+    private final List<Char> chars;
     private Map<Life, Char> lifeToControllers;
-    private Map<Life, ScheduledFuture> lifeSchedules;
+    private final Map<Life, ScheduledFuture> lifeSchedules;
     private String onFirstUserEnter = "", onUserEnter = "";
     private int fixedMobCapacity;
     private int objectIDCounter = 1000000;
     private boolean userFirstEnter = false;
     private String fieldScript = "";
-    private ScriptManagerImpl scriptManagerImpl = new ScriptManagerImpl(this);
+    private final ScriptManagerImpl scriptManagerImpl = new ScriptManagerImpl(this);
     private RuneStone runeStone;
     private ScheduledFuture runeStoneHordesTimer;
     private int burningFieldLevel;
@@ -497,7 +494,7 @@ public class Field {
     public void spawnLife(Life life, Char onlyChar) {
 
         addLife(life);
-        if (getChars().size() > 0) {
+        if (!getChars().isEmpty()) {
 
             //=======================================
             //Normal Controller System
@@ -525,8 +522,7 @@ public class Field {
 
             life.broadcastSpawnPacket(onlyChar);
 
-            if (life instanceof Mob) {
-                Mob mob = ((Mob)life);
+            if (life instanceof Mob mob) {
 
                 if (mob.getRemoveAfter() > 0) // removeafter == 1 means its supposed to die immediately
                     mob.die(false);
@@ -537,7 +533,7 @@ public class Field {
     private void setRandomController(Life life) {
         // No chars -> set controller to null, so a controller will be assigned next time someone enters this field
         Char controller = null;
-        if (getChars().size() > 0) {
+        if (!getChars().isEmpty()) {
             controller = Util.getRandomFromCollection(getChars());
             life.notifyControllerChange(controller);
         }
@@ -614,8 +610,7 @@ public class Field {
         for (Life life : getLifes().values()) {
             if (life instanceof Summon && ((Summon) life).getChr() == chr) {
                 removedList.add(life.getObjectId());
-            } else if (life instanceof FieldAttackObj) {
-                FieldAttackObj fao = (FieldAttackObj) life;
+            } else if (life instanceof FieldAttackObj fao) {
                 if (fao.getOwnerID() == chr.getId() && fao.getTemplateId() == Archer.ARROW_PLATTER) {
                     removedList.add(life.getObjectId());
                 }
@@ -650,15 +645,15 @@ public class Field {
         for (Life life : getLifes().values()) {
             spawnLife(life, chr);
         }
-        if (getRuneStone() != null && getMobs().size() > 0 && getBossMobID() == 0 && isChannelField() && !isTown()) {
+        if (getRuneStone() != null && !getMobs().isEmpty() && getBossMobID() == 0 && isChannelField() && !isTown()) {
             chr.write(FieldPacket.runeStoneAppear(getRuneStone()));
         }
-        if (getOpenGates() != null && getOpenGates().size() > 0) {
+        if (getOpenGates() != null && !getOpenGates().isEmpty()) {
             for (OpenGate openGate : getOpenGates()) {
                 openGate.showOpenGate(this);
             }
         }
-        if (getTownPortalList() != null && getTownPortalList().size() > 0) {
+        if (getTownPortalList() != null && !getTownPortalList().isEmpty()) {
             for (TownPortal townPortal : getTownPortalList()) {
                 townPortal.showTownPortal(this);
             }
@@ -1375,7 +1370,7 @@ public class Field {
     }
 
     public void startBurningFieldTimer() {
-        if(getMobGens().size() > 0
+        if(!getMobGens().isEmpty()
                 && getMobs().stream().mapToInt(m -> m.getForcedMobStat().getLevel()).min().orElse(0) >= GameConstants.BURNING_FIELD_MIN_MOB_LEVEL) {
             setBurningFieldLevel(GameConstants.BURNING_FIELD_LEVEL_ON_START);
             EventManager.addFixedRateEvent(this::changeBurningLevel, 0, GameConstants.BURNING_FIELD_TIMER, TimeUnit.MINUTES); //Every X minutes runs 'changeBurningLevel()'
@@ -1390,7 +1385,7 @@ public class Field {
         }
 
         //If there are players on the map,  decrease the level  else  increase the level
-        if(getChars().size() > 0 && getBurningFieldLevel() > 0) {
+        if(!getChars().isEmpty() && getBurningFieldLevel() > 0) {
             decreaseBurningLevel();
 
         } else if(getChars().size() <= 0 && getBurningFieldLevel() < GameConstants.BURNING_FIELD_MAX_LEVEL){
@@ -1464,7 +1459,7 @@ public class Field {
      * @param init if this is the first time that this method is called.
      */
     public void generateMobs(boolean init) {
-        if (init || getChars().size() > 0) {
+        if (init || !getChars().isEmpty()) {
             boolean buffed = !isChannelField()
                     && getChannel() > GameConstants.CHANNELS_PER_WORLD - GameConstants.BUFFED_CHANNELS;
             int currentMobs = getMobs().size();
@@ -1543,8 +1538,7 @@ public class Field {
     
     public void increaseReactorState(Char chr, int templateId, int stateLength) {
         Life life = getLifeByTemplateId(templateId);
-        if (life instanceof Reactor) {
-            Reactor reactor = (Reactor) life;
+        if (life instanceof Reactor reactor) {
             reactor.increaseState();
             chr.write(ReactorPool.reactorChangeState(reactor, (short) 0, (byte) stateLength));
         }

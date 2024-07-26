@@ -11,7 +11,7 @@ import net.swordie.ms.enums.AllianceType;
  * Created on 9/1/2018.
  */
 public class AllianceResult implements Encodable {
-    private AllianceType type;
+    private final AllianceType type;
     private Alliance alliance;
     private Guild guild;
     private GuildMember member;

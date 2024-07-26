@@ -6,10 +6,8 @@ import net.swordie.ms.ServerConstants;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import net.swordie.ms.util.Util;
-import net.swordie.ms.util.XMLApi;
+import org.hibernate.query.Query;
 
 import java.io.*;
 import java.util.*;
@@ -20,7 +18,7 @@ import java.util.*;
 public class DropData {
     private static final Logger log = Logger.getLogger(DropData.class);
 
-    private static Map<Integer, Set<DropInfo>> drops = new HashMap<>();
+    private static final Map<Integer, Set<DropInfo>> drops = new HashMap<>();
 
     public static void loadCompleteDropsFromTxt(File file) {
         try (Scanner scanner = new Scanner(new FileInputStream(file))) {
@@ -41,7 +39,7 @@ public class DropData {
                  */
                 if(split.length == 1 && split[0].equalsIgnoreCase("global")) {
                     mobID = -1;
-                } else if(split.length == 1 && !split[0].equals("")) {
+                } else if(split.length == 1 && !split[0].isEmpty()) {
                     mobID = Integer.parseInt(split[0]);
                 } else if(split.length >= 2) {
                     int itemID = Integer.parseInt(split[0]);
@@ -93,7 +91,7 @@ public class DropData {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            javax.persistence.Query query = session.createQuery("FROM DropInfo WHERE mobid = :mobid");
+            Query query = session.createQuery("FROM DropInfo WHERE mobid = :mobid");
             query.setParameter("mobid", mobID);
             l = ((org.hibernate.query.Query) query).list();
             transaction.commit();

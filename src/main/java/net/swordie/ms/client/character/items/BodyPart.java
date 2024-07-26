@@ -124,7 +124,7 @@ public enum BodyPart {
     HakuEnd(5201),
     SlotIndexNotDefined(15440);
 
-    private int val;
+    private final int val;
 
     BodyPart(int val) {
         this.val = val;

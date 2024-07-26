@@ -45,11 +45,10 @@ public class PetHandler {
             item = chr.getConsumeInventory().getItemBySlot(slot);
         }
         // Two of the same condition, as item had to be re-assigned
-        if (!(item instanceof PetItem)) {
+        if (!(item instanceof PetItem petItem)) {
             chr.chatMessage(String.format("Could not find a pet on that slot (slot %s).", slot));
             return;
         }
-        PetItem petItem = (PetItem) item;
         if (petItem.getActiveState() == 0) {
             if (chr.getPets().size() >= GameConstants.MAX_PET_AMOUNT) {
                 chr.chatMessage("You already have 3 pets out!");
@@ -146,8 +145,7 @@ public class PetHandler {
         int dropID = inPacket.decodeInt();
         inPacket.decodeInt(); // cliCrc
         Life life = field.getLifeByObjectID(dropID);
-        if (life instanceof Drop) {
-            Drop drop = (Drop) life;
+        if (life instanceof Drop drop) {
             boolean success = drop.canBePickedUpByPet() && drop.canBePickedUpBy(chr) && chr.addDrop(drop);
             if (success) {
                 field.removeDrop(dropID, chr.getId(), false, petID);

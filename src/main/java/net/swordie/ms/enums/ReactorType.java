@@ -5,7 +5,7 @@ public enum ReactorType {
     HERB(1),
     ;
 
-    private byte val;
+    private final byte val;
 
     ReactorType(int val) {
         this.val = (byte) val;

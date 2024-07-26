@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.quest.progress;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.loaders.DatSerializable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 3/2/2018.

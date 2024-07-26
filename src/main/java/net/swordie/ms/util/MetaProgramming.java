@@ -57,13 +57,13 @@ public class MetaProgramming {
                         fromRemoved = false;
                     }
                     line = line.replace("\t", "").replace("    ", "");
-                    String newLine = "";
+                    StringBuilder newLine = new StringBuilder();
                     for (int i = 0; i < (fromRemoved ? tabs - 1 : tabs); i++) {
-                        newLine += "    ";
+                        newLine.append("    ");
                     }
-                    newLine += line;
-                    newLine = newLine.replace("sm.sendAskYesNo", "response = sm.sendAskYesNo");
-                    newLine = newLine.replace("sm.sendAskAccept", "response = sm.sendAskAccept");
+                    newLine.append(line);
+                    newLine = new StringBuilder(newLine.toString().replace("sm.sendAskYesNo", "response = sm.sendAskYesNo"));
+                    newLine = new StringBuilder(newLine.toString().replace("sm.sendAskAccept", "response = sm.sendAskAccept"));
 //                    System.out.println(newLine + "              (neededtabs = " + neededTabs + ", tabs = " + tabs + ", changedLast = " + changedLast + ", fromRemoved = " + fromRemoved + ")");
                     sb.append(newLine).append("\r\n");
                 }
@@ -130,7 +130,7 @@ public class MetaProgramming {
 
         File file = new File("D:/SwordieMS/Swordie/src/headerText.txt");
         try (Scanner scanner = new Scanner(file)) {
-            String s = "";
+            StringBuilder s = new StringBuilder();
             int num = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -152,10 +152,10 @@ public class MetaProgramming {
                         }
                     }
                     String fin = newOp.toString().toUpperCase().substring(1).replace("ON_", "");
-                    s += fin + "(" + num + "), \r\n";
+                    s.append(fin).append("(").append(num).append("), \r\n");
                 }
             }
-            log.debug(s);
+            log.debug(s.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -198,7 +198,7 @@ public class MetaProgramming {
         int change = 0;
         try {
             Scanner scanner = new Scanner(file);
-            String s = "";
+            StringBuilder s = new StringBuilder();
             int num = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -221,9 +221,9 @@ public class MetaProgramming {
                     }
                 }
                 String fin = newOp.toString().toUpperCase().substring(1).replaceFirst("ON_", "");
-                s += fin + "(" + num + "), \r\n";
+                s.append(fin).append("(").append(num).append("), \r\n");
             }
-            log.debug(s);
+            log.debug(s.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

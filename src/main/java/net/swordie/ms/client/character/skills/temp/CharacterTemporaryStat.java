@@ -578,8 +578,8 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
     ;
 
     private int bitPos;
-    private int val;
-    private int pos;
+    private final int val;
+    private final int pos;
     public static final int length = 17;
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
 
@@ -689,28 +689,12 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
     }
 
     public boolean isEncodeInt() {
-        switch (this) {
-            case CarnivalDefence:
-            case SpiritLink:
-            case DojangLuckyBonus:
-            case SoulGazeCriDamR:
-            case PowerTransferGauge:
-            case ReturnTeleport:
-            case ShadowPartner:
-            case IncMaxDamage:
-            case Unk487:
-            case SetBaseDamage:
-            case QuiverCatridge:
-            case ImmuneBarrier:
-            case NaviFlying:
-            case Dance:
-            case SetBaseDamageByBuff:
-            case DotHealHPPerSecond:
-            case MagnetArea:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case CarnivalDefence, SpiritLink, DojangLuckyBonus, SoulGazeCriDamR, PowerTransferGauge, ReturnTeleport,
+                 ShadowPartner, IncMaxDamage, Unk487, SetBaseDamage, QuiverCatridge, ImmuneBarrier, NaviFlying, Dance,
+                 SetBaseDamageByBuff, DotHealHPPerSecond, MagnetArea -> true;
+            default -> false;
+        };
     }
 
     public boolean isIndie() {
@@ -718,48 +702,14 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
     }
 
     public boolean isMovingEffectingStat() {
-        switch (this) {
-            case Speed:
-            case Jump:
-            case Stun:
-            case Weakness:
-            case Slow:
-            case Morph:
-            case Ghost:
-            case BasicStatUp:
-            case Attract:
-            case DashSpeed:
-            case DashJump:
-            case Flying:
-            case Frozen:
-            case Frozen2:
-            case Lapidification:
-            case IndieSpeed:
-            case IndieJump:
-            case KeyDownMoving:
-            case Mechanic:
-            case Magnet:
-            case MagnetArea:
-            case VampDeath:
-            case VampDeathSummon:
-            case GiveMeHeal:
-            case DarkTornado:
-            case NewFlying:
-            case NaviFlying:
-            case UserControlMob:
-            case Dance:
-            case SelfWeakness:
-            case BattlePvPHelenaWindSpirit:
-            case BattlePvPLeeMalNyunScaleUp:
-            case TouchMe:
-            case IndieForceSpeed:
-            case IndieForceJump:
-            case RideVehicle:
-            case RideVehicleExpire:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case Speed, Jump, Stun, Weakness, Slow, Morph, Ghost, BasicStatUp, Attract, DashSpeed, DashJump, Flying,
+                 Frozen, Frozen2, Lapidification, IndieSpeed, IndieJump, KeyDownMoving, Mechanic, Magnet, MagnetArea,
+                 VampDeath, VampDeathSummon, GiveMeHeal, DarkTornado, NewFlying, NaviFlying, UserControlMob, Dance,
+                 SelfWeakness, BattlePvPHelenaWindSpirit, BattlePvPLeeMalNyunScaleUp, TouchMe, IndieForceSpeed,
+                 IndieForceJump, RideVehicle, RideVehicleExpire -> true;
+            default -> false;
+        };
     }
 
     public int getVal() {
@@ -779,97 +729,37 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
     }
 
     public boolean isRemoteEncode4() {
-        switch (this) {
-            case NoBulletConsume:
-            case RespectPImmune:
-            case RespectMImmune:
-            case DefenseAtt:
-            case DefenseState:
-            case MagicShield:
-            case PyramidEffect:
-            case BlessOfDarkness:
-            case ImmuneBarrier:
-            case Dance:
-            case SpiritGuard:
-            case KinesisPsychicEnergeShield:
-            case AdrenalinBoost:
-            case RWBarrier:
-            case RWMagnumBlow:
-            case HayatoStance:
-            case Unk487:
-            case Unk488:
-            case Unk489:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case NoBulletConsume, RespectPImmune, RespectMImmune, DefenseAtt, DefenseState, MagicShield, PyramidEffect,
+                 BlessOfDarkness, ImmuneBarrier, Dance, SpiritGuard, KinesisPsychicEnergeShield, AdrenalinBoost,
+                 RWBarrier, RWMagnumBlow, HayatoStance, Unk487, Unk488, Unk489 -> true;
+            default -> false;
+        };
     }
 
     public boolean isRemoteEncode1() {
-        switch (this) {
-            case Speed:
-            case Shock:
-            case Team:
-            case Cyclone:
-            case OnCapsule:
-            case KillingPoint:
-            case PinkbeanRollingGrade:
-            case ReturnTeleport:
-            case FireBomb:
-            case SurplusSupply:
-            case Unk460:
-            case ComboCounter:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case Speed, Shock, Team, Cyclone, OnCapsule, KillingPoint, PinkbeanRollingGrade, ReturnTeleport, FireBomb,
+                 SurplusSupply, Unk460, ComboCounter -> true;
+            default -> false;
+        };
     }
 
     public boolean isNotEncodeReason() {
-        switch (this) {
-            case Speed:
-            case ElementalCharge:
-            case Shock:
-            case Team:
-            case Ghost:
-            case NoBulletConsume:
-            case RespectPImmune:
-            case RespectMImmune:
-            case DefenseAtt:
-            case DefenseState:
-            case MagicShield:
-            case Cyclone:
-            case OnCapsule:
-            case PyramidEffect:
-            case KillingPoint:
-            case PinkbeanRollingGrade:
-            case StackBuff:
-            case BlessOfDarkness:
-            case SurplusSupply:
-            case ImmuneBarrier:
-            case AdrenalinBoost:
-            case RWBarrier:
-            case RWMagnumBlow:
-            case HayatoStance:
-            case Unk488:
-            case Unk489:
-            case Unk460:
-            case ComboCounter:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case Speed, ElementalCharge, Shock, Team, Ghost, NoBulletConsume, RespectPImmune, RespectMImmune,
+                 DefenseAtt, DefenseState, MagicShield, Cyclone, OnCapsule, PyramidEffect, KillingPoint,
+                 PinkbeanRollingGrade, StackBuff, BlessOfDarkness, SurplusSupply, ImmuneBarrier, AdrenalinBoost,
+                 RWBarrier, RWMagnumBlow, HayatoStance, Unk488, Unk489, Unk460, ComboCounter -> true;
+            default -> false;
+        };
     }
 
     public boolean isNotEncodeAnything() {
-        switch (this) {
-            case FullSoulMP:
-            case AntiMagicShellBool:
-            case PoseTypeBool:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case FullSoulMP, AntiMagicShellBool, PoseTypeBool -> true;
+            default -> false;
+        };
     }
 
     public static void main(String[] args) {

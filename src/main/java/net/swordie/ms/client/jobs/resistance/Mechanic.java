@@ -27,7 +27,6 @@ import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -79,13 +78,13 @@ public class Mechanic extends Citizen {
     public static final int FULL_SPREAD = 35121055;
     public static final int DISTORTION_BOMB = 35121052;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             SECRET_ASSEMBLY,
             MECHANIC_DASH,
             HIDDEN_PEACE,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             HUMANOID_MECH,
             TANK_MECH,
 
@@ -103,7 +102,7 @@ public class Mechanic extends Citizen {
             FOR_LIBERTY_MECH,
     };
 
-    private int[] homingBeacon = new int[] {
+    private final int[] homingBeacon = new int[] {
             HOMING_BEACON,
             ADV_HOMING_BEACON,
             HOMING_BEACON_RESEARCH,
@@ -353,7 +352,7 @@ public class Mechanic extends Citizen {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -416,7 +415,7 @@ public class Mechanic extends Citizen {
             return;
         }
         Mob mob = Util.getRandomFromCollection(field.getMobsInRect(rect));
-        if(field.getBossMobsInRect(rect).size() > 0) {
+        if(!field.getBossMobsInRect(rect).isEmpty()) {
             mob = Util.getRandomFromCollection(field.getBossMobsInRect(rect));
         }
 
@@ -434,15 +433,11 @@ public class Mechanic extends Citizen {
     }
 
     private ForceAtomEnum getHomingBeaconForceAtomEnum() {
-        switch (getHomingBeaconSkill().getSkillId()) {
-            case ADV_HOMING_BEACON:
-                return MECH_MEGA_ROCKET_1;
-            case HOMING_BEACON_RESEARCH:
-                return MECH_MEGA_ROCKET_2;
-            case HOMING_BEACON:
-            default:
-                return MECH_ROCKET;
-        }
+        return switch (getHomingBeaconSkill().getSkillId()) {
+            case ADV_HOMING_BEACON -> MECH_MEGA_ROCKET_1;
+            case HOMING_BEACON_RESEARCH -> MECH_MEGA_ROCKET_2;
+            default -> MECH_ROCKET;
+        };
     }
 
     private Skill getHomingBeaconSkill() {

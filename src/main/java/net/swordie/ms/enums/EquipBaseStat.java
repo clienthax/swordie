@@ -42,7 +42,8 @@ public enum EquipBaseStat {
     exGradeOption(0x8, 1),
     hyperUpgrade(0x10, 1);
 
-    private int val, pos;
+    private final int val;
+    private final int pos;
 
     EquipBaseStat(int val, int pos) {
         this.val = val;

@@ -263,7 +263,7 @@ public class UserHandler {
         Set<Integer> lockedLines = new HashSet<>();
         for (int i = 0; i < size; i++) {
             lockedLines.add(inPacket.decodeInt());
-            if (lockedLines.size() == 0) {
+            if (lockedLines.isEmpty()) {
                 cost += GameConstants.CHAR_POT_LOCK_1_COST;
             } else {
                 cost += GameConstants.CHAR_POT_LOCK_2_COST;

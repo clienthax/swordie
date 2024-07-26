@@ -7,7 +7,7 @@ public enum AccountType {
     GameMaster(1 << 4),
     Admin(1 << 4);
 
-    private int val;
+    private final int val;
 
     AccountType(int val) {
         this.val = val;

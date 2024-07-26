@@ -101,14 +101,11 @@ public final class AES {
     }
 
     public static int getRounds(int keySize) {
-        switch (keySize) {
-            case 16:
-                return 10;
-            case 24:
-                return 12;
-            default:
-                return 14;
-        }
+        return switch (keySize) {
+            case 16 -> 10;
+            case 24 -> 12;
+            default -> 14;
+        };
     }
 
     static int mul(int a, int b) {

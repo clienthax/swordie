@@ -28,8 +28,8 @@ public class GachaponInfo {
     }
 
     public static class GachItem {
-        private int itemID;
-        private boolean hotTime;
+        private final int itemID;
+        private final boolean hotTime;
 
         // TODO: handle quantity
         public GachItem(final int itemID, final boolean hotTime) {

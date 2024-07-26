@@ -4,7 +4,6 @@ import net.swordie.ms.client.Client;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.client.character.CharacterStat;
 import net.swordie.ms.client.character.info.HitInfo;
-import net.swordie.ms.client.character.items.Item;
 import net.swordie.ms.client.character.skills.Option;
 import net.swordie.ms.client.character.skills.Skill;
 import net.swordie.ms.client.character.skills.info.AttackInfo;
@@ -25,7 +24,6 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
@@ -89,7 +87,7 @@ public class Xenon extends Job {
     private ScheduledFuture supplyTimer;
     private static ScheduledFuture temporalPodTimer;
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             SUPPLY_SURPLUS,
             MULTILATERAL_I,
             MODAL_SHIFT,
@@ -97,7 +95,7 @@ public class Xenon extends Job {
             MIMIC_PROTOCOL,
     };
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             CIRCUIT_SURGE,
             XENON_BOOSTER,
             EFFICIENCY_STREAMLINE,
@@ -318,7 +316,7 @@ public class Xenon extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

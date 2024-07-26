@@ -9,7 +9,7 @@ public enum AvatarModifiedMask {
     CarryItemEffect(0x4),
     SubAvatarLook(0x8);
 
-    private byte val;
+    private final byte val;
 
     AvatarModifiedMask(int val) {
         this.val = (byte) val;

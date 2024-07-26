@@ -21,7 +21,6 @@ import net.swordie.ms.connection.packet.*;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.constants.QuestConstants;
 import net.swordie.ms.constants.SkillConstants;
-import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.enums.ForceAtomEnum;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.handlers.Handler;
@@ -184,24 +183,24 @@ public class JobSkillHandler {
         SkillInfo si = SkillData.getSkillInfoById(skillID);
         int range = si.getValue(SkillStat.range, slv);
         ForceAtomEnum fae;
-        switch (skillID) {
-            case BlazeWizard.FINAL_ORBITAL_FLAME:
+        skillID = switch (skillID) {
+            case BlazeWizard.FINAL_ORBITAL_FLAME -> {
                 fae = ForceAtomEnum.ORBITAL_FLAME_4;
-                skillID = BlazeWizard.FINAL_ORBITAL_FLAME_ATOM;
-                break;
-            case BlazeWizard.GRAND_ORBITAL_FLAME:
+                yield BlazeWizard.FINAL_ORBITAL_FLAME_ATOM;
+            }
+            case BlazeWizard.GRAND_ORBITAL_FLAME -> {
                 fae = ForceAtomEnum.ORBITAL_FLAME_3;
-                skillID = BlazeWizard.GRAND_ORBITAL_FLAME_ATOM;
-                break;
-            case BlazeWizard.GREATER_ORBITAL_FLAME:
+                yield BlazeWizard.GRAND_ORBITAL_FLAME_ATOM;
+            }
+            case BlazeWizard.GREATER_ORBITAL_FLAME -> {
                 fae = ForceAtomEnum.ORBITAL_FLAME_2;
-                skillID = BlazeWizard.GREATER_ORBITAL_FLAME_ATOM;
-                break;
-            default:
+                yield BlazeWizard.GREATER_ORBITAL_FLAME_ATOM;
+            }
+            default -> {
                 fae = ForceAtomEnum.ORBITAL_FLAME_1;
-                skillID = BlazeWizard.ORBITAL_FLAME_ATOM;
-                break;
-        }
+                yield BlazeWizard.ORBITAL_FLAME_ATOM;
+            }
+        };
 
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStatBySkillId(BlazeWizard.ORBITAL_FLAME_RANGE)) {
@@ -315,40 +314,20 @@ public class JobSkillHandler {
         int skillID = inPacket.decodeInt();
         int questID = QuestConstants.SKILL_COMMAND_LOCK_ARAN;
         Quest quest = chr.getQuestManager().getQuestById(questID);
-        int lockID = -1;
+        int lockID = switch (skillID) {
+            case Aran.COMBAT_STEP -> 0;
+            case Aran.SMASH_WAVE -> 1;
+            case Aran.FINAL_CHARGE -> 2;
+            case Aran.FINAL_TOSS -> 3;
+            case Aran.ROLLING_SPIN -> 4;
+            case Aran.FINAL_BLOW -> 7;
+            case Aran.JUDGEMENT_DRAW -> 5;
+            case Aran.GATHERING_HOOK -> 6;
+            case Aran.FINISHER_STORM_OF_FEAR -> 8;
+            case Aran.FINISHER_HUNTER_PREY -> 9;
+            default -> -1;
+        };
 
-        switch (skillID) {
-            case Aran.COMBAT_STEP:
-                lockID = 0;
-                break;
-            case Aran.SMASH_WAVE:
-                lockID = 1;
-                break;
-            case Aran.FINAL_CHARGE:
-                lockID = 2;
-                break;
-            case Aran.FINAL_TOSS:
-                lockID = 3;
-                break;
-            case Aran.ROLLING_SPIN:
-                lockID = 4;
-                break;
-            case Aran.FINAL_BLOW:
-                lockID = 7;
-                break;
-            case Aran.JUDGEMENT_DRAW:
-                lockID = 5;
-                break;
-            case Aran.GATHERING_HOOK:
-                lockID = 6;
-                break;
-            case Aran.FINISHER_STORM_OF_FEAR:
-                lockID = 8;
-                break;
-            case Aran.FINISHER_HUNTER_PREY:
-                lockID = 9;
-                break;
-        }
         if (lockID < 0)
             return;
         if (quest == null)
@@ -388,22 +367,21 @@ public class JobSkillHandler {
 
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mobid);
                 int inc = ForceAtomEnum.KAISER_WEAPON_THROW_1.getInc();
-                int type = ForceAtomEnum.KAISER_WEAPON_THROW_1.getForceAtomType();
-
-                switch (tsm.getOption(StopForceAtomInfo).nOption) {
-                    case 3:
+                int type = switch (tsm.getOption(StopForceAtomInfo).nOption) {
+                    case 3 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getForceAtomType();
-                        break;
-                    case 2:
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getForceAtomType();
+                    }
+                    case 2 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_2.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_2.getForceAtomType();
-                        break;
-                    case 4:
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_2.getForceAtomType();
+                    }
+                    case 4 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getForceAtomType();
-                        break;
-                }
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getForceAtomType();
+                    }
+                    default -> ForceAtomEnum.KAISER_WEAPON_THROW_1.getForceAtomType();
+                };
 
                 ForceAtomInfo forceAtomInfo = new ForceAtomInfo(1, inc, 25, 30,
                         0, 10 * i, (int) System.currentTimeMillis(), 1, 0,
@@ -420,22 +398,21 @@ public class JobSkillHandler {
 
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(lastMobID);
                 int inc = ForceAtomEnum.KAISER_WEAPON_THROW_1.getInc();
-                int type = ForceAtomEnum.KAISER_WEAPON_THROW_1.getForceAtomType();
-
-                switch (tsm.getOption(StopForceAtomInfo).nOption) {
-                    case 3:
+                int type = switch (tsm.getOption(StopForceAtomInfo).nOption) {
+                    case 3 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getForceAtomType();
-                        break;
-                    case 2:
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_1.getForceAtomType();
+                    }
+                    case 2 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_2.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_2.getForceAtomType();
-                        break;
-                    case 4:
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_2.getForceAtomType();
+                    }
+                    case 4 -> {
                         inc = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getInc();
-                        type = ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getForceAtomType();
-                        break;
-                }
+                        yield ForceAtomEnum.KAISER_WEAPON_THROW_MORPH_2.getForceAtomType();
+                    }
+                    default -> ForceAtomEnum.KAISER_WEAPON_THROW_1.getForceAtomType();
+                };
 
                 ForceAtomInfo forceAtomInfo = new ForceAtomInfo(1, inc, 25, 30,
                         0, 12 * i, (int) System.currentTimeMillis(), 1, 0,

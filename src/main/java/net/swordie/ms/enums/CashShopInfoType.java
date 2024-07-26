@@ -14,7 +14,7 @@ public enum CashShopInfoType {
     Cart(10),
     BannerMsg(12);
 
-    private int val;
+    private final int val;
 
     CashShopInfoType(int val) {
         this.val = val;

@@ -7,9 +7,9 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class BuyShopResult implements ShopResult {
 
-    private int repurchaseItem;
-    private int someUpdateItem;
-    private int starCoinUpdate;
+    private final int repurchaseItem;
+    private final int someUpdateItem;
+    private final int starCoinUpdate;
 
     public BuyShopResult(int repurchaseItem, int someUpdateItem, int starCoinUpdate) {
         this.repurchaseItem = repurchaseItem;
@@ -18,7 +18,7 @@ public class BuyShopResult implements ShopResult {
     }
 
     @Override
-    public ShopResultType getType() {
+    public ShopResultType type() {
         return ShopResultType.Buy;
     }
 

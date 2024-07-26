@@ -13,7 +13,7 @@ import java.util.Set;
  * Created on 3/2/2018.
  */
 public class QuestStartJobRequirement implements QuestStartRequirement {
-    private Set<Short> jobReq;
+    private final Set<Short> jobReq;
 
     public QuestStartJobRequirement() {
         this.jobReq = new HashSet<>();

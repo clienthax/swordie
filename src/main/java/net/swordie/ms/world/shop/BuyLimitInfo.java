@@ -12,7 +12,7 @@ import java.util.Set;
 public class BuyLimitInfo {
 
     private int type;
-    private Set<FileTime> dates = new HashSet<>();
+    private final Set<FileTime> dates = new HashSet<>();
 
     public void encode(OutPacket outPacket) {
         outPacket.encodeByte(getType());

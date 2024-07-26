@@ -142,7 +142,7 @@ public enum GuildType {
     Res_ChangeMaster_Pinkbean(131),
     ;
 
-    private byte val;
+    private final byte val;
 
     GuildType(int val) {
         this.val = (byte) val;

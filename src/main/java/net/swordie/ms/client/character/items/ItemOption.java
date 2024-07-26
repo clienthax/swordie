@@ -14,9 +14,9 @@ public class ItemOption {
     private int weight;
     private int id;
     private int reqLevel;
-    private Map<Integer, Map<BaseStat, Double>> statValuesPerLevel = new HashMap<>();
+    private final Map<Integer, Map<BaseStat, Double>> statValuesPerLevel = new HashMap<>();
     private String string;
-    private Map<Integer, Map<ItemOptionType, Integer>> miscValuesPerLevel = new HashMap<>();
+    private final Map<Integer, Map<ItemOptionType, Integer>> miscValuesPerLevel = new HashMap<>();
 
     public int getWeight() {
         return weight;
@@ -111,7 +111,7 @@ public class ItemOption {
         } else {
             for (String currentString : split) {
                 String opt = removeSpecialCharacters(currentString.split(" ")[0]);
-                if (!currentString.equals("") && doesItemOptionTypeExists(opt)) {
+                if (!currentString.isEmpty() && doesItemOptionTypeExists(opt)) {
                     val = getMiscValuesByLevel(level).get(ItemOptionType.valueOf(opt));
                     str = str.replace("#" + opt, val + "");
                 }

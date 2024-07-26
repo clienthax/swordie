@@ -100,7 +100,7 @@ public enum LoginType {
     ProcFail(-1),
 
     ;
-    private byte value;
+    private final byte value;
 
     LoginType(int value) {
         this.value = (byte) value;

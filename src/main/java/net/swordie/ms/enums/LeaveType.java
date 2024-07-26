@@ -9,7 +9,7 @@ public enum LeaveType {
     ;
 
 
-    private byte val;
+    private final byte val;
 
     LeaveType(int val) {
         this.val = (byte) val;

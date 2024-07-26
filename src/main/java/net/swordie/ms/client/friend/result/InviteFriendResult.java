@@ -8,11 +8,11 @@ import net.swordie.ms.client.friend.FriendType;
  * Created on 3/31/2018.
  */
 public class InviteFriendResult implements FriendResult {
-    private boolean isAccountFriend;
-    private int level;
-    private int job;
-    private int subJob;
-    private Friend friend;
+    private final boolean isAccountFriend;
+    private final int level;
+    private final int job;
+    private final int subJob;
+    private final Friend friend;
 
     public InviteFriendResult(Friend friend, boolean isAccountFriend, int level, int job, int subJob) {
         this.friend = friend;

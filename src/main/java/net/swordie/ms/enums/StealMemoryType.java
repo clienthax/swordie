@@ -14,7 +14,7 @@ public enum StealMemoryType {
     REMOVE_ALL_MEMORY(5),
     ;
 
-    private byte val;
+    private final byte val;
 
     StealMemoryType(int val) {this.val = (byte) val;}
 

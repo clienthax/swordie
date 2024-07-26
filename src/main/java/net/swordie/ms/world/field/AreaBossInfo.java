@@ -34,9 +34,11 @@ public enum AreaBossInfo {
 
     public static final int BASE_CD_MIN = 4 * 60; // 4 hours
 
-    private int mobId, fieldId, respawnTimeMin;
-    private long health;
-    private Point p;
+    private final int mobId;
+    private final int fieldId;
+    private final int respawnTimeMin;
+    private final long health;
+    private final Point p;
 
     AreaBossInfo(int mobid, int fieldid, Point point, int respawntimemin, long hp) {
         mobId = mobid;

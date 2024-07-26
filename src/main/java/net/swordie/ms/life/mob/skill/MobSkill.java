@@ -368,7 +368,7 @@ public class MobSkill {
             case Undead:
             case Fear:
             case PainMark:
-                Char chr = chars.size() == 0 ? null : Util.getRandomFromCollection(chars);
+                Char chr = chars.isEmpty() ? null : Util.getRandomFromCollection(chars);
                 if (chr != null) {
                     applyEffect(chr);
                 }

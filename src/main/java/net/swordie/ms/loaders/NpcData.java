@@ -5,8 +5,6 @@ import net.swordie.ms.life.npc.Npc;
 import net.swordie.ms.world.shop.NpcShopDlg;
 import net.swordie.ms.world.shop.NpcShopItem;
 import net.swordie.ms.ServerConstants;
-import net.swordie.ms.util.dsl.SWEntity;
-import net.swordie.ms.util.dsl.SWParser;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import net.swordie.ms.util.Util;
@@ -18,12 +16,12 @@ import java.util.*;
 /**
  * Created on 2/19/2018.
  */
-public class NpcData {
+public class NpcData implements DataCreator {
 	private static final Logger log = Logger.getLogger(NpcData.class);
 	private static final boolean LOG_UNKS = false;
 
-	private static Set<Npc> npcs = new HashSet<>();
-	private static Map<Integer, NpcShopDlg> shops = new HashMap<>();
+	private static final Set<Npc> npcs = new HashSet<>();
+	private static final Map<Integer, NpcShopDlg> shops = new HashMap<>();
 
 	private static Map<Integer, NpcShopDlg> getShops() {
 		return shops;
@@ -35,7 +33,13 @@ public class NpcData {
 
 	private static void loadNpcsFromWz() {
 		String wzDir = String.format("%s/Npc.wz", ServerConstants.WZ_DIR);
-		for (File file : new File(wzDir).listFiles()) {
+		File dir = new File(wzDir);
+		if (!dir.exists()) {
+			log.error(wzDir + " does not exist.");
+			return;
+		}
+
+		for (File file : dir.listFiles()) {
 			Npc npc = new Npc(0);
 			Node node = XMLApi.getRoot(file);
 			Node mainNode = XMLApi.getAllChildren(node).get(0);
@@ -139,7 +143,7 @@ public class NpcData {
 
 	private static NpcShopDlg loadNpcShopDlgFromDB(int id) {
 		List<NpcShopItem> items = (List<NpcShopItem>) DatabaseManager.getObjListFromDB(NpcShopItem.class, "shopid", id);
-		if (items == null || items.size() == 0) {
+		if (items == null || items.isEmpty()) {
 			return null;
 		}
 		NpcShopDlg nsd = new NpcShopDlg();

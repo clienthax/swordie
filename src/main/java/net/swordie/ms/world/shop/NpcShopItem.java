@@ -6,7 +6,7 @@ import net.swordie.ms.connection.db.FileTimeConverter;
 import net.swordie.ms.enums.ItemGrade;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 3/27/2018.

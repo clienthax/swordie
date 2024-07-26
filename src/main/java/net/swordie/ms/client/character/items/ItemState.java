@@ -15,7 +15,7 @@ public enum ItemState {
     AmazingHyperUpgradeUsed_Stat(0x400),
     AmazingHyperUpgradeUsed_Sync(0x800);
 
-    private int val;
+    private final int val;
 
     ItemState(int val) {
         this.val = val;

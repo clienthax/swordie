@@ -7,13 +7,8 @@ import net.swordie.ms.client.character.skills.Skill;
 import net.swordie.ms.client.character.skills.info.AttackInfo;
 import net.swordie.ms.client.jobs.Job;
 import net.swordie.ms.connection.InPacket;
-import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.constants.JobConstants;
-import net.swordie.ms.enums.Stat;
 import net.swordie.ms.loaders.SkillData;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created on 12/14/2017.
@@ -25,7 +20,7 @@ public class Noblesse extends Job {
     public static final int ELEMENTAL_SHIFT_HIGH = 10001253;
     public static final int ELEMENTAL_SHIFT_FLASH = 10001254;
 
-    private int[] addedSkills = {
+    private final int[] addedSkills = {
             ELEMENTAL_SLASH,
             ELEMENTAL_SHIFT_BASE,
             ELEMENTAL_SHIFT_HIGH,

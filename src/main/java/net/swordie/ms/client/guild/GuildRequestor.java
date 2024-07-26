@@ -3,7 +3,7 @@ package net.swordie.ms.client.guild;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 3/21/2018.

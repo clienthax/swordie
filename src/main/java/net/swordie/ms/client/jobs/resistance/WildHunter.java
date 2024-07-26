@@ -26,7 +26,6 @@ import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
 import net.swordie.ms.loaders.SkillData;
-import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -106,11 +105,11 @@ public class WildHunter extends Citizen {
     public static final int SILENT_RAMPAGE = 33121054;
     public static final int JAGUAR_RAMPAGE = 33121255;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             SECRET_ASSEMBLY,
     };
 
-    private int[] jaguarSummons = new int[] {
+    private final int[] jaguarSummons = new int[] {
             SUMMON_JAGUAR_GREY,
             SUMMON_JAGUAR_YELLOW,
             SUMMON_JAGUAR_RED,
@@ -122,7 +121,7 @@ public class WildHunter extends Citizen {
             SUMMON_JAGUAR_CRIMSON,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             SUMMON_JAGUAR_GREY,
             SUMMON_JAGUAR_YELLOW,
             SUMMON_JAGUAR_RED,
@@ -371,7 +370,7 @@ public class WildHunter extends Citizen {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -586,8 +585,7 @@ public class WildHunter extends Citizen {
                 case CAPTURE:
                     int mobID = inPacket.decodeInt();
                     Life life = chr.getField().getLifeByObjectID(mobID);
-                    if (life instanceof Mob) {
-                        Mob mob = (Mob) life;
+                    if (life instanceof Mob mob) {
                         if (mob.getMaxHp() * 0.90 <= mob.getHp()) {
                             chr.write(UserPacket.effect(Effect.showCaptureEffect(skillID, slv, 0, 1)));
                             return;

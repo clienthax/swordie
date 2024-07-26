@@ -36,7 +36,7 @@ public enum SkillType {
     SKILL_TYPE_ETC(99),
     ;
 
-    private int val;
+    private final int val;
 
     SkillType(int val) {
         this.val = val;

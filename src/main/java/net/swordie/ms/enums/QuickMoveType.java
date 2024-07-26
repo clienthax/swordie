@@ -30,7 +30,7 @@ public enum QuickMoveType {
 
 
     ;
-    private int val;
+    private final int val;
 
     QuickMoveType(int val) {
         this.val = val;

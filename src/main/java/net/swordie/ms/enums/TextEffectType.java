@@ -8,7 +8,7 @@ public enum TextEffectType {
     TextNoBackground(3),
     ;
 
-    private byte val;
+    private final byte val;
 
     TextEffectType(int val) { this.val = (byte) val;}
 

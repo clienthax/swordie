@@ -16,10 +16,10 @@ public class QuestInfo {
     private int questID;
     private int startNpc;
     private boolean normalAutoStart;
-    private Set<QuestStartRequirement> questStartRequirements = new HashSet<>();
-    private Set<QuestProgressRequirement> questProgressRequirements = new HashSet<>();
-    private Set<QuestReward> questRewards = new HashSet<>();
-    private Set<Integer> fieldEnters = new HashSet<>();
+    private final Set<QuestStartRequirement> questStartRequirements = new HashSet<>();
+    private final Set<QuestProgressRequirement> questProgressRequirements = new HashSet<>();
+    private final Set<QuestReward> questRewards = new HashSet<>();
+    private final Set<Integer> fieldEnters = new HashSet<>();
     private int infoNumber;
     private long end;
     private long endT;

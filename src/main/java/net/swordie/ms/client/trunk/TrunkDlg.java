@@ -7,7 +7,7 @@ import net.swordie.ms.connection.OutPacket;
  */
 public interface TrunkDlg {
 
-    TrunkType getType();
+    TrunkType type();
 
     void encode(OutPacket outPacket);
 }

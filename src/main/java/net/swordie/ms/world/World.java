@@ -19,18 +19,23 @@ import java.util.*;
 public class World {
     //WORLDITEM struct
 
-    private int worldId, worldState, worldEventEXP_WSE, worldEventDrop_WSE, boomUpEventNotice;
-    private boolean starplanet;
-    private String name, worldEventDescription;
-    private List<Channel> channels;
-    private Map<Integer, Party> parties = new HashMap<>();
-    private Map<Integer, Guild> guilds = new HashMap<>();
-    private Map<Integer, Alliance> alliances = new HashMap<>();
-    private Map<Integer, Client> connectedChatClients = new HashMap<>();
+    private final int worldId;
+    private final int worldState;
+    private final int worldEventEXP_WSE;
+    private final int worldEventDrop_WSE;
+    private final int boomUpEventNotice;
+    private final boolean starplanet;
+    private final String name;
+    private String worldEventDescription;
+    private final List<Channel> channels;
+    private final Map<Integer, Party> parties = new HashMap<>();
+    private final Map<Integer, Guild> guilds = new HashMap<>();
+    private final Map<Integer, Alliance> alliances = new HashMap<>();
+    private final Map<Integer, Client> connectedChatClients = new HashMap<>();
     private int partyIDCounter = 1;
     private boolean charCreateBlock;
     private boolean reboot;
-    private ArrayList<Merchant> merchants = new ArrayList<Merchant>();
+    private final ArrayList<Merchant> merchants = new ArrayList<>();
 
     public World(int worldId, String name, int worldState, String worldEventDescription, int worldEventEXP_WSE,
                  int worldEventDrop_WSE, int boomUpEventNotice, int amountOfChannels, boolean starplanet, boolean reboot) {

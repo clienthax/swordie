@@ -12,7 +12,7 @@ public enum DemianFlyingSwordType {
     SecondSword(1), // Smaller 2nd sword that is spawned if 7/7 stigma is reached.
     ;
 
-    private byte val;
+    private final byte val;
 
     DemianFlyingSwordType(int val) {
         this.val = (byte) val;

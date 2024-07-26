@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AndroidInfo {
-    private List<Integer> hairs = new ArrayList<>();
-    private List<Integer> faces = new ArrayList<>();
-    private List<Integer> skins = new ArrayList<>();
+    private final List<Integer> hairs = new ArrayList<>();
+    private final List<Integer> faces = new ArrayList<>();
+    private final List<Integer> skins = new ArrayList<>();
     private int id;
 
     public AndroidInfo(int id) {

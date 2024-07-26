@@ -64,10 +64,11 @@ public enum NpcMessageType {
     None(-1, ResponseType.Answer),
     ;
 
-    private byte val;
-    private boolean prevPossible, nextPossible;
+    private final byte val;
+    private final boolean prevPossible;
+    private final boolean nextPossible;
     private int delay;
-    private ResponseType responseType;
+    private final ResponseType responseType;
 
     NpcMessageType(int val, ResponseType responseType) {
         this.val = (byte) val;

@@ -4,7 +4,7 @@ import net.swordie.ms.client.character.CharacterStat;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.JobConstants;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 2/18/2017.

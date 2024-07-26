@@ -7,22 +7,17 @@ import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.handlers.EventManager;
-import net.swordie.ms.life.Life;
-import net.swordie.ms.util.Randomizer;
-import net.swordie.ms.world.Channel;
-import net.swordie.ms.world.field.Field;
 
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 public class InGameEventManager {
 
-    private static InGameEventManager instance = new InGameEventManager();
+    private static final InGameEventManager instance = new InGameEventManager();
     public static final int REGISTRATION_DURATION_MINS = ServerConfig.DEBUG_MODE ? 1 : 5; // devs want fast
 
-    private HashMap<InGameEventType, InGameEvent> events = new HashMap<>();
+    private final HashMap<InGameEventType, InGameEvent> events = new HashMap<>();
     private ScheduledFuture schedule;
     private ScheduledFuture reminderTimer;
     private InGameEventType previousEvent;

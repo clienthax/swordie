@@ -5,19 +5,9 @@ import net.swordie.ms.connection.OutPacket;
 /**
  * Created on 3/29/2018.
  */
-public class MsgShopResult implements ShopResult {
-
-    private ShopResultType type;
-
-    public MsgShopResult(ShopResultType type) {
-        this.type = type;
-    }
+public record MsgShopResult(ShopResultType type) implements ShopResult {
 
     @Override
-    public ShopResultType getType() {
-        return type;
+    public void encode(OutPacket outPacket) {
     }
-
-    @Override
-    public void encode(OutPacket outPacket) {}
 }

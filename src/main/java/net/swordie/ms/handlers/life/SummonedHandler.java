@@ -2,11 +2,9 @@ package net.swordie.ms.handlers.life;
 
 import net.swordie.ms.client.Client;
 import net.swordie.ms.client.character.Char;
-import net.swordie.ms.client.jobs.nova.Kaiser;
 import net.swordie.ms.client.jobs.resistance.BattleMage;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.connection.packet.Summoned;
-import net.swordie.ms.enums.AssistType;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Life;
@@ -24,8 +22,7 @@ public class SummonedHandler {
         // CVecCtrlSummoned::EndUpdateActive
         int summonID = inPacket.decodeInt();
         Life life = chr.getField().getLifeByObjectID(summonID);
-        if (life instanceof Summon) {
-            Summon summon = (Summon) life;
+        if (life instanceof Summon summon) {
             MovementInfo movementInfo = new MovementInfo(inPacket);
             movementInfo.applyTo(summon);
             chr.getField().broadcastPacket(Summoned.summonedMove(chr.getId(), summonID, movementInfo), chr);
@@ -83,8 +80,7 @@ public class SummonedHandler {
         byte unk = inPacket.decodeByte();
         inPacket.decodeInt(); // current Time
 
-        if (field.getLifeByObjectID(objectID) != null && field.getLifeByObjectID(objectID) instanceof Summon) {
-            Summon summon = (Summon) field.getLifeByObjectID(objectID);
+        if (field.getLifeByObjectID(objectID) != null && field.getLifeByObjectID(objectID) instanceof Summon summon) {
             summon.onSkillUse(skillId);
         }
     }

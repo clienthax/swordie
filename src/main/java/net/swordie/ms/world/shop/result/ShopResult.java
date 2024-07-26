@@ -7,7 +7,7 @@ import net.swordie.ms.connection.OutPacket;
  */
 public interface ShopResult {
 
-    ShopResultType getType();
+    ShopResultType type();
 
     void encode(OutPacket outPacket);
 }

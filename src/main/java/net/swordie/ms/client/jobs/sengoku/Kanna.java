@@ -73,7 +73,7 @@ public class Kanna extends Job {
     public static final int HAKUS_BLESSING = 42121022;
     public static final int BREATH_UNSEEN = 42121023;
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             HAKU_REBORN,
             RADIANT_PEACOCK,
             KISHIN_SHOUKAN,
@@ -218,7 +218,7 @@ public class Kanna extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

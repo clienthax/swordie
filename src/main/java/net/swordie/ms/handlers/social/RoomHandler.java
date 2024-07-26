@@ -24,7 +24,6 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.Merchant.Merchant;
 import net.swordie.ms.life.Merchant.MerchantItem;
-import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.world.World;
 import net.swordie.ms.world.field.Field;
@@ -151,8 +150,7 @@ public class RoomHandler {
                 if (tradeRoom == null) {
                     int objectid = inPacket.decodeInt();
                     Life life = chr.getField().getLifeByObjectID(objectid);
-                    if (life instanceof Merchant) {
-                        Merchant merchant = (Merchant) life;
+                    if (life instanceof Merchant merchant) {
                         if (!merchant.getOpen()) {
                             chr.chatMessage("This shop is in maintenance");
                             return;
@@ -281,7 +279,7 @@ public class RoomHandler {
                 merchant = chr.getMerchant();
                 merchant.setOpen(true);
                 chr.getField().broadcastPacket(MiniroomPacket.openShop(merchant));
-                EventManager.addEvent(() -> merchant.closeMerchant(), TimeUnit.HOURS.toMillis(24)); //remove merchant in 24 hours
+                EventManager.addEvent(merchant::closeMerchant, TimeUnit.HOURS.toMillis(24)); //remove merchant in 24 hours
                 break;
             case AddItem1:
             case AddItem2:
@@ -344,7 +342,7 @@ public class RoomHandler {
                 inPacket.decodeByte();
                 slot = (byte) inPacket.decodeShort();
                 merchant = chr.getMerchant();
-                if (merchant == null || merchant.getOwnerID() != chr.getId() || merchant.getItems().size() == 0) {
+                if (merchant == null || merchant.getOwnerID() != chr.getId() || merchant.getItems().isEmpty()) {
                     return;
                 }
                 MerchantItem merchantItem = merchant.getItems().get(slot);

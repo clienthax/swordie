@@ -140,11 +140,10 @@ public class ScriptHandler {
     public static void handleEnterRandomPortalRequest(Char chr, InPacket inPacket) {
         int portalObjID = inPacket.decodeInt();
         Life life = chr.getField().getLifeByObjectID(portalObjID);
-        if (!(life instanceof RandomPortal)) {
+        if (!(life instanceof RandomPortal randomPortal)) {
             chr.chatMessage("Could not find that portal.");
             return;
         }
-        RandomPortal randomPortal = (RandomPortal) life;
         if (randomPortal.getCharID() != chr.getId()) {
             chr.chatMessage("A mysterious force is blocking your way.");
             chr.dispose();

@@ -46,7 +46,7 @@ public enum ChatType {
     PieSpeaker(38),
     BlackOnWhite(39),
     ;
-    private short val;
+    private final short val;
 
     ChatType(short val) {
         this.val = val;

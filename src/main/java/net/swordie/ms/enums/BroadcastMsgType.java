@@ -30,7 +30,7 @@ public enum BroadcastMsgType {
     MegaphoneNoMessage(23),
     BalloonMessage(24); // TODO   Contains PackedCharLook
 
-    private byte val;
+    private final byte val;
 
     BroadcastMsgType(int val) {
         this.val = (byte) val;

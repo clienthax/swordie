@@ -27,6 +27,7 @@ import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.*;
 import static net.swordie.ms.client.character.skills.SkillStat.*;
@@ -229,18 +230,15 @@ public class Kinesis extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(attackInfo.skillId);
         if(skill == null) {
-            switch(attackInfo.skillId) {
-                case PSYCHIC_ASSAULT_DOWN:
-                    skill = chr.getSkill(PSYCHIC_ASSAULT_FWD);
-                    break;
-                case PSYCHIC_BLAST_DOWN:
-                    skill = chr.getSkill(PSYCHIC_BLAST_FWD);
-                    break;
-            }
+            skill = switch (attackInfo.skillId) {
+                case PSYCHIC_ASSAULT_DOWN -> chr.getSkill(PSYCHIC_ASSAULT_FWD);
+                case PSYCHIC_BLAST_DOWN -> chr.getSkill(PSYCHIC_BLAST_FWD);
+                default -> skill;
+            };
         }
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -311,7 +309,7 @@ public class Kinesis extends Job {
     }
 
     private void createKineticOrbForceAtom(int skillID, byte slv, AttackInfo attackInfo) {
-        if(Arrays.asList(nonOrbSkills).contains(skillID)) {
+        if(Collections.singletonList(nonOrbSkills).contains(skillID)) {
             return;
         }
         SkillInfo si = SkillData.getSkillInfoById(KINETIC_COMBO);

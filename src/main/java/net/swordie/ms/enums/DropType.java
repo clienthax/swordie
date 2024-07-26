@@ -7,7 +7,7 @@ public enum DropType {
     Mesos(0),
     Item(1);
 
-    private byte val;
+    private final byte val;
 
     DropType(int val) {
         this.val = (byte) val;

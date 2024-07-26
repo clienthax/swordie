@@ -47,7 +47,7 @@ public class Scene {
         for (EffectInfo ei : effectInfos) {
 
             if(ei.getType() == null) {
-                log.error(String.format("Unhandled scene Type"));
+                log.error("Unhandled scene Type");
                 continue;
             }
 

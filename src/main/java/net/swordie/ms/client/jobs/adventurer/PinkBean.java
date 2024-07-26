@@ -59,7 +59,7 @@ public class PinkBean extends Job {
     private final int MAX_YOYO_STACK = 8;
     private ScheduledFuture yoyoStackTimer;
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             CHILL_OUT_ZZZ,
             CHILL_OUT_TONGUE_OUT,
             CHILL_OUT_MYSTERIOUS_COCKTAIL,
@@ -223,7 +223,7 @@ public class PinkBean extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -330,8 +330,7 @@ public class PinkBean extends Job {
                     Rect rect = new Rect(inPacket.decodeShort(), inPacket.decodeShort()
                             , inPacket.decodeShort(), inPacket.decodeShort());
                     for(Life life : chr.getField().getLifesInRect(rect)) {
-                        if(life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if(life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             if(Util.succeedProp(si.getValue(prop, slv))) {
                                 o1.nOption = si.getValue(x, slv);

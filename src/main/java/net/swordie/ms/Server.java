@@ -39,8 +39,8 @@ public class Server extends Properties {
 
 	private static final Server server = new Server();
 
-	private List<World> worldList = new ArrayList<>();
-	private Set<Integer> users = new HashSet<>(); // just save the ids, no need to save the references
+	private final List<World> worldList = new ArrayList<>();
+	private final Set<Integer> users = new HashSet<>(); // just save the ids, no need to save the references
 	private CashShop cashShop;
 
 	public static Server getInstance() {
@@ -105,7 +105,7 @@ public class Server extends Properties {
 		if (!exists) {
 			log.info("Dat files cannot be found (at least not the equip dats). All dats will now be generated. This may take a long while.");
 			Util.makeDirIfAbsent(ServerConstants.DAT_DIR);
-			for (Class c : DataClasses.datCreators) {
+			for (Class<? extends DataCreator> c : DataClasses.datCreators) {
 				try {
 					Method m = c.getMethod("generateDatFiles");
 					m.invoke(null);

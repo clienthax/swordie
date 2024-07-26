@@ -9,7 +9,7 @@ public enum EliteState {
     EliteBoss(2),
     BonusStage(3);
 
-    private int val;
+    private final int val;
 
     EliteState(int val) {
         this.val = val;

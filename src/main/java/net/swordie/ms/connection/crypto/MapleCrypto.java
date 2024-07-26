@@ -35,15 +35,15 @@ public final class MapleCrypto {
      *
      * @see AES#encrypt(byte[]) used in this method.
      */
-    private AES cipher;
+    private final AES cipher;
     /**
      * Used for checking the packets being sent and received. These are
      * initialized at the starting part of the program by providing the
      * current version the server is running.
      *
-     * @see MapleAES#checkPacket(byte[], byte[]) checking net.swordie.ms.connection.packet header using these.
-     * @see MapleAES#checkPacket(int, byte[]) checking net.swordie.ms.connection.packet header using these.
-     * @see MapleAES#initialize(short) where the values are initialized.
+     * @see MapleCrypto#checkPacket(byte[], byte[]) checking net.swordie.ms.connection.packet header using these.
+     * @see MapleCrypto#checkPacket(int, byte[]) checking net.swordie.ms.connection.packet header using these.
+     * @see MapleCrypto#initialize(short) where the values are initialized.
      */
     private static short gVersion, sVersion, rVersion;
     /**
@@ -224,7 +224,7 @@ public final class MapleCrypto {
     }
 
     /**
-     * @see MapleAES#checkPacket(byte[], byte[]) same thing as this method,
+     * @see MapleCrypto#checkPacket(byte[], byte[]) same thing as this method,
      * except that we convert the integer net.swordie.ms.connection.packet header (4 bytes combined)
      * into an array of the first 2 bytes of the integer net.swordie.ms.connection.packet header.
      * @param delta foreign header.

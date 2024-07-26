@@ -66,75 +66,47 @@ public enum BaseStat {
 
 
     public static BaseStat getFromStat(Stat s) {
-        switch (s) {
-            case str:
-                return str;
-            case dex:
-                return dex;
-            case inte:
-                return inte;
-            case luk:
-                return luk;
-            case mhp:
-                return mhp;
-            case mmp:
-                return mmp;
-            default:
-                return unk;
-        }
+        return switch (s) {
+            case str -> str;
+            case dex -> dex;
+            case inte -> inte;
+            case luk -> luk;
+            case mhp -> mhp;
+            case mmp -> mmp;
+            default -> unk;
+        };
     }
 
     public BaseStat getRateVar() {
-        switch (this) {
-            case str:
-                return strR;
-            case dex:
-                return dexR;
-            case inte:
-                return intR;
-            case luk:
-                return lukR;
-            case pad:
-                return padR;
-            case mad:
-                return madR;
-            case pdd:
-                return pddR;
-            case mdd:
-                return mddR;
-            case mhp:
-                return mhpR;
-            case mmp:
-                return mmpR;
-            case acc:
-                return accR;
-            case eva:
-                return evaR;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case str -> strR;
+            case dex -> dexR;
+            case inte -> intR;
+            case luk -> lukR;
+            case pad -> padR;
+            case mad -> madR;
+            case pdd -> pddR;
+            case mdd -> mddR;
+            case mhp -> mhpR;
+            case mmp -> mmpR;
+            case acc -> accR;
+            case eva -> evaR;
+            default -> null;
+        };
     }
 
     public BaseStat getLevelVar() {
-        switch(this) {
-            case str:
-                return strLv;
-            case dex:
-                return dexLv;
-            case inte:
-                return intLv;
-            case luk:
-                return lukLv;
-            case pad:
-                return padLv;
-            case mad:
-                return madLv;
-            case mhp:
-                return mhpLv;
-            case mmp:
-                return mmpLv;
-        }
-        return null;
+        return switch (this) {
+            case str -> strLv;
+            case dex -> dexLv;
+            case inte -> intLv;
+            case luk -> lukLv;
+            case pad -> padLv;
+            case mad -> madLv;
+            case mhp -> mhpLv;
+            case mmp -> mmpLv;
+            default -> null;
+        };
     }
 
     public static Map<BaseStat, Integer> getFromCTS(CharacterTemporaryStat ctsArg, Option o) {
@@ -382,21 +354,14 @@ public enum BaseStat {
     }
 
     public Stat toStat() {
-        switch(this) {
-            case str:
-                return Stat.str;
-            case dex:
-                return Stat.dex;
-            case inte:
-                return Stat.inte;
-            case luk:
-                return Stat.luk;
-            case mhp:
-                return Stat.mhp;
-            case mmp:
-                return Stat.mmp;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case str -> Stat.str;
+            case dex -> Stat.dex;
+            case inte -> Stat.inte;
+            case luk -> Stat.luk;
+            case mhp -> Stat.mhp;
+            case mmp -> Stat.mmp;
+            default -> null;
+        };
     }
 }

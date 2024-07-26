@@ -14,10 +14,8 @@ import net.swordie.ms.client.party.Party;
 import net.swordie.ms.client.party.PartyMember;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.connection.packet.UserLocal;
-import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.ChatType;
-import net.swordie.ms.enums.Stat;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.Life;
@@ -25,14 +23,11 @@ import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
 import net.swordie.ms.loaders.SkillData;
-import net.swordie.ms.util.Randomizer;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +68,7 @@ public class Mihile extends Job {
     public static final int QUEEN_OF_TOMORROW = 51121053;
     public static final int SACRED_CUBE = 51121054;
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             ROYAL_GUARD,
             ROYAL_GUARD_2,
             ROYAL_GUARD_3,
@@ -413,7 +408,7 @@ public class Mihile extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -559,8 +554,7 @@ public class Mihile extends Job {
                         rect = rect.moveRight();
                     }
                     for(Life life : chr.getField().getLifesInRect(rect)) {
-                        if(life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if(life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             if(Util.succeedProp(si.getValue(prop, slv))) {
                                 mts.removeBuffs();

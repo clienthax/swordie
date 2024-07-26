@@ -140,10 +140,10 @@ public class MigrationHandler {
         int x = inPacket.decodeShort();
         int y = inPacket.decodeShort();
         String portalName = inPacket.decodeString();
-        if (portalName != null && !"".equals(portalName)) {
+        if (portalName != null && !portalName.isEmpty()) {
             Field field = chr.getField();
             Portal portal = field.getPortalByName(portalName);
-            if (portal.getScript() != null && !portal.getScript().equals("")) {
+            if (portal.getScript() != null && !portal.getScript().isEmpty()) {
                 chr.getScriptManager().startScript(portal.getId(), portal.getScript(), ScriptType.Portal);
             } else {
                 Field toField = chr.getOrCreateFieldByCurrentInstanceType(portal.getTargetMapId());

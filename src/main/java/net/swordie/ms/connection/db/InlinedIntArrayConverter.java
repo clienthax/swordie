@@ -1,7 +1,7 @@
 package net.swordie.ms.connection.db;
 
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class InlinedIntArrayConverter implements AttributeConverter<List<Integer
             sb.append(i).append(",");
         }
         String res;
-        if (integers.size() > 0) {
+        if (!integers.isEmpty()) {
             res = sb.toString().substring(0, sb.length() - 1); // removes last comma
         } else {
             res = "";
@@ -35,7 +35,7 @@ public class InlinedIntArrayConverter implements AttributeConverter<List<Integer
         }
         String[] split = s.split(",");
         List<Integer> ints = new ArrayList<>();
-        if (split.length > 0 && split[0].length() > 0) {
+        if (split.length > 0 && !split[0].isEmpty()) {
             for (String str : split) {
                 ints.add(Integer.valueOf(str));
             }

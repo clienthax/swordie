@@ -10,7 +10,7 @@ import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.enums.MessageType;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "guildmembers")

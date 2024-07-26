@@ -13,7 +13,7 @@ import static net.swordie.ms.client.guild.result.GuildType.*;
  */
 public class GuildResult {
 
-    private GuildType type;
+    private final GuildType type;
     private Guild guild;
     private GuildMember member;
     private String[] gradeNames;

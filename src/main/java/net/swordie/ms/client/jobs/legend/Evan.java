@@ -93,7 +93,7 @@ public class Evan extends Job {
     private int debrisCount = 0;
     private Field oldField;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             INHERITED_WILL,
             BACK_TO_NATURE,
     };
@@ -130,20 +130,11 @@ public class Evan extends Job {
     }
 
     public int getEvanSkill(int skillID) {
-        switch (skillID) {
-            case MANA_BURST_I:
-            case MANA_BURST_II:
-            case MANA_BURST_III:
-            case MANA_BURST_IV_1:
-            case MANA_BURST_IV_2:
-            case WIND_CIRCLE:
-            case THUNDER_CIRCLE:
-            case EARTH_CIRCLE:
-            case DARK_FOG:
-                return 1;
-
-        }
-        return skillID;
+        return switch (skillID) {
+            case MANA_BURST_I, MANA_BURST_II, MANA_BURST_III, MANA_BURST_IV_1, MANA_BURST_IV_2, WIND_CIRCLE,
+                 THUNDER_CIRCLE, EARTH_CIRCLE, DARK_FOG -> 1;
+            default -> skillID;
+        };
     }
 
     @Override
@@ -268,7 +259,7 @@ public class Evan extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -471,8 +462,7 @@ public class Evan extends Job {
                                     chr.getPosition().deepCopy().getY() + 300)
                     );
                     for(Life life : chr.getField().getLifesInRect(rect)) {
-                        if(life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if(life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             o1.nOption = rflash.getValue(x, slv);
                             o1.rOption = skillID;

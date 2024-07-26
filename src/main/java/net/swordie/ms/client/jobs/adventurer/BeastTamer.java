@@ -106,7 +106,7 @@ public class BeastTamer extends Job {
     //Hyper
     public static final int TEAM_ROAR = 112121056;
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             MAPLE_GUARDIAN,
             BEAR_MODE,
             SNOW_LEOPARD_MODE,
@@ -141,7 +141,7 @@ public class BeastTamer extends Job {
             TEAM_ROAR,
     };
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             BEAR_MODE,
             SNOW_LEOPARD_MODE,
             HAWK_MODE,
@@ -149,23 +149,23 @@ public class BeastTamer extends Job {
             HOMEWARD_BOUND,
     };
 
-    private static int[] bearBuffs = new int[]{
+    private static final int[] bearBuffs = new int[]{
             BEAR_ASSAULT,
     };
 
-    private static int[] leopardBuffs = new int[]{
+    private static final int[] leopardBuffs = new int[]{
             BRO_ATTACK,
 
     };
 
-    private static int[] hawkBuffs = new int[]{
+    private static final int[] hawkBuffs = new int[]{
             HAWK_FLOCK,
             RAPTOR_TALONS,
             BIRDS_EYE_VIEW,
             RAZOR_BEAK,
     };
 
-    private static int[] catBuffs = new int[]{
+    private static final int[] catBuffs = new int[]{
             MEOW_CARD,
             MEOW_CARD_RED,
             MEOW_CARD_BLUE,
@@ -180,7 +180,7 @@ public class BeastTamer extends Job {
             FRIENDS_OF_ARBY,
     };
 
-    private int[] cards = new int[]{
+    private final int[] cards = new int[]{
             MEOW_CARD_RED,
             MEOW_CARD_GREEN,
             MEOW_CARD_BLUE,
@@ -597,7 +597,7 @@ public class BeastTamer extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -808,7 +808,7 @@ public class BeastTamer extends Job {
                                         pml.getChr().getHP() <= 0).
                                 collect(Collectors.toList());
 
-                        if (eligblePartyMemberList.size() > 0) {
+                        if (!eligblePartyMemberList.isEmpty()) {
                             Char randomPartyChr = Util.getRandomFromCollection(eligblePartyMemberList).getChr();
                             TemporaryStatManager partyTSM = randomPartyChr.getTemporaryStatManager();
                             randomPartyChr.heal(randomPartyChr.getMaxHP());

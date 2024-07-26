@@ -123,17 +123,17 @@ public class Mob extends Life {
     private int charismaEXP;
     private boolean isSplit;
     private int splitLink;
-    private Map<Char, Long> damageDone = new HashMap<>();
+    private final Map<Char, Long> damageDone = new HashMap<>();
     private Set<DropInfo> drops = new HashSet<>();
-    private List<MobSkill> skills = new ArrayList<>();
-    private List<MobSkill> attacks = new ArrayList<>();
+    private final List<MobSkill> skills = new ArrayList<>();
+    private final List<MobSkill> attacks = new ArrayList<>();
     private Set<Integer> quests = new HashSet<>();
     private Set<Integer> revives = new HashSet<>();
-    private Map<Integer, Long> skillCooldowns = new HashMap<>();
+    private final Map<Integer, Long> skillCooldowns = new HashMap<>();
     private long nextPossibleSkillTime = 0;
-    private List<Tuple<Integer, Integer>> eliteSkills = new ArrayList<>();
+    private final List<Tuple<Integer, Integer>> eliteSkills = new ArrayList<>();
     private boolean selfDestruction;
-    private List<MobSkill> skillDelays = new CopyOnWriteArrayList<>();
+    private final List<MobSkill> skillDelays = new CopyOnWriteArrayList<>();
     private boolean inAttack;
     private boolean isBanMap;
     private int banType = 1;// default
@@ -1466,8 +1466,7 @@ public class Mob extends Life {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Mob) {
-            Mob mob = (Mob) obj;
+        if (obj instanceof Mob mob) {
             return mob.getTemplateId() == getTemplateId() && mob.getObjectId() == getObjectId() && mob.getField().equals(getField());
         }
         return false;
@@ -1533,7 +1532,7 @@ public class Mob extends Life {
     }
 
     public void reviveMob(long delay) {
-        if (getRevives().size() > 0) {
+        if (!getRevives().isEmpty()) {
             EventManager.addEvent(this::doRevive, delay);
         }
     }
@@ -1799,7 +1798,7 @@ public class Mob extends Life {
     }
 
     public boolean isFinishedEscort() {
-        return escortDest.size() == 0;
+        return escortDest.isEmpty();
     }
 
     @Override

@@ -7,14 +7,14 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class SellShopResult implements ShopResult {
 
-    private int itemID;
+    private final int itemID;
 
     public SellShopResult(int itemID) {
         this.itemID = itemID;
     }
 
     @Override
-    public ShopResultType getType() {
+    public ShopResultType type() {
         return ShopResultType.NotEnoughInStockMsg;
     }
 

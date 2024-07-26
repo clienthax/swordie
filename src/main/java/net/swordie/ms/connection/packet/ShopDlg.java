@@ -25,7 +25,7 @@ public class ShopDlg {
     public static OutPacket shopResult(ShopResult shopResult) {
         OutPacket outPacket = new OutPacket(OutHeader.SHOP_RESULT);
 
-        outPacket.encodeByte(shopResult.getType().getVal());
+        outPacket.encodeByte(shopResult.type().getVal());
         shopResult.encode(outPacket);
 
         return outPacket;

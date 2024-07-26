@@ -8,7 +8,7 @@ public enum ServerStatus {
     /**
      * Created on 11/3/2017.
      */
-    private byte value;
+    private final byte value;
 
     ServerStatus (int value) {
         this.value = (byte) value;

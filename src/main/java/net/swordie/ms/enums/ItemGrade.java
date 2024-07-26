@@ -26,29 +26,20 @@ public enum ItemGrade {
     Legendary(20),
     ;
 
-    private int val;
+    private final int val;
 
     ItemGrade(int val) {
         this.val = val;
     }
 
     public static ItemGrade getHiddenBonusGradeByBaseGrade(ItemGrade gradeByVal) {
-        switch (gradeByVal) {
-            case HiddenRare:
-            case Rare:
-                return RareBonusHidden;
-            case HiddenEpic:
-            case Epic:
-                return EpicBonusHidden;
-            case HiddenUnique:
-            case Unique:
-                return UniqueBonusHidden;
-            case HiddenLegendary:
-            case Legendary:
-                return LegendaryBonusHidden;
-            default:
-                return None;
-        }
+        return switch (gradeByVal) {
+            case HiddenRare, Rare -> RareBonusHidden;
+            case HiddenEpic, Epic -> EpicBonusHidden;
+            case HiddenUnique, Unique -> UniqueBonusHidden;
+            case HiddenLegendary, Legendary -> LegendaryBonusHidden;
+            default -> None;
+        };
     }
 
     public short getVal() {
@@ -85,91 +76,50 @@ public enum ItemGrade {
     public static boolean isMatching(short first, short second) {
         ItemGrade firstGrade = getGradeByVal(first);
         ItemGrade other = getGradeByVal(second);
-        switch(firstGrade) {
-            case None:
-                return other == None;
-            case RareSecondary:
-                return other == RareSecondary;
-            case HiddenRare:
-            case Rare:
-                return other == HiddenRare || other == Rare;
-            case HiddenEpic:
-            case Epic:
-                return other == HiddenEpic || other == Epic;
-            case HiddenUnique:
-            case Unique:
-                return other == HiddenUnique || other == Unique;
-            case HiddenLegendary:
-            case Legendary:
-                return other == HiddenLegendary || other == Legendary;
-            default:
-                return false;
-        }
+        return switch (firstGrade) {
+            case None -> other == None;
+            case RareSecondary -> other == RareSecondary;
+            case HiddenRare, Rare -> other == HiddenRare || other == Rare;
+            case HiddenEpic, Epic -> other == HiddenEpic || other == Epic;
+            case HiddenUnique, Unique -> other == HiddenUnique || other == Unique;
+            case HiddenLegendary, Legendary -> other == HiddenLegendary || other == Legendary;
+            default -> false;
+        };
     }
 
     public static ItemGrade getHiddenGradeByVal(short val) {
         ItemGrade ig = None;
         ItemGrade arg = getGradeByVal(val);
-        switch(arg) {
-            case Rare:
-            case HiddenRare:
-                ig = HiddenRare;
-                break;
-            case Epic:
-            case HiddenEpic:
-                ig = HiddenEpic;
-                break;
-            case Unique:
-            case HiddenUnique:
-                ig = HiddenUnique;
-                break;
-            case Legendary:
-            case HiddenLegendary:
-                ig = HiddenLegendary;
-                break;
-        }
+        ig = switch (arg) {
+            case Rare, HiddenRare -> HiddenRare;
+            case Epic, HiddenEpic -> HiddenEpic;
+            case Unique, HiddenUnique -> HiddenUnique;
+            case Legendary, HiddenLegendary -> HiddenLegendary;
+            default -> ig;
+        };
         return ig;
     }
 
     public static ItemGrade getOneTierLower(short val) {
         ItemGrade ig = None;
         ItemGrade arg = getGradeByVal(val);
-        switch(arg) {
-            case Rare:
-                ig = RareSecondary;
-                break;
-            case Epic:
-                ig = Rare;
-                break;
-            case HiddenRare:
-            case HiddenEpic:
-                ig = HiddenRare;
-                break;
-            case Unique:
-                ig = Epic;
-                break;
-            case HiddenUnique:
-                ig = HiddenEpic;
-                break;
-            case Legendary:
-                ig = Unique;
-                break;
-            case HiddenLegendary:
-                ig = HiddenUnique;
-                break;
-        }
+        ig = switch (arg) {
+            case Rare -> RareSecondary;
+            case Epic -> Rare;
+            case HiddenRare, HiddenEpic -> HiddenRare;
+            case Unique -> Epic;
+            case HiddenUnique -> HiddenEpic;
+            case Legendary -> Unique;
+            case HiddenLegendary -> HiddenUnique;
+            default -> ig;
+        };
         return ig;
     }
 
     public boolean isHidden() {
-        switch (this) {
-            case Hidden:
-            case HiddenRare:
-            case HiddenEpic:
-            case HiddenUnique:
-            case HiddenLegendary:
-                return true;
-        }
-        return false;
+        return switch (this) {
+            case Hidden, HiddenRare, HiddenEpic, HiddenUnique, HiddenLegendary -> true;
+            default -> false;
+        };
     }
 }

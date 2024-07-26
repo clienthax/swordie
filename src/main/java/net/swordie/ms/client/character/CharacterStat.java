@@ -9,7 +9,7 @@ import net.swordie.ms.util.SystemTime;
 
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created by Tim on 2/18/2017.

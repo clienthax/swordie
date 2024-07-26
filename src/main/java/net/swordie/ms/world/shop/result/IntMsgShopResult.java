@@ -7,8 +7,8 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class IntMsgShopResult implements ShopResult {
 
-    private int value;
-    private ShopResultType type;
+    private final int value;
+    private final ShopResultType type;
 
     public IntMsgShopResult(int value, ShopResultType type) {
         this.value = value;
@@ -16,7 +16,7 @@ public class IntMsgShopResult implements ShopResult {
     }
 
     @Override
-    public ShopResultType getType() {
+    public ShopResultType type() {
         return type;
     }
 

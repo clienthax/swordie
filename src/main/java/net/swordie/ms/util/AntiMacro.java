@@ -24,7 +24,7 @@ public class AntiMacro {
         AntiMacroRes_TargetSuccess(11),
         AntiMacroRes_Reward(12);
 
-        private int val;
+        private final int val;
 
         AntiMacroResultType(int val) {
             this.val = val;
@@ -51,7 +51,7 @@ public class AntiMacro {
         AntiMacroGlobalRequest(6),
         AntiMacroTypeNum(6);
 
-        private int val;
+        private final int val;
 
         AntiMacroType(int val) {
             this.val = val;
@@ -66,8 +66,8 @@ public class AntiMacro {
         "AmaticSC", "Audiowide", "Caveat", "CoveredByYourGrace", "Rajdhani", "Srisakdi"
     };
 
-    private Font font;
-    private String text;
+    private final Font font;
+    private final String text;
 
     public AntiMacro(String font, String text) throws IOException, FontFormatException {
         File file = new File(String.format("%s/antimacro_fonts/%s.ttf", ServerConstants.RESOURCES_DIR, font));
@@ -100,14 +100,14 @@ public class AntiMacro {
     }
 
     public static Color getRandomColor() {
-        switch (Util.getRandom(6)) {
-            case 0: return Color.RED;
-            case 1: return Color.YELLOW;
-            case 2: return Color.CYAN;
-            case 3: return Color.GREEN;
-            case 4: return Color.ORANGE;
-            case 5: return Color.PINK;
-            default: return Color.WHITE;
-        }
+        return switch (Util.getRandom(6)) {
+            case 0 -> Color.RED;
+            case 1 -> Color.YELLOW;
+            case 2 -> Color.CYAN;
+            case 3 -> Color.GREEN;
+            case 4 -> Color.ORANGE;
+            case 5 -> Color.PINK;
+            default -> Color.WHITE;
+        };
     }
 }

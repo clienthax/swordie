@@ -293,20 +293,12 @@ public class MakingSkillRecipe {
             return 0;
         }
         int unk = getRecommandedSkillLevel() - makingSkillLevel;
-        double proficiency = 0;
-        switch (getReqSkillID()) {
-            case 92000000:
-            case 92010000:
-                proficiency = Math.pow(1.05, unk) * 40.0;
-                break;
-            case 92020000:
-            case 92030000:
-                proficiency = Math.pow(1.05, unk) * 100.0;
-                break;
-            case 92040000:
-                proficiency = Math.pow(1.05, unk) * 60.0;
-                break;
-        }
+        double proficiency = switch (getReqSkillID()) {
+            case 92000000, 92010000 -> Math.pow(1.05, unk) * 40.0;
+            case 92020000, 92030000 -> Math.pow(1.05, unk) * 100.0;
+            case 92040000 -> Math.pow(1.05, unk) * 60.0;
+            default -> 0;
+        };
         if (success) {
             proficiency += proficiency;
         }

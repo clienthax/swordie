@@ -63,7 +63,7 @@ public class AdminCommands {
     public static class Test extends AdminCommand {
 
         public static void execute(Char chr, String[] args) {
-            Effect effect = Effect.skillUse(Integer.valueOf(args[1]), (byte) 1, 0);
+            Effect effect = Effect.skillUse(Integer.parseInt(args[1]), (byte) 1, 0);
             chr.getField().broadcastPacket(
                     UserRemote.effect(chr.getId(), effect));
             chr.write(UserPacket.effect(effect));
@@ -134,8 +134,8 @@ public class AdminCommands {
             // Start encodeForLocal
             int[] mask = new int[CharacterTemporaryStat.length];
             mask[cts.getPos()] |= cts.getVal();
-            for (int i = 0; i < mask.length; i++) {
-                outPacket.encodeInt(mask[i]);
+            for (int j : mask) {
+                outPacket.encodeInt(j);
             }
             log.debug("[Out]\t| " + outPacket);
 
@@ -630,16 +630,16 @@ public class AdminCommands {
     public static class MapInfo extends AdminCommand {
         public static void execute(Char chr, String[] args) {
 
-            String str = "";
+            StringBuilder str = new StringBuilder();
 
             for(Char c : chr.getField().getChars()) {
-                str += c.getName();
+                str.append(c.getName());
                 if(chr.getField().getChars().indexOf(c) != chr.getField().getChars().size()) {
-                    str += ", ";
+                    str.append(", ");
                 }
             }
 
-            chr.chatMessage(SystemNotice,str);
+            chr.chatMessage(SystemNotice, str.toString());
 
         }
     }
@@ -794,7 +794,7 @@ public class AdminCommands {
                 }
                 query = new StringBuilder(query.substring(0, query.length() - 1));
                 Map<Integer, String> map = StringData.getItemStringByName(query.toString());
-                if (map.size() == 0) {
+                if (map.isEmpty()) {
                     chr.chatMessage(Mob, "No items found for query " + query);
                 }
                 for (Map.Entry<Integer, String> entry : map.entrySet()) {
@@ -1055,10 +1055,9 @@ public class AdminCommands {
         public static void execute(Char chr, String[] args) {
             List<Life> lifes = new ArrayList<>(chr.getField().getLifes().values());
             Life l = lifes.get(lifes.size() - 1);
-            if (!(l instanceof Mob)) {
+            if (!(l instanceof Mob mob)) {
                 return;
             }
-            Mob mob = (Mob) l;
             chr.getClient().write(MobPool.statSet(mob, (short) 0));
         }
     }
@@ -1160,7 +1159,7 @@ public class AdminCommands {
                     list.add(skill);
                     chr.addSkill(skill);
                 }
-                if (list.size() > 0) {
+                if (!list.isEmpty()) {
                     chr.getClient().write(WvsContext.changeSkillRecordResult(list, true, false, false, false));
                 }
             }
@@ -1199,7 +1198,7 @@ public class AdminCommands {
                     chr.chatMessage(Mob, "type: " + skillInfo.getType());
                 } else {
                     Map<Integer, SkillStringInfo> map = StringData.getSkillStringByName(query.toString());
-                    if (map.size() == 0) {
+                    if (map.isEmpty()) {
                         chr.chatMessage(Mob, "No skills found for query " + query);
                     }
                     for (Map.Entry<Integer, SkillStringInfo> entry : map.entrySet()) {
@@ -1274,7 +1273,7 @@ public class AdminCommands {
                             chr.chatMessage("Unknown query type " + queryType);
                             return;
                     }
-                    if (map.size() == 0) {
+                    if (map.isEmpty()) {
                         chr.chatMessage(Mob, "No " + queryType + "s found for query " + query);
                         return;
                     }
@@ -1445,7 +1444,7 @@ public class AdminCommands {
 
     @Command(names = {"savemap"}, requiredType = Tester)
     public static class SaveMap extends AdminCommand {
-        private static HashMap<String, Integer> quickmaps = new HashMap<>();
+        private static final HashMap<String, Integer> quickmaps = new HashMap<>();
 
         public static void execute(Char chr, String[] args) {
             int mapid = chr.getFieldID();
@@ -1467,7 +1466,7 @@ public class AdminCommands {
                 Portal portal = chr.getField().getDefaultPortal();
                 chr.warp(toField, portal);
             } else if (args[1].equalsIgnoreCase("list")) {
-                Set keys = quickmaps.keySet();
+                Set<String> keys = quickmaps.keySet();
                 chr.chatMessage(BlackOnWhite, "[SaveMap] " + quickmaps.size() + " saved maps.");
                 for (Object maps : keys) {
                     chr.chatMessage(BlackOnWhite, "[SaveMap] Stored map: " + quickmaps.get(maps) + " as '" + maps + "'.");
@@ -1855,7 +1854,7 @@ public class AdminCommands {
 
         public static void execute(Char chr, String[] args) {
             List<Mob> mobs = new ArrayList<>(chr.getField().getMobs());
-            if (mobs.size() > 0) {
+            if (!mobs.isEmpty()) {
                 Mob mob = mobs.get(0);
                 MobTemporaryStat mts = mob.getTemporaryStat();
                 Option o = new Option();
@@ -2011,7 +2010,7 @@ public class AdminCommands {
 
         public static void execute(Char chr, String[] args) {
             String name = args [1];
-            int amount = Integer.valueOf(args [2]);
+            int amount = Integer.parseInt(args [2]);
             Char other = chr.getWorld().getCharByName(name);
             other.addNx(amount);
         }

@@ -17,7 +17,7 @@ public enum QuestStartRequirementType {
     MIN_STAT(5)
     ;
 
-    private byte val;
+    private final byte val;
 
     QuestStartRequirementType(int val) {
         this.val = (byte) val;
@@ -44,21 +44,14 @@ public enum QuestStartRequirementType {
 
 
     public QuestStartRequirement load(DataInputStream dis) throws IOException {
-        switch(this) {
-            case QUEST:
-                return (QuestStartRequirement) new QuestStartCompletionRequirement().load(dis);
-            case ITEM:
-                return (QuestStartRequirement) new QuestStartItemRequirement().load(dis);
-            case JOB:
-                return (QuestStartRequirement) new QuestStartJobRequirement().load(dis);
-            case MARRIAGE:
-                return (QuestStartRequirement) new QuestStartMarriageRequirement().load(dis);
-            case MAX_LEVEL:
-                return (QuestStartRequirement) new QuestStartMaxLevelRequirement().load(dis);
-            case MIN_STAT:
-                return (QuestStartRequirement) new QuestStartMinStatRequirement().load(dis);
-            default:
-                return null;
-        }
+        return switch (this) {
+            case QUEST -> (QuestStartRequirement) new QuestStartCompletionRequirement().load(dis);
+            case ITEM -> (QuestStartRequirement) new QuestStartItemRequirement().load(dis);
+            case JOB -> (QuestStartRequirement) new QuestStartJobRequirement().load(dis);
+            case MARRIAGE -> (QuestStartRequirement) new QuestStartMarriageRequirement().load(dis);
+            case MAX_LEVEL -> (QuestStartRequirement) new QuestStartMaxLevelRequirement().load(dis);
+            case MIN_STAT -> (QuestStartRequirement) new QuestStartMinStatRequirement().load(dis);
+            default -> null;
+        };
     }
 }

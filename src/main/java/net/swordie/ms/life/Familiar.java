@@ -4,7 +4,7 @@ import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.connection.db.FileTimeConverter;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Sjonnie

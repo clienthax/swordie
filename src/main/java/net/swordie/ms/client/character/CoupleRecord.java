@@ -9,7 +9,7 @@ import java.util.Map;
  * Created on 12/19/2017.
  */
 public class CoupleRecord {
-    private Map<Long, Integer> snToItemMap = new HashMap<>();
+    private final Map<Long, Integer> snToItemMap = new HashMap<>();
     private int pairCharacterId;
     private String pairCharacterName;
     private long sn;

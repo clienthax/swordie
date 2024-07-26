@@ -6,7 +6,7 @@ import net.swordie.ms.enums.BaseStat;
 import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.Util;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 2/21/2018.

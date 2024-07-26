@@ -70,7 +70,7 @@ public class Mercedes extends Job {
     public static final int FINAL_ATTACK_DBG = 23100006;
     public static final int ADVANCED_FINAL_ATTACK = 23120012;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELVEN_GRACE,
             UPDRAFT,
             ELVEN_HEALING,
@@ -97,7 +97,7 @@ public class Mercedes extends Job {
 
     private int eleKnightSummonID = 1;
     private int lastAttackSkill = 0;
-    private List<Summon> summonList = new ArrayList<>();
+    private final List<Summon> summonList = new ArrayList<>();
 
     public Mercedes(Char chr) {
         super(chr);
@@ -255,7 +255,7 @@ public class Mercedes extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -379,7 +379,7 @@ public class Mercedes extends Job {
     }
 
     private void incrementIgnisRoarStackCount(TemporaryStatManager tsm, AttackInfo attackInfo) {
-        if (Arrays.asList(summonAttacks).contains(attackInfo.skillId)
+        if (Collections.singletonList(summonAttacks).contains(attackInfo.skillId)
                 || getFinalAtkSkill() != null && attackInfo.skillId == getFinalAtkSkill().getSkillId()
                 || attackInfo.skillId == lastAttackSkill) {
             return;

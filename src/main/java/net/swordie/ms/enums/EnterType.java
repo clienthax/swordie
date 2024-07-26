@@ -7,7 +7,7 @@ public enum EnterType {
     NoAnimation(0),
     Animation(1);
 
-    private byte val;
+    private final byte val;
 
     EnterType(int val) {
         this.val = (byte) val;

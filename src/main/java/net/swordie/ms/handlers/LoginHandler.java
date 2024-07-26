@@ -354,7 +354,7 @@ public class LoginHandler {
                 int mask = inPacket.decodeInt();
                 for (CharacterTemporaryStat cts : CharacterTemporaryStat.values()) {
                     if (cts.getPos() == i && (cts.getVal() & mask) != 0) {
-                        log.error(String.format("[Error %s] Contained stat %s", errortype, cts.toString()));
+                        log.error(String.format("[Error %s] Contained stat %s", errortype, cts));
                     }
                 }
             }

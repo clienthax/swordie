@@ -315,7 +315,7 @@ public enum CashItemType {
     FailReason_NotAvailableLockerTransfer(92),
     FailReason_DormancyAccount(93);
 
-    private int val;
+    private final int val;
 
     CashItemType(int val) {
         this.val = val;

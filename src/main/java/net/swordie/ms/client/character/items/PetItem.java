@@ -8,7 +8,7 @@ import net.swordie.ms.life.pet.PetSkill;
 import org.apache.log4j.Logger;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 4/14/2018.

@@ -116,7 +116,7 @@ public enum MobSkillID {
     No(238),
     ;
 
-    private int val;
+    private final int val;
 
     MobSkillID(int val) {
         this.val = val;
@@ -132,44 +132,35 @@ public enum MobSkillID {
 
     public static void main(String[] args) {
         for (MobSkillID msi : values()) {
-            String s = "";
+            StringBuilder s = new StringBuilder();
             boolean capital = true;
             for (char c : msi.toString().toCharArray()) {
                 if (!capital && Character.isLetter(c)) {
                     c = Character.toLowerCase(c);
                 }
                 if (c != '_') {
-                    s += c;
+                    s.append(c);
                     capital = false;
                 } else {
                     capital = true;
                 }
             }
-            System.out.printf("%s(%d),%n", s, msi.val);
+            System.out.printf("%s(%d),%n", s.toString(), msi.val);
         }
     }
 
     public CharacterTemporaryStat getAffectedCTS() {
-        switch (this) {
-            case Seal:
-                return CharacterTemporaryStat.Seal;
-            case Darkness:
-                return CharacterTemporaryStat.Darkness;
-            case Weakness:
-                return CharacterTemporaryStat.Weakness;
-            case Stun:
-                return CharacterTemporaryStat.Stun;
-            case Curse:
-                return CharacterTemporaryStat.Curse;
-            case Slow:
-                return CharacterTemporaryStat.Slow;
-            case PainMark:
-                return CharacterTemporaryStat.PainMark;
-            case Poison:
-                return CharacterTemporaryStat.Poison;
-            case Fear:
-                return CharacterTemporaryStat.Fear;
-        }
-        return null;
+        return switch (this) {
+            case Seal -> CharacterTemporaryStat.Seal;
+            case Darkness -> CharacterTemporaryStat.Darkness;
+            case Weakness -> CharacterTemporaryStat.Weakness;
+            case Stun -> CharacterTemporaryStat.Stun;
+            case Curse -> CharacterTemporaryStat.Curse;
+            case Slow -> CharacterTemporaryStat.Slow;
+            case PainMark -> CharacterTemporaryStat.PainMark;
+            case Poison -> CharacterTemporaryStat.Poison;
+            case Fear -> CharacterTemporaryStat.Fear;
+            default -> null;
+        };
     }
 }

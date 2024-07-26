@@ -17,7 +17,7 @@ public enum InventoryOperation {
     BagRemoveSlot(10),
     ;
 
-    private byte val;
+    private final byte val;
 
     InventoryOperation(int val) {
         this.val = (byte) val;

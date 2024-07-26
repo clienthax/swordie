@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SetEffect {
     private static final Logger log = Logger.getLogger(EtcData.class);
-    private HashMap<Integer, List<Object>> effectsByLevel = new HashMap<>();
+    private final HashMap<Integer, List<Object>> effectsByLevel = new HashMap<>();
 
     public void addScrollStat(int level, ScrollStat ss, int amount) {
         List<Object> stats = effectsByLevel.getOrDefault(level, new ArrayList<>());

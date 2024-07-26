@@ -9,7 +9,7 @@ public enum GolluxDifficultyType {
     Hell(3),
     ;
 
-    private byte val;
+    private final byte val;
 
     GolluxDifficultyType(int val) {
         this.val = (byte) val;

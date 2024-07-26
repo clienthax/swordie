@@ -54,7 +54,7 @@ public class ThunderBreaker extends Noblesse {
     public static final int GLORY_OF_THE_GUARDIANS_TB = 15121053;
     public static final int PRIMAL_BOLT = 15121054;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELEMENTAL_HARMONY_STR,
             IMPERIAL_RECALL,
             ELEMENTAL_EXPERT,
@@ -64,7 +64,7 @@ public class ThunderBreaker extends Noblesse {
             ELEMENTAL_SHIFT2
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             LIGHTNING_ELEMENTAL,
             KNUCKLE_BOOSTER,
             LINK_MASTERY,
@@ -75,7 +75,7 @@ public class ThunderBreaker extends Noblesse {
             PRIMAL_BOLT,
     };
 
-    private int[] lightningBuffs = new int[] {
+    private final int[] lightningBuffs = new int[] {
             LIGHTNING_ELEMENTAL,
             ELECTRIFIED,
             LIGHTNING_BOOST,
@@ -204,7 +204,7 @@ public class ThunderBreaker extends Noblesse {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

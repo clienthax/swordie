@@ -8,7 +8,7 @@ import net.swordie.ms.util.FileTime;
  * Created on 2/3/2018.
  */
 public class TemporaryStatBase {
-    private Option option;
+    private final Option option;
     private FileTime lastUpdated;
     protected int expireTerm;
     private boolean dynamicTermSet;

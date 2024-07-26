@@ -18,7 +18,7 @@ public enum GuildBBSType {
     Res_SomethingElse(8),
     ;
 
-    private int val;
+    private final int val;
 
     GuildBBSType(int val) {
         this.val = val;

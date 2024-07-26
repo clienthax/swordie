@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class LoadFriendResult implements FriendResult {
 
-    private Set<Friend> friends;
+    private final Set<Friend> friends;
 
     public LoadFriendResult(Set<Friend> friends) {
         this.friends = friends;

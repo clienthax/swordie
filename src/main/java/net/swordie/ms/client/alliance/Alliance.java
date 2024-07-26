@@ -5,7 +5,7 @@ import net.swordie.ms.client.guild.Guild;
 import net.swordie.ms.connection.Encodable;
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 
 /**

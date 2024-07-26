@@ -136,11 +136,11 @@ public class Thief extends Beginner {
     private ScheduledFuture critGrowthTimer;
     public static long lastShadowMeld = Long.MIN_VALUE;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             MAPLE_RETURN,
     };
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             HASTE,
             DARK_SIGHT,
             ASSASSINS_MARK,
@@ -534,7 +534,7 @@ public class Thief extends Beginner {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -864,7 +864,7 @@ public class Thief extends Beginner {
                         for (int i = 0; i < getAssassinsMarkStarCount(); i++) {
 
                             Mob life = Util.getRandomFromCollection(lifes);
-                            if(bossLifes.size() > 0 && Util.succeedProp(65)) {
+                            if(!bossLifes.isEmpty() && Util.succeedProp(65)) {
                                 life = Util.getRandomFromCollection(bossLifes);
                             }
 
@@ -1099,7 +1099,7 @@ public class Thief extends Beginner {
                         dropInfoSet.add(new DropInfo(GameConstants.MAX_DROP_CHANCE, 50, 150)); // min 50; max 150;
                     }
                 }
-                if (dropInfoSet.size() > 0) {
+                if (!dropInfoSet.isEmpty()) {
                     field.drop(dropInfoSet, mob.getPosition(), chr.getId());
                 }
             }

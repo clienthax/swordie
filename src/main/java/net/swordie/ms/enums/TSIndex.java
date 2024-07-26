@@ -33,44 +33,29 @@ public enum TSIndex {
     }
 
     public static CharacterTemporaryStat getCTSFromTwoStatIndex(int index) {
-        switch(index) {
-            case 0:
-                return CharacterTemporaryStat.EnergyCharged;
-            case 1:
-                return CharacterTemporaryStat.DashSpeed;
-            case 2:
-                return CharacterTemporaryStat.DashJump;
-            case 3:
-                return CharacterTemporaryStat.RideVehicle;
-            case 4:
-                return CharacterTemporaryStat.PartyBooster;
-            case 5:
-                return CharacterTemporaryStat.GuidedBullet;
-            case 6:
-                return CharacterTemporaryStat.Undead;
-            default:
-                return null;
-        }
+        return switch (index) {
+            case 0 -> CharacterTemporaryStat.EnergyCharged;
+            case 1 -> CharacterTemporaryStat.DashSpeed;
+            case 2 -> CharacterTemporaryStat.DashJump;
+            case 3 -> CharacterTemporaryStat.RideVehicle;
+            case 4 -> CharacterTemporaryStat.PartyBooster;
+            case 5 -> CharacterTemporaryStat.GuidedBullet;
+            case 6 -> CharacterTemporaryStat.Undead;
+            default -> null;
+        };
     }
 
     public static TSIndex getTSEFromCTS(CharacterTemporaryStat cts) {
-        switch(cts) {
-            case EnergyCharged:
-                return EnergyCharged;
-            case DashJump:
-                return DashJump;
-            case DashSpeed:
-                return DashSpeed;
-            case RideVehicle:
-                return RideVehicle;
-            case PartyBooster:
-                return PartyBooster;
-            case GuidedBullet:
-                return GuidedBullet;
-            case Undead:
-                return Undead;
-        }
-        return null;
+        return switch (cts) {
+            case EnergyCharged -> EnergyCharged;
+            case DashJump -> DashJump;
+            case DashSpeed -> DashSpeed;
+            case RideVehicle -> RideVehicle;
+            case PartyBooster -> PartyBooster;
+            case GuidedBullet -> GuidedBullet;
+            case Undead -> Undead;
+            default -> null;
+        };
     }
 
     public static boolean isTwoStat(CharacterTemporaryStat cts) {

@@ -2,14 +2,12 @@ package net.swordie.ms.util;
 
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * Created on 2/18/2017.
@@ -46,7 +44,7 @@ public class FileTime implements Serializable {
 		QUEST_TIME(27111903),
 		PLAIN_ZERO(0);
 
-		private long val;
+		private final long val;
 
 		Type(long val) {
 			this.val = val;

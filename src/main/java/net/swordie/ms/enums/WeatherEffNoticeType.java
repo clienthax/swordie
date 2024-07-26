@@ -224,7 +224,7 @@ public enum WeatherEffNoticeType {
     CyberGalaxy(217),
     ;
 
-    private int val;
+    private final int val;
 
     WeatherEffNoticeType(int val) {this.val = val;}
 

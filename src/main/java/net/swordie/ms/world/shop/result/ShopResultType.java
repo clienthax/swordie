@@ -39,7 +39,7 @@ public enum ShopResultType {
     Below15LimitMsg(35),
     ;
 
-    private int val;
+    private final int val;
 
     ShopResultType(int val) {
         this.val = val;

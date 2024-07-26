@@ -115,7 +115,7 @@ public class Warrior extends Beginner {
     public static final int SMITE_SHIELD = 1221052; //Lv170
 
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             MAPLE_RETURN,
     };
 
@@ -150,7 +150,7 @@ public class Warrior extends Beginner {
     };
 
     private Summon evilEye;
-    private long lastPanicHit = Long.MIN_VALUE;
+    private final long lastPanicHit = Long.MIN_VALUE;
     private long lastDivineShieldHit = Long.MIN_VALUE;
     private long revengeEvilEye = Long.MIN_VALUE;
     private static long lastFinalPact = Long.MIN_VALUE;
@@ -638,7 +638,7 @@ public class Warrior extends Beginner {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -1103,8 +1103,7 @@ public class Warrior extends Beginner {
                         rect = rect.moveRight();
                     }
                     for (Life life : chr.getField().getLifesInRect(rect)) {
-                        if (life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if (life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             if (Util.succeedProp(si.getValue(prop, slv))) {
                                 o1.nOption = -si.getValue(x, slv);
@@ -1143,7 +1142,7 @@ public class Warrior extends Beginner {
                                         pml.getChr().getHP() <= 0).
                                 collect(Collectors.toList());
 
-                        if (eligblePartyMemberList.size() > 0) {
+                        if (!eligblePartyMemberList.isEmpty()) {
                             Char randomPartyChr = Util.getRandomFromCollection(eligblePartyMemberList).getChr();
                             TemporaryStatManager partyTSM = randomPartyChr.getTemporaryStatManager();
                             randomPartyChr.heal(randomPartyChr.getMaxHP());
@@ -1163,8 +1162,7 @@ public class Warrior extends Beginner {
                         rect2 = rect2.moveRight();
                     }
                     for (Life life : chr.getField().getLifesInRect(rect2)) {
-                        if (life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if (life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             if (Util.succeedProp(si.getValue(prop, slv))) {
                                 mts.removeBuffs();

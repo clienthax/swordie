@@ -14,7 +14,7 @@ public enum DemianFlyingSwordPathIdx {
     Targeting(8),
     ;
 
-    private short val;
+    private final short val;
 
     DemianFlyingSwordPathIdx(int val) {
         this.val = (short) val;

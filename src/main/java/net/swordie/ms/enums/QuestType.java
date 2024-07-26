@@ -43,7 +43,7 @@ public enum QuestType {
     MakingRes_Fail_NotEnoughMeso(33),
     ;
 
-    private byte val;
+    private final byte val;
 
     QuestType(int val) {
         this.val = (byte) val;

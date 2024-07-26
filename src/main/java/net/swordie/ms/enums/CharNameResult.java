@@ -9,7 +9,7 @@ public enum CharNameResult {
     Unavailable_Invalid(2),
     Unavailable_CashItem(3);
 
-    private byte val;
+    private final byte val;
 
     CharNameResult(byte val) {
         this.val = val;

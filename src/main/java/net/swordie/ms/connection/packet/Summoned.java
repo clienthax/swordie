@@ -8,11 +8,7 @@ import net.swordie.ms.enums.LeaveType;
 import net.swordie.ms.handlers.header.OutHeader;
 import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.movement.MovementInfo;
-import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.util.Position;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 /**
  * Created on 5/21/2018.
@@ -120,7 +116,7 @@ public class Summoned {
         outPacket.encodeByte(ai.summon.getCharLevel());
         byte left = (byte) (ai.left ? 1 : 0);
         outPacket.encodeByte((left << 7) | ai.attackActionType);
-        byte attackCount = (byte) (ai.mobAttackInfo.size() > 0 ? ai.mobAttackInfo.get(0).damages.length : 0);
+        byte attackCount = (byte) (!ai.mobAttackInfo.isEmpty() ? ai.mobAttackInfo.get(0).damages.length : 0);
         outPacket.encodeByte((ai.mobCount << 4) | (attackCount & 0xF));
         for (MobAttackInfo mai : ai.mobAttackInfo) {
             outPacket.encodeInt(mai.mobId);

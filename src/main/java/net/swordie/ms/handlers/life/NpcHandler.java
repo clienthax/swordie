@@ -48,11 +48,10 @@ public class NpcHandler {
         int npcID = inPacket.decodeInt();
         Position playerPos = inPacket.decodePosition();
         Life life = chr.getField().getLifeByObjectID(npcID);
-        if (!(life instanceof Npc)) {
+        if (!(life instanceof Npc npc)) {
             chr.chatMessage("Could not find that npc.");
             return;
         }
-        Npc npc = (Npc) life;
         int templateID = npc.getTemplateId();
         if (npc.getTrunkGet() > 0 || npc.getTrunkPut() > 0) {
             chr.write(FieldPacket.trunkDlg(new TrunkOpen(templateID, chr.getAccount().getTrunk())));

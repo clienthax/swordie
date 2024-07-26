@@ -50,7 +50,7 @@ public class CathingScheduledThreadPoolExecutor extends ScheduledThreadPoolExecu
     }
 
     private class LogOnExceptionRunnable implements Runnable {
-        private Runnable runnable;
+        private final Runnable runnable;
 
         public LogOnExceptionRunnable(Runnable runnable) {
             super();
@@ -73,7 +73,7 @@ public class CathingScheduledThreadPoolExecutor extends ScheduledThreadPoolExecu
     }
 
     private class LogOnExceptionCallable<V> implements Callable<V> {
-        private Callable<V> callable;
+        private final Callable<V> callable;
 
         public LogOnExceptionCallable(Callable<V> callable) {
             super();

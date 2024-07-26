@@ -10,7 +10,7 @@ import java.util.Arrays;
 public enum CustomFUEFieldScripts { // Custom First User Enter Field Scripts
 
     ;
-    private int id;
+    private final int id;
 
     CustomFUEFieldScripts(int val) {
         this.id = val;

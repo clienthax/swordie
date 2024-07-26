@@ -14,7 +14,7 @@ public enum QuestProgressRequirementType {
     MONEY(3)
     ;
 
-    private byte val;
+    private final byte val;
 
     QuestProgressRequirementType(int val) {
         this.val = (byte) val;
@@ -37,17 +37,12 @@ public enum QuestProgressRequirementType {
     }
 
     public QuestProgressRequirement load(DataInputStream dis) throws IOException {
-        switch(this) {
-            case ITEM:
-                return (QuestProgressRequirement) new QuestProgressItemRequirement().load(dis);
-            case LEVEL:
-                return (QuestProgressRequirement) new QuestProgressLevelRequirement(0).load(dis);
-            case MOB:
-                return (QuestProgressRequirement) new QuestProgressMobRequirement().load(dis);
-            case MONEY:
-                return (QuestProgressRequirement) new QuestProgressMoneyRequirement(0).load(dis);
-            default:
-                return null;
-        }
+        return switch (this) {
+            case ITEM -> (QuestProgressRequirement) new QuestProgressItemRequirement().load(dis);
+            case LEVEL -> (QuestProgressRequirement) new QuestProgressLevelRequirement(0).load(dis);
+            case MOB -> (QuestProgressRequirement) new QuestProgressMobRequirement().load(dis);
+            case MONEY -> (QuestProgressRequirement) new QuestProgressMoneyRequirement(0).load(dis);
+            default -> null;
+        };
     }
 }

@@ -2,7 +2,7 @@ package net.swordie.ms.client.friend;
 
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 3/31/2018.

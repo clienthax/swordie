@@ -55,7 +55,7 @@ public class MacroHandler {
         Char chr = c.getChr();
 
         // attempting to refresh while there's no LD
-        if (chr.getLieDetectorAnswer().length() > 0) {
+        if (!chr.getLieDetectorAnswer().isEmpty()) {
             chr.sendLieDetector(true);
         }
     }

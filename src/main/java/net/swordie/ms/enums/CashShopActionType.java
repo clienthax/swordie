@@ -22,7 +22,7 @@ public enum CashShopActionType {
     Req_Leave(102),
     Req_Favorite(103);
 
-    private int val;
+    private final int val;
 
     CashShopActionType(int val) {
         this.val = val;

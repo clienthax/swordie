@@ -73,88 +73,49 @@ public enum ScrollStat {
     }
 
     public EquipBaseStat getEquipStat() {
-        switch(this) {
-            case incSTR:
-                return iStr;
-            case incDEX:
-                return iDex;
-            case incINT:
-                return iInt;
-            case incLUK:
-                return iLuk;
-            case incPAD:
-                return iPAD;
-            case incMAD:
-                return iMAD;
-            case incPDD:
-                return iPDD;
-            case incMDD:
-                return iMDD;
-            case incACC:
-                return iACC;
-            case incEVA:
-                return iEVA;
-            case incMHP:
-                return iMaxHP;
-            case incMMP:
-                return iMaxMP;
-            case incSpeed:
-            case speed:
-                return iSpeed;
-            case incJump:
-                return iJump;
-            case incReqLevel:
-                return iReduceReq;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case incSTR -> iStr;
+            case incDEX -> iDex;
+            case incINT -> iInt;
+            case incLUK -> iLuk;
+            case incPAD -> iPAD;
+            case incMAD -> iMAD;
+            case incPDD -> iPDD;
+            case incMDD -> iMDD;
+            case incACC -> iACC;
+            case incEVA -> iEVA;
+            case incMHP -> iMaxHP;
+            case incMMP -> iMaxMP;
+            case incSpeed, speed -> iSpeed;
+            case incJump -> iJump;
+            case incReqLevel -> iReduceReq;
+            default -> null;
+        };
     }
 
     public BaseStat getBaseStat() {
-        switch(this) {
-            case incSTR:
-                return BaseStat.str;
-            case incDEX:
-                return BaseStat.dex;
-            case incINT:
-                return BaseStat.inte;
-            case incLUK:
-                return BaseStat.luk;
-            case incPAD:
-                return BaseStat.pad;
-            case incMAD:
-                return BaseStat.mad;
-            case incPDD:
-                return BaseStat.pdd;
-            case incMDD:
-                return BaseStat.mdd;
-            case incACC:
-                return BaseStat.acc;
-            case incEVA:
-                return BaseStat.eva;
-            case incMHP:
-                return BaseStat.mhp;
-            case incMMP:
-                return BaseStat.mmp;
-            case incSpeed:
-            case speed:
-                return BaseStat.speed;
-            case incJump:
-                return BaseStat.jump;
-            case incSTRr:
-                return BaseStat.strR;
-            case incDEXr:
-                return BaseStat.dexR;
-            case incINTr:
-                return BaseStat.intR;
-            case incLUKr:
-                return BaseStat.lukR;
-            case incMHPr:
-                return  BaseStat.mhpR;
-            case incMMPr:
-                return BaseStat.mmpR;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case incSTR -> BaseStat.str;
+            case incDEX -> BaseStat.dex;
+            case incINT -> BaseStat.inte;
+            case incLUK -> BaseStat.luk;
+            case incPAD -> BaseStat.pad;
+            case incMAD -> BaseStat.mad;
+            case incPDD -> BaseStat.pdd;
+            case incMDD -> BaseStat.mdd;
+            case incACC -> BaseStat.acc;
+            case incEVA -> BaseStat.eva;
+            case incMHP -> BaseStat.mhp;
+            case incMMP -> BaseStat.mmp;
+            case incSpeed, speed -> BaseStat.speed;
+            case incJump -> BaseStat.jump;
+            case incSTRr -> BaseStat.strR;
+            case incDEXr -> BaseStat.dexR;
+            case incINTr -> BaseStat.intR;
+            case incLUKr -> BaseStat.lukR;
+            case incMHPr -> BaseStat.mhpR;
+            case incMMPr -> BaseStat.mmpR;
+            default -> null;
+        };
     }
 }

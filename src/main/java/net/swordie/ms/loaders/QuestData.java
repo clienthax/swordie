@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 /**
  * Created on 3/2/2018.
  */
-public class QuestData {
-    private static Set<QuestInfo> baseQuests = new HashSet<>();
+public class QuestData implements DataCreator {
+    private static final Set<QuestInfo> baseQuests = new HashSet<>();
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
@@ -34,6 +34,11 @@ public class QuestData {
         String wzDir = String.format("%s/Quest.wz/", ServerConstants.WZ_DIR);
         String checkDir = wzDir + "Check.img.xml";
         File file = new File(checkDir);
+        if (!file.exists()) {
+            log.error(checkDir + " does not exist.");
+            return;
+        }
+
         Node root = XMLApi.getRoot(file);
         Node mainNode = XMLApi.getAllChildren(root).get(0);
         for (Node questIDNode : XMLApi.getAllChildren(mainNode)) {
@@ -426,7 +431,7 @@ public class QuestData {
                     String value = XMLApi.getNamedAttribute(rewardNode, "value");
                     switch (name) {
                         case "transferField":
-                            quest.setTransferField(Integer.valueOf(value));
+                            quest.setTransferField(Integer.parseInt(value));
                             break;
                         case "nextQuest":
                             quest.setNextQuest(Integer.parseInt(value));
@@ -512,7 +517,7 @@ public class QuestData {
     }
 
     public static void linkMobData() {
-        if (getBaseQuests().size() == 0) {
+        if (getBaseQuests().isEmpty()) {
             loadQuestsFromWZ();
         }
         for (QuestInfo qi : getBaseQuests()) {
@@ -531,7 +536,7 @@ public class QuestData {
     }
 
     public static void linkItemData() {
-        if (getBaseQuests().size() == 0) {
+        if (getBaseQuests().isEmpty()) {
             loadQuestsFromWZ();
         }
         for (QuestInfo qi : getBaseQuests()) {
@@ -563,7 +568,7 @@ public class QuestData {
     public static void generateDatFiles() {
         log.info("Started generating quest data.");
         long start = System.currentTimeMillis();
-        if (getBaseQuests().size() == 0) {
+        if (getBaseQuests().isEmpty()) {
             loadQuestsFromWZ();
         }
         saveAllQuestInfos(String.format("%s/quests", ServerConstants.DAT_DIR));

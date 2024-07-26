@@ -195,7 +195,7 @@ public class UserStatHandler {
         int mask = inPacket.decodeInt();
         List<Stat> stats = Stat.getStatsByFlag(mask); // should be in correct order
         inPacket.decodeInt();
-        HashMap<Stat, Short> hashMap = new HashMap();
+        HashMap<Stat, Short> hashMap = new HashMap<>();
         for (Stat stat : stats) {
             hashMap.put(stat, inPacket.decodeShort()); // always short?
         }

@@ -10,7 +10,7 @@ public enum GoldHammerResult {
     Done(2),
     Error(3);
 	
-	private byte val;
+	private final byte val;
 	
 	GoldHammerResult(int val) {
 		this.val = (byte) val;

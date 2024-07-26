@@ -322,15 +322,11 @@ public class SkillHandler {
         chr.addMakingSkillProficiency(recipeID, incSkillProficiency);
         chr.addStatAndSendPacket(Stat.fatigue, msr.getIncFatigability());
         if (success) {
-            Stat trait = Stat.craftEXP;
-            switch (reqSkillID) {
-                case 92000000:
-                    trait = Stat.senseEXP;
-                    break;
-                case 92010000:
-                    trait = Stat.willEXP;
-                    break;
-            }
+            Stat trait = switch (reqSkillID) {
+                case 92000000 -> Stat.senseEXP;
+                case 92010000 -> Stat.willEXP;
+                default -> Stat.craftEXP;
+            };
             chr.addTraitExp(trait, (int) Math.pow(2, chr.getMakingSkillLevel(reqSkillID) + 2));
         }
         chr.getField().broadcastPacket(FieldPacket.makingSkillResult(chr.getId(), recipeID, result, target, incSkillProficiency));

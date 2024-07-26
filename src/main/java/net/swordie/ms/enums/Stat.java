@@ -42,7 +42,7 @@ public enum Stat {
     eventPoints(0x80000000),
     ;
 
-    private int val;
+    private final int val;
 
     Stat(int val) {
         this.val = val;

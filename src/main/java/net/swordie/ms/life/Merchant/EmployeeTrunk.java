@@ -2,7 +2,7 @@ package net.swordie.ms.life.Merchant;
 
 import net.swordie.ms.constants.GameConstants;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -479,7 +479,7 @@ public class Kaiser extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -734,21 +734,12 @@ public class Kaiser extends Job {
     }
 
     private int getKaiserGauge(Char chr) {
-        int maxGauge;
-        switch (chr.getJob()) {
-            case 6100:
-                maxGauge = SkillData.getSkillInfoById(60000219).getValue(s, 1);
-                break;
-            case 6110:
-                maxGauge = SkillData.getSkillInfoById(60000219).getValue(u, 1);
-                break;
-            case 6111:
-            case 6112:
-                maxGauge = SkillData.getSkillInfoById(60000219).getValue(v, 1);
-                break;
-            default:
-                maxGauge = 0;
-        }
+        int maxGauge = switch (chr.getJob()) {
+            case 6100 -> SkillData.getSkillInfoById(60000219).getValue(s, 1);
+            case 6110 -> SkillData.getSkillInfoById(60000219).getValue(u, 1);
+            case 6111, 6112 -> SkillData.getSkillInfoById(60000219).getValue(v, 1);
+            default -> 0;
+        };
         return maxGauge;
     }
 

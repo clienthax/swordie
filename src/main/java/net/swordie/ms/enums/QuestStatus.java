@@ -8,7 +8,7 @@ public enum QuestStatus {
     Started(1),
     Completed(2);
 
-    private byte val;
+    private final byte val;
 
     QuestStatus(int val) {
         this.val = (byte) val;

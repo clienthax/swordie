@@ -95,7 +95,7 @@ public class NightWalker extends Noblesse {
     public static final int TRIPLE_THROW = 14101020;
     public static final int TRIPLE_THROW_FINISHER = 14101021;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELEMENTAL_HARMONY_LUK,
             IMPERIAL_RECALL,
             ELEMENTAL_EXPERT,
@@ -105,7 +105,7 @@ public class NightWalker extends Noblesse {
             ELEMENTAL_SHIFT2,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             DARK_ELEMENTAL,
             HASTE,
             DARK_SIGHT,
@@ -120,23 +120,23 @@ public class NightWalker extends Noblesse {
             SHADOW_ILLUSION,
     };
 
-    private int[] darkEleSkills = new int[] {
+    private final int[] darkEleSkills = new int[] {
             DARK_ELEMENTAL,
             ADAPTIVE_DARKNESS,
             ADAPTIVE_DARKNESS_II,
             ADAPTIVE_DARKNESS_III,
     };
 
-    private int[] batSkills = new int[] {
+    private final int[] batSkills = new int[] {
             SHADOW_BAT,
             BAT_AFFINITY,
             BAT_AFFINITY_II,
             BAT_AFFINITY_III,
     };
 
-    private List<Summon> bats = new ArrayList<>();
+    private final List<Summon> bats = new ArrayList<>();
     private Summon darkServant;
-    private List<Summon> darkOmenBats = new ArrayList<>();
+    private final List<Summon> darkOmenBats = new ArrayList<>();
     private int darkOmenAttackCount = 0;
 
     public NightWalker(Char chr) {
@@ -320,7 +320,7 @@ public class NightWalker extends Noblesse {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -416,7 +416,7 @@ public class NightWalker extends Noblesse {
             }
             MobTemporaryStat mts = mob.getTemporaryStat();
             // Remove Bats & Create ForceAtom
-            if (bats.size() > 0) {
+            if (!bats.isEmpty()) {
                 for(Iterator<Summon> it = bats.iterator(); it.hasNext();) {
                     Summon bat = it.next();
                     if (Util.succeedProp((mts.hasCurrentMobStat(MobStat.ElementDarkness) ? 2*getBatAttackProp() : getBatAttackProp()))) {
@@ -427,7 +427,7 @@ public class NightWalker extends Noblesse {
                 }
             }
             // Remove bats created by dark omen and create ForceAtom
-            if (darkOmenBats.size() > 0) {
+            if (!darkOmenBats.isEmpty()) {
                 for(Iterator<Summon> it = darkOmenBats.iterator(); it.hasNext();) {
                     Summon bat = it.next();
                     if (Util.succeedProp((mts.hasCurrentMobStat(MobStat.ElementDarkness) ? 2*getBatAttackProp() : getBatAttackProp()))) {

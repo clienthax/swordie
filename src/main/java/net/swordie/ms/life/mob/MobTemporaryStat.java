@@ -23,8 +23,8 @@ import static net.swordie.ms.life.mob.MobStat.*;
 
 public class MobTemporaryStat {
 	private List<BurnedInfo> burnedInfos = new ArrayList<>();
-	private Map<Tuple<Integer, Integer>, ScheduledFuture> burnCancelSchedules = new HashMap<>();
-	private Map<Tuple<Integer, Integer>, ScheduledFuture> burnSchedules = new HashMap<>();
+	private final Map<Tuple<Integer, Integer>, ScheduledFuture> burnCancelSchedules = new HashMap<>();
+	private final Map<Tuple<Integer, Integer>, ScheduledFuture> burnSchedules = new HashMap<>();
 	private String linkTeam;
 	private Comparator<MobStat> mobStatComper = (o1, o2) -> {
 		int res = 0;
@@ -42,8 +42,8 @@ public class MobTemporaryStat {
 		return res;
 	};
 	private final TreeMap<MobStat, Option> currentStatVals = new TreeMap<>(mobStatComper);
-	private TreeMap<MobStat, Option> newStatVals = new TreeMap<>(mobStatComper);
-	private TreeMap<MobStat, Option> removedStatVals = new TreeMap<>(mobStatComper);
+	private final TreeMap<MobStat, Option> newStatVals = new TreeMap<>(mobStatComper);
+	private final TreeMap<MobStat, Option> removedStatVals = new TreeMap<>(mobStatComper);
 	private Map<MobStat, ScheduledFuture> schedules = new HashMap<>();
 	private Mob mob;
 
@@ -81,9 +81,9 @@ public class MobTemporaryStat {
 		synchronized (currentStatVals) {
 			// DecodeBuffer(12) + MobStat::DecodeTemporary
 			int[] mask = getNewMask();
-			for (int i = 0; i < mask.length; i++) {
-				outPacket.encodeInt(mask[i]);
-			}
+            for (int j : mask) {
+                outPacket.encodeInt(j);
+            }
 
 			for (Map.Entry<MobStat, Option> entry : getNewStatVals().entrySet()) {
 				MobStat mobStat = entry.getKey();
@@ -202,8 +202,8 @@ public class MobTemporaryStat {
 			}
 			if (hasNewMobStat(ExtraBuffStat)) {
 				List<Option> values = getNewOptionsByMobStat(ExtraBuffStat).extraOpts;
-				outPacket.encodeByte(values.size() > 0);
-				if (values.size() > 0) {
+				outPacket.encodeByte(!values.isEmpty());
+				if (!values.isEmpty()) {
 					outPacket.encodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).nOption); // nPAD
 					outPacket.encodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).mOption); // nMAD
 					outPacket.encodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).xOption); // nPDR
@@ -322,9 +322,9 @@ public class MobTemporaryStat {
 			res[mobStat.getPos()] |= mobStat.getVal();
 		}
 		OutPacket outPacket = new OutPacket();
-		for (int i = 0; i < res.length; i++) {
-			outPacket.encodeInt(res[i]);
-		}
+        for (int re : res) {
+            outPacket.encodeInt(re);
+        }
 		return res;
 	}
 
@@ -410,7 +410,7 @@ public class MobTemporaryStat {
 			List<BurnedInfo> biList = getBurnedInfos().stream().filter(bi -> bi.getCharacterId() == charID).collect(Collectors.toList());
 			getBurnedInfos().removeAll(biList);
 			getRemovedStatVals().put(BurnedInfo, getCurrentOptionsByMobStat(BurnedInfo));
-			if (getBurnedInfos().size() == 0) {
+			if (getBurnedInfos().isEmpty()) {
 				getCurrentStatVals().remove(BurnedInfo);
 			}
 			getMob().getField().broadcastPacket(MobPool.statReset(getMob(), (byte) 1, false, biList));

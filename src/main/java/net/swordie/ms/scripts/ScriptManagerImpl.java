@@ -50,7 +50,6 @@ import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
-import net.swordie.ms.util.container.Tuple;
 import net.swordie.ms.world.World;
 import net.swordie.ms.world.event.*;
 import net.swordie.ms.world.field.*;
@@ -98,17 +97,17 @@ public class ScriptManagerImpl implements ScriptManager {
 	private static final Logger log = LogManager.getRootLogger();
 	private static final ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName(SCRIPT_ENGINE_NAME);
 
-	private Char chr;
+	private final Char chr;
 	private Field field;
 	private final boolean isField;
-	private NpcScriptInfo npcScriptInfo;
-	private Map<ScriptType, ScriptInfo> scripts;
+	private final NpcScriptInfo npcScriptInfo;
+	private final Map<ScriptType, ScriptInfo> scripts;
 	private int returnField = 0;
 	private int returnPortal = 0;
 	private ScriptType lastActiveScriptType;
-	private Map<ScriptType, Future> evaluations = new HashMap<>();
-	private Set<ScheduledFuture> events = new HashSet<>();
-	private ScriptMemory memory = new ScriptMemory();
+	private final Map<ScriptType, Future> evaluations = new HashMap<>();
+	private final Set<ScheduledFuture> events = new HashSet<>();
+	private final ScriptMemory memory = new ScriptMemory();
 	private boolean curNodeEventEnd;
 	private static final Lock fileReadLock = new ReentrantLock();
 	private FieldTransferInfo fieldTransferInfo;
@@ -1124,7 +1123,7 @@ public class ScriptManagerImpl implements ScriptManager {
 					chr.warp(forcedReturn, 0, false);
 				}
 				// if eligible members' size is 0, clear the instance
-				if (instance.getChars().size() == 0) {
+				if (instance.getChars().isEmpty()) {
 					instance.clear();
 				}
 			}
@@ -1231,7 +1230,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	@Override
 	public boolean hasMobsInField(int fieldid) {
 		Field field = chr.getOrCreateFieldByCurrentInstanceType(fieldid);
-		return field.getMobs().size() > 0;
+		return !field.getMobs().isEmpty();
 	}
 
 	@Override
@@ -1416,7 +1415,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	public void openNpc(int npcId) {
 		Npc npc = NpcData.getNpcDeepCopyById(npcId);
 		String script;
-		if(npc.getScripts().size() > 0) {
+		if(!npc.getScripts().isEmpty()) {
 			script = npc.getScripts().get(0);
 		} else {
 			script = String.valueOf(npc.getTemplateId());
@@ -1629,11 +1628,10 @@ public class ScriptManagerImpl implements ScriptManager {
     public boolean isFinishedEscort(int templateID) {
         Field field = chr.getField();
         Life life = field.getLifeByTemplateId(templateID);
-        if(!(life instanceof Mob)) {
+        if(!(life instanceof Mob mob)) {
             WvsContext.dispose(chr);
             return false;
         }
-        Mob mob = (Mob) life;
         boolean finished = mob.isFinishedEscort();
         if (!finished) {
             WvsContext.dispose(chr);
@@ -1691,7 +1689,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	@Override
 	public boolean hasReactors() {
 		Field field = chr.getField();
-		return field.getReactors().size() > 0;
+		return !field.getReactors().isEmpty();
 	}
 
 	@Override
@@ -1704,9 +1702,8 @@ public class ScriptManagerImpl implements ScriptManager {
 	public int getReactorState(int reactorId) {
 		Field field = chr.getField();
 		Life life = field.getLifeByTemplateId(reactorId);
-		if (life != null && life instanceof Reactor) {
-			Reactor reactor = (Reactor) life;
-			return reactor.getState();
+		if (life != null && life instanceof Reactor reactor) {
+            return reactor.getState();
 		}
 		return -1;
 	}
@@ -2113,7 +2110,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	public void addQRValue(int questId, String qrValue, boolean ex) {
 		String qrVal = getQRValue(questId);
-		if (qrVal.equals("") || qrVal.equals("Quest is Null")) {
+		if (qrVal.isEmpty() || qrVal.equals("Quest is Null")) {
 			createQuestWithQRValue(questId, qrValue);
 			return;
 		}
@@ -2717,7 +2714,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		if (chr.getField() == null || chr.getField().getMobs() == null) {
 			return;
 		}
-		int type = chr.getField().getMobs().size() == 0 ? 2 : 1;
+		int type = chr.getField().getMobs().isEmpty() ? 2 : 1;
 		chr.getOrCreateFieldByCurrentInstanceType(BossConstants.GOLLUX_FIRST_MAP).getProperties().put(String.valueOf(chr.getFieldID()), type);
 		updateGolluxMap();
 	}
@@ -2738,7 +2735,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		golluxMainParts.add(BossConstants.GOLLUX_RIGHT_SHOULDER);
 		golluxMainParts.add(BossConstants.GOLLUX_LEFT_SHOULDER);
 		for (Map.Entry<String, Object> entry : golluxMaps.entrySet()) {
-			if (golluxMainParts.contains(Integer.valueOf(entry.getKey())) && Integer.valueOf(entry.getValue().toString()) == 2) {
+			if (golluxMainParts.contains(Integer.valueOf(entry.getKey())) && Integer.parseInt(entry.getValue().toString()) == 2) {
 				difficulty--;
 			}
 		}
@@ -2752,7 +2749,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		int mobId = 9390600 + phase;
 		Mob gollux = MobData.getMobDeepCopyById(mobId);
 		int hpMultiplier = BossConstants.GOLLUX_HP_MULTIPLIERS[phase][getGolluxDifficulty().getVal()];
-		Mob mob = spawnMob(mobId, 0, 0, false, gollux.getHp() * Long.valueOf(hpMultiplier));
+		Mob mob = spawnMob(mobId, 0, 0, false, gollux.getHp() * (long) hpMultiplier);
 		blockGolluxAttacks();
 	}
 
@@ -2802,7 +2799,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	}
 
 	public void createFallingCatcherOnCharacter(String name) {
-		ArrayList<Position> positions = new ArrayList<Position>();
+		ArrayList<Position> positions = new ArrayList<>();
 		positions.add(chr.getPosition());
 		chr.getField().broadcastPacket(FieldPacket.createFallingCatcher(name, 1, 1, positions));
 	}
@@ -2873,19 +2870,19 @@ public class ScriptManagerImpl implements ScriptManager {
 		short pX = BossConstants.ZAKUM_SPAWN_X;
 		short pY = BossConstants.ZAKUM_SPAWN_Y;
 		int zakBody = BossConstants.ZAKUM_EASY_BODY;
-		int zakArm = BossConstants.ZAKUM_EASY_ARM;
-		switch (map) {
-			case BossConstants.ZAKUM_HARD_ALTAR:
-				zakBody = BossConstants.ZAKUM_HARD_BODY;
-				zakArm = BossConstants.ZAKUM_HARD_ARM;
-				break;
-			case BossConstants.ZAKUM_CHAOS_ALTAR:
-				zakBody = BossConstants.ZAKUM_CHAOS_BODY;
-				zakArm = BossConstants.ZAKUM_CHAOS_ARM;
-				break;
-		}
+		int zakArm = switch (map) {
+            case BossConstants.ZAKUM_HARD_ALTAR -> {
+                zakBody = BossConstants.ZAKUM_HARD_BODY;
+                yield BossConstants.ZAKUM_HARD_ARM;
+            }
+            case BossConstants.ZAKUM_CHAOS_ALTAR -> {
+                zakBody = BossConstants.ZAKUM_CHAOS_BODY;
+                yield BossConstants.ZAKUM_CHAOS_ARM;
+            }
+            default -> BossConstants.ZAKUM_EASY_ARM;
+        };
 
-		spawnMob(zakArm, pX, pY, false);
+        spawnMob(zakArm, pX, pY, false);
 		for (int i = 1; i <= 8; i++) {
 			spawnMob(zakBody + i, pX, pY, false);
 		}
@@ -2901,9 +2898,9 @@ public class ScriptManagerImpl implements ScriptManager {
 				easy ? BossConstants.BALROG_EASY_DMGSINK : BossConstants.BALROG_HARD_DMGSINK,
 		};
 
-		for (int i = 0; i < spawns.length; i++) {
-			spawnMob(spawns[i], BossConstants.BALROG_SPAWN_X, BossConstants.BALROG_SPAWN_Y, false);
-		}
+        for (int spawn : spawns) {
+            spawnMob(spawn, BossConstants.BALROG_SPAWN_X, BossConstants.BALROG_SPAWN_Y, false);
+        }
 	}
 
 	public void resetBossMap(int fieldId) {

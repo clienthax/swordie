@@ -20,7 +20,7 @@ public enum SendTypeFromClient {
     PlatformerStageExit(12),
     DamageSkinSaveFAQ(13);
 
-    private int val;
+    private final int val;
 
     SendTypeFromClient(int val) {
         this.val = val;

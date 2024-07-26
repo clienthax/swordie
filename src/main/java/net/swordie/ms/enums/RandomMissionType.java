@@ -13,7 +13,7 @@ public enum RandomMissionType {
 
     ;
 
-    private int val;
+    private final int val;
 
     RandomMissionType(int val) {
         this.val = val;

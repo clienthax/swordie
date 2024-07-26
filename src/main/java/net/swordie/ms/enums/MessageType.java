@@ -49,7 +49,7 @@ public enum MessageType {
 
     ;
 
-    private byte val;
+    private final byte val;
 
     MessageType(int val) {
         this.val = (byte) val;

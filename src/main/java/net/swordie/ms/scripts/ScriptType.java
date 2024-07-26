@@ -14,7 +14,7 @@ public enum ScriptType {
     Quest("quest")
     ;
 
-    private String dir;
+    private final String dir;
 
     ScriptType(String dir) {
         this.dir = dir;

@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Created on 2/18/2017.
  */
 public class InPacket extends Packet {
-    private ByteBuf byteBuf;
+    private final ByteBuf byteBuf;
 
     /**
      * Creates a new InPacket with a given buffer.
@@ -47,6 +47,7 @@ public class InPacket extends Packet {
         return byteBuf.array();
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public InPacket clone() {
         return new InPacket(byteBuf);

@@ -20,8 +20,11 @@
  */
 package net.swordie.ms.connection.db;
 
+import java.io.Serial;
+
 public class DatabaseException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -420103154764822555L;
 
     public DatabaseException(String msg) {

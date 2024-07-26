@@ -26,7 +26,7 @@ public enum WorldId {
 
     ;
 
-    private int val;
+    private final int val;
 
     WorldId(int val) {
         this.val = val;

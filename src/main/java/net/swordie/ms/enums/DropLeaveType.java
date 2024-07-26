@@ -13,7 +13,7 @@ public enum DropLeaveType {
     Fade2(6),
     Absorb(7); // CAnimationDisplayer::RegisterAbsorbItemAnimationJP ?
 
-    private byte val;
+    private final byte val;
 
     DropLeaveType(int  val) {
         this.val = (byte) val;

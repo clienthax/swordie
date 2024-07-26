@@ -13,7 +13,7 @@ public enum ReviveType {
     EVENT(6),
     ;
 
-    private byte val;
+    private final byte val;
 
     ReviveType(int val) {
         this.val = (byte) val;

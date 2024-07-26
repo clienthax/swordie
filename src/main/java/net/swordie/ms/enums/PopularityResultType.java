@@ -12,7 +12,7 @@ public enum PopularityResultType {
     Notify(5),
     ;
 
-    private byte val;
+    private final byte val;
 
     PopularityResultType(int val) {
         this.val = (byte) val;

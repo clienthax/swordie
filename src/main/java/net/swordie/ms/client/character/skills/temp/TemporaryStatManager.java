@@ -38,25 +38,25 @@ import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat
  */
 public class TemporaryStatManager {
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
-    private Map<CharacterTemporaryStat, List<Option>> currentStats = new HashMap<>();
-    private Map<CharacterTemporaryStat, List<Option>> newStats = new HashMap<>();
-    private Map<CharacterTemporaryStat, List<Option>> removedStats = new HashMap<>();
-    private Map<CharacterTemporaryStat, ScheduledFuture> schedules = new HashMap<>();
-    private HashMap<Tuple<CharacterTemporaryStat, Option>, ScheduledFuture> indieSchedules = new HashMap<>();
+    private final Map<CharacterTemporaryStat, List<Option>> currentStats = new HashMap<>();
+    private final Map<CharacterTemporaryStat, List<Option>> newStats = new HashMap<>();
+    private final Map<CharacterTemporaryStat, List<Option>> removedStats = new HashMap<>();
+    private final Map<CharacterTemporaryStat, ScheduledFuture> schedules = new HashMap<>();
+    private final HashMap<Tuple<CharacterTemporaryStat, Option>, ScheduledFuture> indieSchedules = new HashMap<>();
     private int pvpDamage;
     private byte defenseState;
     private byte defenseAtt;
     private int[] diceInfo = new int[22];
-    private int[] diceOption = new int[8];
+    private final int[] diceOption = new int[8];
     private List<Integer> mobZoneStates;
     private int viperEnergyCharge;
     private StopForceAtom stopForceAtom;
     private LarknessManager larknessManager;
-    private Char chr;
-    private List<TemporaryStatBase> twoStates = new ArrayList<>();
-    private Set<AffectedArea> affectedAreas = new HashSet<>();
-    private Map<BaseStat, Integer> baseStats = new HashMap<>();
-    private List<OutPacket> toBroadcastAfterMigrate = new ArrayList<>();
+    private final Char chr;
+    private final List<TemporaryStatBase> twoStates = new ArrayList<>();
+    private final Set<AffectedArea> affectedAreas = new HashSet<>();
+    private final Map<BaseStat, Integer> baseStats = new HashMap<>();
+    private final List<OutPacket> toBroadcastAfterMigrate = new ArrayList<>();
 
 
     public TemporaryStatManager(Char chr){
@@ -222,7 +222,7 @@ public class TemporaryStatManager {
                 option.summon = null;
             }
             getCurrentStats().get(cts).remove(option);
-            if(getCurrentStats().get(cts).size() == 0) {
+            if(getCurrentStats().get(cts).isEmpty()) {
                 getCurrentStats().remove(cts);
             }
         }

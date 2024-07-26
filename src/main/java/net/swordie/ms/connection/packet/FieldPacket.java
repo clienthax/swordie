@@ -42,7 +42,7 @@ public class FieldPacket {
     public static OutPacket funcKeyMappedManInit(FuncKeyMap funcKeyMap) {
         OutPacket outPacket = new OutPacket(OutHeader.FUNC_KEY_MAPPED_MAN_INIT);
 
-        if (funcKeyMap.getKeymap() == null || funcKeyMap.getKeymap().size() == 0) {
+        if (funcKeyMap.getKeymap() == null || funcKeyMap.getKeymap().isEmpty()) {
             outPacket.encodeByte(true);
         } else {
             outPacket.encodeByte(false);
@@ -312,7 +312,7 @@ public class FieldPacket {
                 chr.getGuild().getAlliance().getName());
         outPacket.encodeByte(-1); // Forced pet IDx
         outPacket.encodeByte(0); // User state (?)
-        outPacket.encodeByte(chr.getPets().size() > 0); // pet activated
+        outPacket.encodeByte(!chr.getPets().isEmpty()); // pet activated
         for(Pet pet : chr.getPets()) {
             PetItem pi = pet.getItem();
             outPacket.encodeByte(1);
@@ -649,7 +649,7 @@ public class FieldPacket {
     public static OutPacket trunkDlg(TrunkDlg trunkDlg) {
         OutPacket outPacket = new OutPacket(OutHeader.TRUNK_DLG);
 
-        outPacket.encodeByte(trunkDlg.getType().getVal());
+        outPacket.encodeByte(trunkDlg.type().getVal());
         trunkDlg.encode(outPacket);
 
         return outPacket;
@@ -1048,7 +1048,7 @@ public class FieldPacket {
     }
 
     public static OutPacket createFallingCatcherGollux(int mobId, Position position) {
-        ArrayList<Position> pos = new ArrayList<Position>();
+        ArrayList<Position> pos = new ArrayList<>();
         pos.add(position);
         switch (mobId) {
             case 9390610:
@@ -1058,7 +1058,7 @@ public class FieldPacket {
             default:
                 Random ran = new Random();
                 int x = ran.nextInt(3) + 1;
-                return createFallingCatcher("DropStoneGiantBoss" + String.valueOf(x), 25, 1, pos);
+                return createFallingCatcher("DropStoneGiantBoss" + x, 25, 1, pos);
         }
 
     }

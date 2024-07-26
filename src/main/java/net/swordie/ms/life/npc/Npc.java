@@ -22,7 +22,7 @@ public class Npc extends Life {
     private int alpha; // if hideToLocalUser is true
     private String localRepeatEffect;
     private ScreenInfo screenInfo;
-    private Map<Integer, String> scripts = new HashMap<>();
+    private final Map<Integer, String> scripts = new HashMap<>();
     private boolean move;
     private int trunkGet;
     private int trunkPut;

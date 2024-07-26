@@ -14,7 +14,7 @@ public enum SoulType {
     Magnificent(8),
     ;
 
-    private int val;
+    private final int val;
 
     SoulType(int val) {
         this.val = val;

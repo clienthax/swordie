@@ -97,48 +97,45 @@ public class RuneStone {
 
 
     public void activateRuneStoneEffect(Char chr) {
-        int runeBuffID = 0;
-        switch (runeType) {
-            case Swiftness:
+        int runeBuffID = switch (runeType) {
+            case Swiftness -> {
                 applyRuneSwiftness(chr);
-                runeBuffID = LIBERATE_THE_SWIFT_RUNE;
-                break;
-            case Recovery:
+                yield LIBERATE_THE_SWIFT_RUNE;
+            }
+            case Recovery -> {
                 applyRuneRecovery(chr);
-                runeBuffID = LIBERATE_THE_RECOVERY_RUNE;
-                break;
-            case Destruction:
+                yield LIBERATE_THE_RECOVERY_RUNE;
+            }
+            case Destruction ->
                 // Handled in Job.java : handleAttack
-                runeBuffID = LIBERATE_THE_DESTRUCTIVE_RUNE_BUFF;
-                break;
-            case Thunder:
+                    LIBERATE_THE_DESTRUCTIVE_RUNE_BUFF;
+            case Thunder -> {
                 applyRuneThunder(chr);
-                runeBuffID = LIBERATE_THE_RUNE_OF_THUNDER;
-                break;
-            case Might:
+                yield LIBERATE_THE_RUNE_OF_THUNDER;
+            }
+            case Might -> {
                 applyRuneMight(chr);
-                runeBuffID = LIBERATE_THE_RUNE_OF_MIGHT;
-                break;
-            case Darkness:
+                yield LIBERATE_THE_RUNE_OF_MIGHT;
+            }
+            case Darkness -> {
                 applyRuneDarkness(chr);
-                runeBuffID = LIBERATE_THE_RUNE_OF_DARKNESS;
-                break;
-            case Riches:
+                yield LIBERATE_THE_RUNE_OF_DARKNESS;
+            }
+            case Riches -> {
 
                 //TODO  Drop stuff from the sky
 
                 applyRuneRiches(chr);
-                runeBuffID = LIBERATE_THE_RUNE_OF_RICHES;
-                break;
-            case Hordes:
+                yield LIBERATE_THE_RUNE_OF_RICHES;
+            }
+            case Hordes -> {
                 applyRuneHordes(chr);
-                runeBuffID = LIBERATE_THE_RUNE_OF_HORDES;
-                break;
-            case Skill:
+                yield LIBERATE_THE_RUNE_OF_HORDES;
+            }
+            case Skill ->
                 // Handled in Char.java : setSkillCooldown
-                runeBuffID = LIBERATE_THE_RUNE_OF_SKILL;
-                break;
-        }
+                    LIBERATE_THE_RUNE_OF_SKILL;
+        };
 
         // Common EXP buff
         TemporaryStatManager tsm = chr.getTemporaryStatManager();

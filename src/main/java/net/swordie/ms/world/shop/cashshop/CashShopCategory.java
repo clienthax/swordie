@@ -2,7 +2,7 @@ package net.swordie.ms.world.shop.cashshop;
 
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**

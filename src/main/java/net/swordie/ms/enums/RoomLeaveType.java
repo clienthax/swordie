@@ -42,7 +42,7 @@ public enum RoomLeaveType {
     CMRLeave_Failed(34),
         ;
 
-    private int val;
+    private final int val;
 
     RoomLeaveType(int val) {
         this.val = val;

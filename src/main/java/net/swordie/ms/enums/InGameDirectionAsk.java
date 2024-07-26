@@ -1,14 +1,12 @@
 package net.swordie.ms.enums;
 
-import java.util.Arrays;
-
 public enum InGameDirectionAsk {
     NOT(0),
     DELAY(1),
     PATTERN_INPUT_REQUEST(2),
     CAMERA_MOVE_TIME(3);
 
-    private int val;
+    private final int val;
 
     InGameDirectionAsk(int val) {
         this.val = val;

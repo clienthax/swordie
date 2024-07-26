@@ -85,11 +85,11 @@ public class Blaster extends Citizen {
     public static final int WEAVING = 37111003;
     public static final int BOBBING = 37101001;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             SECRET_ASSEMBLY,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             ARM_CANNON_BOOST,
             MAPLE_WARRIOR_BLASTER,
             FOR_LIBERTY_BLASTER,
@@ -186,7 +186,7 @@ public class Blaster extends Citizen {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -385,7 +385,7 @@ public class Blaster extends Citizen {
             tsm.putCharacterStatValue(RWCylinder, o);
             tsm.sendSetStatPacket();
             int time = tsm.hasStat(RWMaximizeCannon) ? 500 : 1500;
-            EventManager.addEvent(() -> reloadCylinder(), time);
+            EventManager.addEvent(this::reloadCylinder, time);
         }
         if (!chr.hasSkill(COMBO_TRAINING)) {
             return;

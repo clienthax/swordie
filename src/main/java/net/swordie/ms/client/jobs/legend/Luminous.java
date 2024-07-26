@@ -70,7 +70,7 @@ public class Luminous extends Job {
     public static final int HEROIC_MEMORIES_LUMI = 27121053;
     public static final int ARMAGEDDON = 27121052; //Stun debuff
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             EQUILIBRIUM,
             //EQUILIBRIUM2,
             CHANGE_LIGHT_DARK,
@@ -283,21 +283,12 @@ public class Luminous extends Job {
             }
         }
 
-        int orbmad;
-        switch (amount) {
-            case 1:
-                orbmad = 15;
-                break;
-            case 2:
-                orbmad = 24;
-                break;
-            case 3:
-                orbmad = 30;
-                break;
-            default:
-                orbmad = 0;
-                break;
-        }
+        int orbmad = switch (amount) {
+            case 1 -> 15;
+            case 2 -> 24;
+            case 3 -> 30;
+            default -> 0;
+        };
 
         if(amount > 0) {
             o.nOption = amount;
@@ -346,7 +337,7 @@ public class Luminous extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

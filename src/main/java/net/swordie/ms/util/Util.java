@@ -20,8 +20,8 @@ import java.util.stream.IntStream;
  */
 public class Util {
 
-    private static Map<Class, Class> boxedToPrimClasses = new HashMap<>();
-    private static Pattern regexPattern = Pattern.compile("^\\$2[a-z]\\$.{56}$");
+    private static final Map<Class, Class> boxedToPrimClasses = new HashMap<>();
+    private static final Pattern regexPattern = Pattern.compile("^\\$2[a-z]\\$.{56}$");
 
     static {
         boxedToPrimClasses.put(Boolean.class, boolean.class);
@@ -41,7 +41,7 @@ public class Util {
      * @return A random element from the list, or null if the list is null or empty.
      */
     public static <T> T getRandomFromCollection(List<T> list) {
-        if(list != null && list.size() > 0) {
+        if(list != null && !list.isEmpty()) {
             return list.get(getRandom(list.size() - 1));
         }
         return null;
@@ -306,9 +306,7 @@ public class Util {
         totalLength = Math.max(totalLength, value.length());
         char[] chars = new char[totalLength];
         char[] valueChars = value.toCharArray();
-        for (int i = 0; i < value.length() ; i++) {
-            chars[i] = valueChars[i];
-        }
+        System.arraycopy(valueChars, 0, chars, 0, value.length());
         for(int i = value.length(); i < chars.length; i++) {
             chars[i] = c;
         }
@@ -403,12 +401,9 @@ public class Util {
      * @param <T> the type of the elements
      * @return a new Set created from the elements
      */
+    @SafeVarargs
     public static <T> Set<T> makeSet(T... elems) {
-        Set<T> set = new HashSet<>();
-        for (T elem : elems) {
-            set.add(elem);
-        }
-        return set;
+        return new HashSet<>(Arrays.asList(elems));
     }
 
     /**

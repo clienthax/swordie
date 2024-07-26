@@ -10,7 +10,6 @@ import net.swordie.ms.world.field.Field;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Created by Asura on 27-7-2018.
@@ -78,8 +77,8 @@ public class OpenGate {
             List<OpenGate> openGatesWithSameChr = field.getOpenGates()
                     .stream()
                     .filter(og -> og.getChr().getId() == getChr().getId())
-                    .collect(Collectors.toList());
-            if (openGatesWithSameChr != null && openGatesWithSameChr.size() >= 2) {
+                    .toList();
+            if (openGatesWithSameChr.size() >= 2) {
                 OpenGate openGate = openGatesWithSameChr.get(0);
                 openGate.despawnOpenGate(field);
             }

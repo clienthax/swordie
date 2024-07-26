@@ -37,7 +37,7 @@ public enum TrunkType {
     TrunkRes_BlockFunction(28),
     ;
 
-    private int val;
+    private final int val;
 
     TrunkType(int val) {
         this.val = val;

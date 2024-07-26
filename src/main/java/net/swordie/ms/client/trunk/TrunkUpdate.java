@@ -7,8 +7,8 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class TrunkUpdate implements TrunkDlg {
 
-    private TrunkType successType;
-    private Trunk trunk;
+    private final TrunkType successType;
+    private final Trunk trunk;
 
     public TrunkUpdate(TrunkType successType, Trunk trunk) {
         this.successType = successType;
@@ -16,7 +16,7 @@ public class TrunkUpdate implements TrunkDlg {
     }
 
     @Override
-    public TrunkType getType() {
+    public TrunkType type() {
         return successType;
     }
 

@@ -13,7 +13,7 @@ public enum StigmaDeliveryType {
     Cancel(2),
     ;
 
-    private int val;
+    private final int val;
 
     StigmaDeliveryType(int val) {
         this.val = val;

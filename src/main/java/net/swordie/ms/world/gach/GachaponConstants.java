@@ -103,20 +103,15 @@ public class GachaponConstants {
     }
 
     public static GachaponDlgType getDlgByTicket(final int ticketID) {
-        switch (ticketID) {
-            case 5220000:
-                return GachaponDlgType.TOWN;
-            case 5220098:
-                return GachaponDlgType.NEBULITE;
-            case 5220097:
-                return GachaponDlgType.CHAIR;
-            case 5220099:
-                return GachaponDlgType.MOUNT;
-            case 5220100:
-                return GachaponDlgType.SPECIAL;
-            case 5451000:// Remote Gachapon Ticket TODO: handle remote gach
-                return null;
-        }
-        return null;
+        return switch (ticketID) {
+            case 5220000 -> GachaponDlgType.TOWN;
+            case 5220098 -> GachaponDlgType.NEBULITE;
+            case 5220097 -> GachaponDlgType.CHAIR;
+            case 5220099 -> GachaponDlgType.MOUNT;
+            case 5220100 -> GachaponDlgType.SPECIAL;
+            case 5451000 ->// Remote Gachapon Ticket TODO: handle remote gach
+                    null;
+            default -> null;
+        };
     }
 }

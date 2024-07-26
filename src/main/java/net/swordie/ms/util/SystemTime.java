@@ -1,6 +1,6 @@
 package net.swordie.ms.util;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 2/18/2017.

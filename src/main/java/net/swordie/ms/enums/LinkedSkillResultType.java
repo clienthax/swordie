@@ -11,7 +11,7 @@ public enum LinkedSkillResultType {
     SetSonOfLinkedSkillResult_Fail_DBRequestFail(4),
     ;
 
-    private int val;
+    private final int val;
 
     LinkedSkillResultType(int val) {
         this.val = val;

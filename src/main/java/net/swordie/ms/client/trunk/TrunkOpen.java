@@ -7,8 +7,8 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class TrunkOpen implements TrunkDlg {
 
-    private int npcTemplateID;
-    private Trunk trunk;
+    private final int npcTemplateID;
+    private final Trunk trunk;
 
     public TrunkOpen(int npcTemplateID, Trunk trunk) {
         this.npcTemplateID = npcTemplateID;
@@ -16,7 +16,7 @@ public class TrunkOpen implements TrunkDlg {
     }
 
     @Override
-    public TrunkType getType() {
+    public TrunkType type() {
         return TrunkType.TrunkRes_OpenTrunkDlg;
     }
 

@@ -10,7 +10,6 @@ import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Triple;
-import net.swordie.ms.world.event.PinkZakumEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -190,7 +189,7 @@ public class GameConstants {
     public static long[] charExp = new long[251];
     private static int[][] enchantSuccessRates = new int[25][2];
     private static int[][] enchantSuccessRatesSuperior = new int[15][2];
-    private static int[] guildExp = new int[MAX_GUILD_LV];
+    private static final int[] guildExp = new int[MAX_GUILD_LV];
 
     // Skills
     public static final int TIME_LEAP_QR_KEY = 99996; // Quest where personal Time Leap CDs get stored
@@ -205,7 +204,7 @@ public class GameConstants {
     public static final int SILENT_CRUSADE_BOSS_COOLDOWN = 240; // minutes between silent crusade attempts (240 min = 4 hours)
 
     // Starforce
-    private static final int STARFORCE_LEVELS[][] = {
+    private static final int[][] STARFORCE_LEVELS = {
             { Integer.MAX_VALUE, -1 }, // per equip
             { 137, (ServerConstants.VERSION >= 197 ? 20 : 13) },
             { 127, (ServerConstants.VERSION >= 197 ? 15 : 12) },
@@ -214,7 +213,7 @@ public class GameConstants {
             { 95, 5 },
     };
 
-    private static final int STARFORCE_LEVELS_SUPERIOR[][] = {
+    private static final int[][] STARFORCE_LEVELS_SUPERIOR = {
             { Integer.MAX_VALUE, 15 },
             { 137, 12 },
             { 127, 10 },
@@ -633,30 +632,22 @@ public class GameConstants {
     }
 
     public static BaseStat getSecStatByMainStat(BaseStat mainStat) {
-        switch(mainStat) {
-            case str:
-                return BaseStat.dex;
-            case dex:
-                return BaseStat.str;
-            case inte:
-                return BaseStat.luk;
-            case luk:
-                return BaseStat.dex;
-            default:
-                return null;
-        }
+        return switch (mainStat) {
+            case str -> BaseStat.dex;
+            case dex -> BaseStat.str;
+            case inte -> BaseStat.luk;
+            case luk -> BaseStat.dex;
+            default -> null;
+        };
     }
 
     public static double getExpOrbExpModifierById(int itemID) {
-        switch (itemID) {
-            case BLUE_EXP_ORB_ID:
-                return BLUE_EXP_ORB_MULT;
-            case PURPLE_EXP_ORB_ID:
-                return PURPLE_EXP_ORB_MULT;
-            case RED_EXP_ORB_ID:
-                return RED_EXP_ORB_MULT;
-        }
-        return 0;
+        return switch (itemID) {
+            case BLUE_EXP_ORB_ID -> BLUE_EXP_ORB_MULT;
+            case PURPLE_EXP_ORB_ID -> PURPLE_EXP_ORB_MULT;
+            case RED_EXP_ORB_ID -> RED_EXP_ORB_MULT;
+            default -> 0;
+        };
     }
 
     /**
@@ -688,29 +679,20 @@ public class GameConstants {
             return 0; // Just 1 attacker
         }
         if (attackers >= 3) {
-            switch (leechers) {
-                case 6:
-                    return 1.95;
-                case 5:
-                    return 1.5;
-                case 4:
-                    return 1.1;
-                default:
-                    return 0.75;
-            }
+            return switch (leechers) {
+                case 6 -> 1.95;
+                case 5 -> 1.5;
+                case 4 -> 1.1;
+                default -> 0.75;
+            };
         } else {
-            switch (leechers) {
-                case 6:
-                    return 1.65 + attackers * 0.1;
-                case 5:
-                    return 1.2 + attackers * 0.1;
-                case 4:
-                    return 0.8 + attackers * 0.1;
-                case 3:
-                    return 0.4 + attackers * 0.1;
-                default:
-                    return 0.15 + attackers * 0.1;
-            }
+            return switch (leechers) {
+                case 6 -> 1.65 + attackers * 0.1;
+                case 5 -> 1.2 + attackers * 0.1;
+                case 4 -> 0.8 + attackers * 0.1;
+                case 3 -> 0.4 + attackers * 0.1;
+                default -> 0.15 + attackers * 0.1;
+            };
         }
     }
 
@@ -804,12 +786,10 @@ public class GameConstants {
 
     public static ReactorType getReactorType(int reactorId) {
         int prefix = reactorId / 100000;
-        switch (prefix) {
-            case 1:
-                return ReactorType.HERB;
-            case 2:
-                return ReactorType.VEIN;
-        }
-        return null;
+        return switch (prefix) {
+            case 1 -> ReactorType.HERB;
+            case 2 -> ReactorType.VEIN;
+            default -> null;
+        };
     }
 }

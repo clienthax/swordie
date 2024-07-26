@@ -19,7 +19,7 @@ public enum DamageSkinType {
     Res_Fail_AlreadyActive(10),
     ;
 
-    private int val;
+    private final int val;
 
     DamageSkinType(int val) {
         this.val = val;

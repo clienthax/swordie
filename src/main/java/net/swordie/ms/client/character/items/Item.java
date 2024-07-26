@@ -10,7 +10,7 @@ import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
@@ -55,7 +55,7 @@ public class Item implements Serializable, Encodable {
         ITEM(2),
         PET(3);
 
-        private byte val;
+        private final byte val;
 
         Type(byte val) {
             this.val = val;

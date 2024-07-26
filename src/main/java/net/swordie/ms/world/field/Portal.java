@@ -13,7 +13,7 @@ public class Portal {
     private boolean onlyOnce;
     private boolean hideTooltip;
     private int delay;
-    private int id;
+    private final int id;
 
     public Portal(int id, PortalType type, String name, int targetMapId, String targetPortalName, int x, int y,
                   int horizontalImpact, int verticalImpact, String script, boolean onlyOnce, boolean hideTooltip,

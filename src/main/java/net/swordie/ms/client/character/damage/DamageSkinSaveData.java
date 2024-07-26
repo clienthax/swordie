@@ -4,7 +4,7 @@ import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.loaders.StringData;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 4/5/2018.

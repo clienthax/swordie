@@ -201,12 +201,11 @@ public class ItemHandler {
                 return;
             }
             Item pi = chr.getCashInventory().getItemBySN(sn);
-            if (!(pi instanceof PetItem)) {
+            if (!(pi instanceof PetItem petItem)) {
                 chr.chatMessage("Could not find that pet.");
                 return;
             }
             boolean add = itemID < 5190014; // add property doesn't include the "Slimming Medicine"
-            PetItem petItem = (PetItem) pi;
             if (add) {
                 petItem.addPetSkill(ps);
             } else {

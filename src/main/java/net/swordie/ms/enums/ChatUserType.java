@@ -7,7 +7,7 @@ public enum ChatUserType {
     User(0),
     Admin(1);
 
-    private byte val;
+    private final byte val;
 
     ChatUserType(int val) {
         this.val = (byte) val;

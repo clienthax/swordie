@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.skills;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.constants.SkillConstants;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created by Asura on 13-6-2018.

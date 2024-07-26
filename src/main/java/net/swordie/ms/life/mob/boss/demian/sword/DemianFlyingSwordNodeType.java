@@ -10,7 +10,7 @@ public enum DemianFlyingSwordNodeType {
     Targeting(2),
     ;
 
-    private byte val;
+    private final byte val;
 
     DemianFlyingSwordNodeType(int val) {
         this.val = (byte) val;

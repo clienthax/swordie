@@ -8,7 +8,7 @@ import net.swordie.ms.client.friend.FriendType;
  */
 public class FriendResultMsg implements FriendResult {
 
-    private FriendType type;
+    private final FriendType type;
     private String name;
 
     public FriendResultMsg(FriendType type) {

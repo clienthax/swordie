@@ -9,7 +9,7 @@ public enum DropEnterType {
     Instant(2),
     FadeAway(3);
 
-    private byte val;
+    private final byte val;
 
     DropEnterType(int val) {
         this.val = (byte) val;

@@ -4,10 +4,10 @@ package net.swordie.ms.life.mob;
 import net.swordie.ms.util.Position;
 
 public class EscortDest {
-    private Position destPos;
-    private int attr;
-    private int mass;
-    private int stopDuration;
+    private final Position destPos;
+    private final int attr;
+    private final int mass;
+    private final int stopDuration;
 
     public EscortDest(int destPosX, int destPosY, int attr, int mass, int stopDuration) {
         this.destPos = new Position(destPosX, destPosY);

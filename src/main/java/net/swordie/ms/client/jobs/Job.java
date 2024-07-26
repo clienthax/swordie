@@ -119,7 +119,7 @@ public abstract class Job {
 			MAPLERUNNER_DASH
 	};
 
-	private int[] buffs = new int[] {
+	private final int[] buffs = new int[] {
 			BOSS_SLAYERS,
 			UNDETERRED,
 			FOR_THE_GUILD,
@@ -147,7 +147,7 @@ public abstract class Job {
 		Skill skill = SkillData.getSkillDeepCopyById(attackInfo.skillId);
 		int skillID = 0;
 		SkillInfo si = null;
-		boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+		boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
 		byte slv = 0;
 		if (skill != null) {
 			si = SkillData.getSkillInfoById(skill.getSkillId());

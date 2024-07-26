@@ -27,8 +27,7 @@ public class DropHandler {
         // rest is some info about foreground info, not interested
         Field field = chr.getField();
         Life life = field.getLifeByObjectID(dropID);
-        if (life instanceof Drop) {
-            Drop drop = (Drop) life;
+        if (life instanceof Drop drop) {
             boolean success = ((!c.getWorld().isReboot() && drop.getOwnerID() == chr.getId()) || drop.canBePickedUpBy(chr)) && chr.addDrop(drop);
             if (success) {
                 field.removeDrop(dropID, chr.getId(), false, -1);

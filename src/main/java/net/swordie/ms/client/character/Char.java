@@ -73,6 +73,7 @@ import net.swordie.ms.scripts.ScriptInfo;
 import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.util.*;
+import net.swordie.ms.util.container.Tuple;
 import net.swordie.ms.world.Channel;
 import net.swordie.ms.world.World;
 import net.swordie.ms.world.field.*;
@@ -82,8 +83,9 @@ import net.swordie.ms.world.shop.NpcShopDlg;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -274,7 +276,7 @@ public class Char {
 	@Transient
 	private boolean partyInvitable;
 	@Transient
-	private ScriptManagerImpl scriptManagerImpl = new ScriptManagerImpl(this);
+	private final ScriptManagerImpl scriptManagerImpl = new ScriptManagerImpl(this);
 	@Transient
 	private int driverID;
 	@Transient
@@ -348,7 +350,7 @@ public class Char {
 	@Transient
 	private FieldInstanceType fieldInstanceType;
 	@Transient
-	private Map<Integer, Field> fields = new HashMap<>();
+	private final Map<Integer, Field> fields = new HashMap<>();
 	@Transient
 	private int bulletIDForAttack;
 	@Transient
@@ -381,7 +383,7 @@ public class Char {
 	private boolean skillCDBypass = false;
 	// TODO Move this to CharacterStat?
 	@Transient
-	private Map<BaseStat, Long> baseStats = new HashMap<>();
+	private final Map<BaseStat, Long> baseStats = new HashMap<>();
 	@Transient
 	private boolean changingChannel;
 	@Transient
@@ -511,7 +513,7 @@ public class Char {
 		psychicAreas = new HashMap<>();
 		psychicLocks = new HashMap<>();
 		psychicLockBalls = new HashMap<>();
-		funcKeyMaps = new ArrayList<FuncKeyMap>();
+		funcKeyMaps = new ArrayList<>();
 	}
 
 	public static Char getFromDBById(int userId) {
@@ -525,9 +527,9 @@ public class Char {
 		Transaction transaction = session.beginTransaction();
 		Query query = session.createQuery("FROM Char chr WHERE chr.avatarData.characterStat.name = :name");
 		query.setParameter("name", name);
-		List l = ((org.hibernate.query.Query) query).list();
+		List l = ((Query) query).list();
 		Char chr = null;
-		if (l != null && l.size() > 0) {
+		if (l != null && !l.isEmpty()) {
 			chr = (Char) l.get(0);
 		}
 		transaction.commit();
@@ -542,9 +544,9 @@ public class Char {
 				"WHERE chr.avatarData.characterStat.name = :name AND chr.avatarData.characterStat.worldIdForLog = :world");
 		query.setParameter("name", name);
 		query.setParameter("world", worldId);
-		List l = ((org.hibernate.query.Query) query).list();
+		List l = ((Query) query).list();
 		Char chr = null;
-		if (l != null && l.size() > 0) {
+		if (l != null && !l.isEmpty()) {
 			chr = (Char) l.get(0);
 		}
 		transaction.commit();
@@ -984,7 +986,7 @@ public class Char {
 		}
 
 		if (mask.isInMask(DBChar.SkillRecord)) {
-			boolean encodeSkills = getSkills().size() > 0;
+			boolean encodeSkills = !getSkills().isEmpty();
 			outPacket.encodeByte(encodeSkills);
 			if (encodeSkills) {
 				Set<LinkSkill> linkSkills = getLinkSkills();
@@ -1598,22 +1600,15 @@ public class Char {
 	}
 
 	public Inventory getInventoryByType(InvType invType) {
-		switch (invType) {
-			case EQUIPPED:
-				return getEquippedInventory();
-			case EQUIP:
-				return getEquipInventory();
-			case CONSUME:
-				return getConsumeInventory();
-			case ETC:
-				return getEtcInventory();
-			case INSTALL:
-				return getInstallInventory();
-			case CASH:
-				return getCashInventory();
-			default:
-				return null;
-		}
+        return switch (invType) {
+            case EQUIPPED -> getEquippedInventory();
+            case EQUIP -> getEquipInventory();
+            case CONSUME -> getConsumeInventory();
+            case ETC -> getEtcInventory();
+            case INSTALL -> getInstallInventory();
+            case CASH -> getCashInventory();
+            default -> null;
+        };
 	}
 
 	public Client getClient() {
@@ -2002,52 +1997,31 @@ public class Char {
 	 */
 	public int getStat(Stat charStat) {
 		CharacterStat cs = getAvatarData().getCharacterStat();
-		switch (charStat) {
-			case str:
-				return cs.getStr();
-			case dex:
-				return cs.getDex();
-			case inte:
-				return cs.getInt();
-			case luk:
-				return cs.getLuk();
-			case hp:
-				return cs.getHp();
-			case mhp:
-				return cs.getMaxHp();
-			case mp:
-				return cs.getMp();
-			case mmp:
-				return cs.getMaxMp();
-			case ap:
-				return cs.getAp();
-			case level:
-				return cs.getLevel();
-			case skin:
-				return cs.getSkin();
-			case face:
-				return cs.getFace();
-			case hair:
-				return cs.getHair();
-			case pop:
-				return cs.getPop();
-			case charismaEXP:
-				return cs.getCharismaExp();
-			case charmEXP:
-				return cs.getCharmExp();
-			case craftEXP:
-				return cs.getCraftExp();
-			case insightEXP:
-				return cs.getInsightExp();
-			case senseEXP:
-				return cs.getSenseExp();
-			case willEXP:
-				return cs.getWillExp();
-			case fatigue:
-				return cs.getFatigue();
-		}
-		return -1;
-	}
+        return switch (charStat) {
+            case str -> cs.getStr();
+            case dex -> cs.getDex();
+            case inte -> cs.getInt();
+            case luk -> cs.getLuk();
+            case hp -> cs.getHp();
+            case mhp -> cs.getMaxHp();
+            case mp -> cs.getMp();
+            case mmp -> cs.getMaxMp();
+            case ap -> cs.getAp();
+            case level -> cs.getLevel();
+            case skin -> cs.getSkin();
+            case face -> cs.getFace();
+            case hair -> cs.getHair();
+            case pop -> cs.getPop();
+            case charismaEXP -> cs.getCharismaExp();
+            case charmEXP -> cs.getCharmExp();
+            case craftEXP -> cs.getCraftExp();
+            case insightEXP -> cs.getInsightExp();
+            case senseEXP -> cs.getSenseExp();
+            case willEXP -> cs.getWillExp();
+            case fatigue -> cs.getFatigue();
+            default -> -1;
+        };
+    }
 
 	/**
 	 * Adds a Stat to this Char.
@@ -2240,7 +2214,7 @@ public class Char {
             skill.setCurrentLevel(-1); // workaround to remove skill from window without a cc
             skills.add(skill);
         }
-        if (skills.size() > 0) {
+        if (!skills.isEmpty()) {
             getClient().write(WvsContext.changeSkillRecordResult(skills, true, false, false, false));
         }
 		int equippedSummonSkill = ItemConstants.getEquippedSummonSkillItem(item.getItemId(), getJob());
@@ -2313,7 +2287,7 @@ public class Char {
             skills.add(skill);
             addSkill(skill);
         }
-        if (skills.size() > 0) {
+        if (!skills.isEmpty()) {
             getClient().write(WvsContext.changeSkillRecordResult(skills, true, false, false, false));
         }
 		int equippedSummonSkill = ItemConstants.getEquippedSummonSkillItem(equip.getItemId(), getJob());
@@ -2397,7 +2371,7 @@ public class Char {
 	 */
 	public Item getEquippedItemByBodyPart(BodyPart bodyPart) {
 		List<Item> items = getEquippedInventory().getItemsByBodyPart(bodyPart);
-		return items.size() > 0 ? items.get(0) : null;
+		return !items.isEmpty() ? items.get(0) : null;
 	}
 
 	public boolean isLeft() {
@@ -2511,7 +2485,7 @@ public class Char {
 
 		List<Portal> portals = getField().getClosestPortal(rect);
 
-		if (portals.size() > 0) {
+		if (!portals.isEmpty()) {
 			setPreviousPortalID(portals.get(0).getId());
 		} else {
 			setPreviousPortalID(0);
@@ -2912,9 +2886,8 @@ public class Char {
 				getScriptManager().startScript(itemID, script, ScriptType.Item);
 				return true;
 			} else if (getInventoryByType(item.getInvType()).canPickUp(item)) {
-				if (item instanceof Equip) {
-					Equip equip = (Equip) item;
-					if (equip.hasAttribute(EquipAttribute.UntradableAfterTransaction)) {
+				if (item instanceof Equip equip) {
+                    if (equip.hasAttribute(EquipAttribute.UntradableAfterTransaction)) {
 						equip.removeAttribute(EquipAttribute.UntradableAfterTransaction);
 						equip.addAttribute(EquipAttribute.Untradable);
 					}
@@ -3524,7 +3497,7 @@ public class Char {
 	}
 
 	public void setInstance(Instance instance) {
-		if (this.instance != null && this.instance.getChars().size() == 0 && instance == null) {
+		if (this.instance != null && this.instance.getChars().isEmpty() && instance == null) {
 			this.instance.stopEvents();
 		}
 		this.instance = instance;
@@ -3626,7 +3599,7 @@ public class Char {
 
 	private boolean canHold(List<Item> items, Char deepCopiedChar) {
 		// explicitly use a Char param to avoid accidentally adding items
-		if (items.size() == 0) {
+		if (items.isEmpty()) {
 			return true;
 		}
 		Item item = items.get(0);
@@ -4400,7 +4373,7 @@ public class Char {
 	 * @return whether or not this Char has any of the given quests
 	 */
 	public boolean hasAnyQuestsInProgress(Set<Integer> quests) {
-		return quests.size() == 0 || quests.stream().anyMatch(this::hasQuestInProgress);
+		return quests.isEmpty() || quests.stream().anyMatch(this::hasQuestInProgress);
 	}
 
 	public int getPreviousFieldID() {
@@ -4445,7 +4418,7 @@ public class Char {
 	}
 
 	public void punishLieDetectorEvasion() {
-		if (getLieDetectorAnswer().length() > 0) {
+		if (!getLieDetectorAnswer().isEmpty()) {
 			failedLieDetector();
 		}
 	}
@@ -4676,16 +4649,12 @@ public class Char {
 		if (exp >= neededExp) {
 			setMakingSkillProficiency(skillID, 0);
 			setMakingSkillLevel(skillID, level + 1);
-			Stat trait = Stat.craftEXP;
-			switch (skillID) {
-				case 92000000:
-					trait = Stat.senseEXP;
-					break;
-				case 92010000:
-					trait = Stat.willEXP;
-					break;
-			}
-			addTraitExp(trait, (int) Math.pow(2, (level + 1) + 2));
+			Stat trait = switch (skillID) {
+                case 92000000 -> Stat.senseEXP;
+                case 92010000 -> Stat.willEXP;
+                default -> Stat.craftEXP;
+            };
+            addTraitExp(trait, (int) Math.pow(2, (level + 1) + 2));
 			write(FieldPacket.fieldEffect(FieldEffect.playSound("profession/levelup", 100)));
 		}
 	}
@@ -4819,7 +4788,7 @@ public class Char {
 		TemporaryStatManager tsm = getTemporaryStatManager();
 		int itemID = item.getItemId();
 		Map<SpecStat, Integer> specStats = ItemData.getItemInfoByID(itemID).getSpecStats();
-		if (specStats.size() > 0) {
+		if (!specStats.isEmpty()) {
 			ItemBuffs.giveItemBuffsFromItemID(this, tsm, itemID);
 		} else {
 			switch (itemID) {
@@ -4944,7 +4913,7 @@ public class Char {
 			chatMessage("You cannot hold that much mesos.");
 			return;
 		}
-		List<MerchantItem> itemsMoved = new ArrayList<MerchantItem>();
+		List<MerchantItem> itemsMoved = new ArrayList<>();
 		for (MerchantItem mi : employeeTrunk.getItems()) {
 			Item i = mi.item.deepCopy();
 			i.setQuantity(mi.bundles * i.getQuantity());
@@ -4985,9 +4954,9 @@ public class Char {
 					continue;
 				}
 				for (Object effect : setEffect.getStatsByLevel(i)) {
-					if (effect instanceof net.swordie.ms.util.container.Tuple) {
-						ScrollStat ss = (ScrollStat) (((net.swordie.ms.util.container.Tuple) effect).getLeft());
-						int amount = (int) (((net.swordie.ms.util.container.Tuple) effect).getRight());
+					if (effect instanceof Tuple) {
+						ScrollStat ss = (ScrollStat) (((Tuple) effect).getLeft());
+						int amount = (int) (((Tuple) effect).getRight());
 						stats.put(ss, amount);
 					}
 				}

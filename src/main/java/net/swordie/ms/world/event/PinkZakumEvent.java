@@ -9,14 +9,11 @@ import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.enums.WeatherEffNoticeType;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.drop.Drop;
-import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.world.Channel;
 import net.swordie.ms.world.field.ClockPacket;
 import net.swordie.ms.world.field.Field;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +26,7 @@ public class PinkZakumEvent implements InGameEvent {
     public static final int BATTLE_MAP = 689013000; // pink zakum raid
     private final int REENTRY_MAP = 689011000; // pink zakum revive room
 
-    private int remindersSent = 0;
+    private final int remindersSent = 0;
     private boolean started = false;
     private boolean active = false;
     private long startTimeMillis;
@@ -64,7 +61,7 @@ public class PinkZakumEvent implements InGameEvent {
         Server.getInstance().getWorldById(ServerConfig.WORLD_ID)
                 .broadcastPacket(WvsContext.broadcastMsg(BroadcastMsg.notice("Event registration has ended!")));
 
-        if (channelInstance.getField(LOBBY_MAP).getChars().size() > 0) {
+        if (!channelInstance.getField(LOBBY_MAP).getChars().isEmpty()) {
             startTimeMillis = System.currentTimeMillis() + TIME_LIMIT_SECONDS * 1000;
             warpMap(LOBBY_MAP, BATTLE_MAP);
             broadcastClock(BATTLE_MAP, TIME_LIMIT_SECONDS);

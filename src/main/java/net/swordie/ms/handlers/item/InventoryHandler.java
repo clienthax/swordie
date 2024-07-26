@@ -29,7 +29,6 @@ import java.util.List;
 import static net.swordie.ms.enums.InvType.EQUIP;
 import static net.swordie.ms.enums.InvType.EQUIPPED;
 import static net.swordie.ms.enums.InventoryOperation.*;
-import static net.swordie.ms.enums.InventoryOperation.Move;
 
 public class InventoryHandler {
 

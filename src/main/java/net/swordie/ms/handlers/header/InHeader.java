@@ -1022,7 +1022,7 @@ public enum InHeader {
     NO(1140),
     ;
 
-    private static List<InHeader> spam = Arrays.asList(
+    private static final List<InHeader> spam = Arrays.asList(
             UPDATE_CLIENT_ENVIRONMENT,
             PONG,
             WVS_SET_UP_STEP,
@@ -1052,7 +1052,7 @@ public enum InHeader {
             USER_B2_BODY_REQUEST
     );
 
-    private short value;
+    private final short value;
     private final static Map<Short, InHeader> opToHeaderMap = new HashMap<>();
 
     static {

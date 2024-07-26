@@ -10,9 +10,9 @@ import java.util.*;
  * Created on 4/21/2018.
  */
 public class CashShop {
-    private Map<CashShopCategory, List<CashShopItem>> items;
+    private final Map<CashShopCategory, List<CashShopItem>> items;
     private List<CashShopCategory> categories;
-    private List<Integer> saleItems;
+    private final List<Integer> saleItems;
     private boolean eventOn;
     private boolean lockerTransfer;
     private boolean refundAvailable;

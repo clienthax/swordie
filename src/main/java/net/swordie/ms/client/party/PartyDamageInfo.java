@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class PartyDamageInfo {
 
     private final Party party;
-    private Map<Char, Double> damageDone = new HashMap<>();
+    private final Map<Char, Double> damageDone = new HashMap<>();
     private final Mob mob;
 
     public PartyDamageInfo(Party party, Mob mob) {

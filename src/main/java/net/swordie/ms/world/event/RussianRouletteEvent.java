@@ -73,7 +73,7 @@ public class RussianRouletteEvent implements InGameEvent {
         Server.getInstance().getWorldById(ServerConfig.WORLD_ID)
                 .broadcastPacket(WvsContext.broadcastMsg(BroadcastMsg.notice("Event registration has ended!")));
 
-        if (channelInstance.getField(EVENT_MAP).getChars().size() > 0) {
+        if (!channelInstance.getField(EVENT_MAP).getChars().isEmpty()) {
             sendNotice("Get in position!", ROUND_LENGTH_SECONDS);
             broadcastClock(ROUND_LENGTH_SECONDS);
             killTimer = EventManager.addEvent(this::broadcastCountdownEffect, ROUND_LENGTH_SECONDS - 3, TimeUnit.SECONDS);

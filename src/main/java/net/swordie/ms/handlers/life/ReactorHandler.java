@@ -28,11 +28,10 @@ public class ReactorHandler {
         int idk = inPacket.decodeInt();
         byte type = inPacket.decodeByte();
         Life life = chr.getField().getLifeByObjectID(objID);
-        if (!(life instanceof Reactor)) {
+        if (!(life instanceof Reactor reactor)) {
             log.error("Could not find reactor with objID " + objID);
             return;
         }
-        Reactor reactor = (Reactor) life;
         int templateID = reactor.getTemplateId();
         ReactorInfo ri = ReactorData.getReactorInfoByID(templateID);
         String action = ri.getAction();
@@ -54,15 +53,14 @@ public class ReactorHandler {
         int objID = inPacket.decodeInt();
 
         Life life = chr.getField().getLifeByObjectID(objID);
-        if (!(life instanceof Reactor)) {
+        if (!(life instanceof Reactor reactor)) {
             log.error("Could not find reactor with objID " + objID);
             return;
         }
-        Reactor reactor = (Reactor) life;
         int templateID = reactor.getTemplateId();
         ReactorInfo ri = ReactorData.getReactorInfoByID(templateID);
         String action = ri.getAction();
-        if (action.equals("")) {
+        if (action.isEmpty()) {
             action = templateID + "action";
         }
         if (chr.getScriptManager().isActive(ScriptType.Reactor)

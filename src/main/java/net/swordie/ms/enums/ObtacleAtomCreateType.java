@@ -14,7 +14,7 @@ public enum ObtacleAtomCreateType {
     // NO, seems to indicate end
     ;
 
-    private byte val;
+    private final byte val;
 
     ObtacleAtomCreateType(int val) {
         this.val = (byte) val;

@@ -131,23 +131,13 @@ public class QuestHandler {
         } else {
             sm.createQuestWithQRValue(QuestConstants.MEDAL_REISSUE_QUEST, "");
         }
-        switch (count) {
-            case 0:
-                actualMesoCost = 100;
-                break;
-            case 1:
-                actualMesoCost = 1000;
-                break;
-            case 2:
-                actualMesoCost = 10000;
-                break;
-            case 3:
-                actualMesoCost = 100000;
-                break;
-            default:
-                actualMesoCost = 1000000;
-                break;
-        }
+        actualMesoCost = switch (count) {
+            case 0 -> 100;
+            case 1 -> 1000;
+            case 2 -> 10000;
+            case 3 -> 100000;
+            default -> 1000000;
+        };
         if (QuestData.getQuestInfoById(questId).getMedalItemId() != medalItemId || !(ItemConstants.isMedal(medalItemId))) {
             chr.getOffenseManager().addOffense(String.format("Character %d tried to reissue an item {%d} that isn't a medal or tried to reissue a medal from a quest {%d} that doesn't give the given medal", chr.getId(), medalItemId, questId));
 

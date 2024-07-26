@@ -32,7 +32,7 @@ public enum FieldOption {
     MoveSkillOnly(0x10000000L),
     OnlyStarPlanetPet(0x20000000L);
 
-    private long val;
+    private final long val;
 
     FieldOption(long val) {
         this.val = val;

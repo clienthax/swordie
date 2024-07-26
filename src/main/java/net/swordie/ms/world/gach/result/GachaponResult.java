@@ -6,7 +6,7 @@ public enum GachaponResult {
     ERROR(3);
     private final int result;
 
-    private GachaponResult(final int result) {
+    GachaponResult(final int result) {
         this.result = result;
     }
 

@@ -10,7 +10,7 @@ import net.swordie.ms.enums.PicStatus;
 import net.swordie.ms.util.FileTime;
 import org.apache.log4j.Logger;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -260,7 +260,7 @@ public class User {
     public PicStatus getPicStatus() {
         PicStatus picStatus;
         String pic = getPic();
-        if(pic == null || pic.length() == 0) {
+        if(pic == null || pic.isEmpty()) {
             picStatus = PicStatus.CREATE_PIC;
         } else {
             picStatus = PicStatus.ENTER_PIC;

@@ -19,17 +19,7 @@ import java.util.Map;
 /**
  * Created on 11/17/2017.
  */
-public class XMLApi {
-
-    private Node root;
-
-    public XMLApi(Node root) {
-        this.root = root;
-    }
-
-    public Node getRoot() {
-        return root;
-    }
+public record XMLApi(Node root) {
 
     /**
      * Returns a list of Nodes containing all children of a given Node. Filters out all text elements.

@@ -3,7 +3,6 @@ package net.swordie.ms.connection;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
-import net.swordie.ms.client.guild.Guild;
 import net.swordie.ms.handlers.header.OutHeader;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Position;
@@ -15,9 +14,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class OutPacket extends Packet {
-    private ByteBuf baos;
-    private boolean loopback = false;
-    private boolean encryptedByShanda = false;
+    private final ByteBuf baos;
+    private final boolean loopback = false;
+    private final boolean encryptedByShanda = false;
     private short op;
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
 
@@ -199,7 +198,7 @@ public class OutPacket extends Packet {
         if (s == null) {
             s = "";
         }
-        if (s.length() > 0) {
+        if (!s.isEmpty()) {
             for (char c : s.toCharArray()) {
                 encodeChar(c);
             }
@@ -227,6 +226,7 @@ public class OutPacket extends Packet {
         }
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Packet clone() {
         return new OutPacket(getData());

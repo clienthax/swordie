@@ -81,7 +81,7 @@ public enum EquipPrefix {
     EvanWing(196),
     EvanShoes(197);
 
-    private int val;
+    private final int val;
 
     EquipPrefix(int val) {
         this.val = val;

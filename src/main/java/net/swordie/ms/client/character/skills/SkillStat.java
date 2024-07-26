@@ -291,158 +291,56 @@ public enum SkillStat {
     }
 
     public BaseStat getBaseStat() {
-        switch (this) {
-            case pddX:
-            case mdd2pdd:
-            case pdd:
-            case epdd:
-            case indiePdd:
-                return BaseStat.pdd;
-            case pddR:
-            case indiePddR:
-                return BaseStat.pddR;
-            case mddX:
-            case pdd2mdd:
-            case emdd:
-            case mdd:
-            case indieMdd:
-                return BaseStat.mdd;
-            case mddR:
-            case indieMddR:
-                return BaseStat.mddR;
-            case lv2mhp:
-                return BaseStat.mhpLv;
-            case mhpX:
-            case emhp:
-            case indieMhp:
-            case hcHp:
-            case eva2hp:
-                return BaseStat.mhp;
-            case mhpR:
-            case indieMhpR:
-                return BaseStat.mhpR;
-            case lv2mmp:
-                return BaseStat.mmpLv;
-            case mmpX:
-            case indieMmp:
-            case emmp:
-                return BaseStat.mmp;
-            case mmpR:
-            case indieMmpR:
-                return BaseStat.mmpR;
-            case psdSpeed:
-            case speed:
-            case speedMax:
-            case indieForceSpeed:
-            case indieSpeed:
-                return BaseStat.speed;
-            case psdJump:
-            case indieForceJump:
-            case indieJump:
-            case jump:
-                return BaseStat.jump;
-            case stanceProp:
-            case indieStance:
-                return BaseStat.stance;
-            case asrR:
-            case indieAsrR:
-                return BaseStat.asr;
-            case pad:
-            case padX:
-            case indiePad:
-            case epad:
-                return BaseStat.pad;
-            case lv2pad:
-                return BaseStat.padLv;
-            case padR:
-            case indiePadR:
-                return BaseStat.padR;
-            case indieMad:
-            case mad:
-            case madX:
-            case emad:
-                return BaseStat.mad;
-            case lv2mad:
-                return BaseStat.madLv;
-            case madR:
-            case indieMadR:
-                return BaseStat.madR;
-            case indieTerR:
-            case terR:
-                return BaseStat.ter;
-            case indieEva:
-            case eva:
-                return BaseStat.eva;
-            case indieBooster:
-                return BaseStat.booster;
-            case mastery:
-                return BaseStat.mastery;
-            case strFX:
-            case strX:
-            case dex2str:
-                return BaseStat.str;
-            case lv2str:
-                return BaseStat.strLv;
-            case strR:
-                return BaseStat.strR;
-            case dex:
-            case dexFX:
-            case dexX:
-            case luk2dex:
-            case str2dex:
-                return BaseStat.dex;
-            case lv2dex:
-                return BaseStat.dexLv;
-            case dexR:
-                return BaseStat.dexR;
-            case intFX:
-            case intX:
-            case luk2int:
-                return BaseStat.inte;
-            case lv2int:
-                return BaseStat.intLv;
-            case intR:
-                return BaseStat.intR;
-            case lukFX:
-            case lukX:
-            case dex2luk:
-            case int2luk:
-                return BaseStat.luk;
-            case lv2luk:
-                return BaseStat.lukLv;
-            case lukR:
-                return BaseStat.lukR;
-            case bdR:
-            case indieBDR:
-            case nbdR:
-                return BaseStat.bd;
-            case ignoreMobpdpR:
-            case indieIgnoreMobpdpR:
-                return BaseStat.ied;
-            case indieAllStat:
-                return BaseStat.allStat;
-            case criticaldamageMin:
-                return BaseStat.minCd;
-            case criticaldamageMax:
-                return BaseStat.maxCd;
-            case cr:
-            case indieCr:
-                return BaseStat.cr;
-            case expR:
-            case indieExp:
-                return BaseStat.expR;
-            case dropR:
-                return BaseStat.dropR;
-            case mesoR:
-            case mesoG:
-                return BaseStat.mesoR;
-            case hp:
-                return BaseStat.hpRecovery;
-            case mp:
-                return BaseStat.mpRecovery;
-            case bufftimeR:
-                return BaseStat.buffTimeR;
-        }
-        return null;
+        return switch (this) {
+            case pddX, mdd2pdd, pdd, epdd, indiePdd -> BaseStat.pdd;
+            case pddR, indiePddR -> BaseStat.pddR;
+            case mddX, pdd2mdd, emdd, mdd, indieMdd -> BaseStat.mdd;
+            case mddR, indieMddR -> BaseStat.mddR;
+            case lv2mhp -> BaseStat.mhpLv;
+            case mhpX, emhp, indieMhp, hcHp, eva2hp -> BaseStat.mhp;
+            case mhpR, indieMhpR -> BaseStat.mhpR;
+            case lv2mmp -> BaseStat.mmpLv;
+            case mmpX, indieMmp, emmp -> BaseStat.mmp;
+            case mmpR, indieMmpR -> BaseStat.mmpR;
+            case psdSpeed, speed, speedMax, indieForceSpeed, indieSpeed -> BaseStat.speed;
+            case psdJump, indieForceJump, indieJump, jump -> BaseStat.jump;
+            case stanceProp, indieStance -> BaseStat.stance;
+            case asrR, indieAsrR -> BaseStat.asr;
+            case pad, padX, indiePad, epad -> BaseStat.pad;
+            case lv2pad -> BaseStat.padLv;
+            case padR, indiePadR -> BaseStat.padR;
+            case indieMad, mad, madX, emad -> BaseStat.mad;
+            case lv2mad -> BaseStat.madLv;
+            case madR, indieMadR -> BaseStat.madR;
+            case indieTerR, terR -> BaseStat.ter;
+            case indieEva, eva -> BaseStat.eva;
+            case indieBooster -> BaseStat.booster;
+            case mastery -> BaseStat.mastery;
+            case strFX, strX, dex2str -> BaseStat.str;
+            case lv2str -> BaseStat.strLv;
+            case strR -> BaseStat.strR;
+            case dex, dexFX, dexX, luk2dex, str2dex -> BaseStat.dex;
+            case lv2dex -> BaseStat.dexLv;
+            case dexR -> BaseStat.dexR;
+            case intFX, intX, luk2int -> BaseStat.inte;
+            case lv2int -> BaseStat.intLv;
+            case intR -> BaseStat.intR;
+            case lukFX, lukX, dex2luk, int2luk -> BaseStat.luk;
+            case lv2luk -> BaseStat.lukLv;
+            case lukR -> BaseStat.lukR;
+            case bdR, indieBDR, nbdR -> BaseStat.bd;
+            case ignoreMobpdpR, indieIgnoreMobpdpR -> BaseStat.ied;
+            case indieAllStat -> BaseStat.allStat;
+            case criticaldamageMin -> BaseStat.minCd;
+            case criticaldamageMax -> BaseStat.maxCd;
+            case cr, indieCr -> BaseStat.cr;
+            case expR, indieExp -> BaseStat.expR;
+            case dropR -> BaseStat.dropR;
+            case mesoR, mesoG -> BaseStat.mesoR;
+            case hp -> BaseStat.hpRecovery;
+            case mp -> BaseStat.mpRecovery;
+            case bufftimeR -> BaseStat.buffTimeR;
+            default -> null;
+        };
     }
 }

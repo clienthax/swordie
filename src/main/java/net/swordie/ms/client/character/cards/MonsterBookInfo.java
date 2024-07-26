@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.cards;
 
 import net.swordie.ms.constants.ItemConstants;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

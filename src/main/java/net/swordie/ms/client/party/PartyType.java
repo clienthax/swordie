@@ -152,7 +152,7 @@ public enum PartyType {
 
     ;
 
-    private byte val;
+    private final byte val;
 
     PartyType(int val) {
         this.val = (byte) val;

@@ -19,7 +19,7 @@ public class DemianFlyingSwordPath {
 
     // Bouncing Paths
         // 1
-    public static final List<Position> flyingSwordPathBouncing1 = new ArrayList<Position>() {{
+    public static final List<Position> flyingSwordPathBouncing1 = new ArrayList<>() {{
         add(new Position(100, -100));
         add(new Position(340, 100));
         add(new Position(890, -200));
@@ -35,22 +35,22 @@ public class DemianFlyingSwordPath {
         add(new Position()); // 0, 0
     }};
         // 2
-    public static final List<Position> flyingSwordPathBouncing2 = new ArrayList<Position>() {{
-        add(new Position(895, -300));
-        add(new Position(1530, -100));
-        add(new Position(1290, 100));
-        add(new Position(740, -200));
-        add(new Position(240, 50));
-        add(new Position(-60, -100));
-        add(new Position(90, -300));
-        add(new Position(590, -25));
-        add(new Position(1690, -25));
-        add(new Position(1290, -25));
-        add(new Position(1040, 100));
-        add(new Position(540, -200));
-        add(new Position(1600, -400));
-        add(new Position(1600, -400));
-    }};
+    public static final List<Position> flyingSwordPathBouncing2 = new ArrayList<>() {{
+            add(new Position(895, -300));
+            add(new Position(1530, -100));
+            add(new Position(1290, 100));
+            add(new Position(740, -200));
+            add(new Position(240, 50));
+            add(new Position(-60, -100));
+            add(new Position(90, -300));
+            add(new Position(590, -25));
+            add(new Position(1690, -25));
+            add(new Position(1290, -25));
+            add(new Position(1040, 100));
+            add(new Position(540, -200));
+            add(new Position(1600, -400));
+            add(new Position(1600, -400));
+        }};
 
     // Creation Position
     public static final Position creationPosition = new Position(895, -200);

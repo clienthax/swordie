@@ -20,14 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EtcData {
+public class EtcData implements DataCreator {
 
     private static final Logger log = Logger.getLogger(EtcData.class);
     private static final Map<Integer, Integer> familiarSkills = new HashMap<>();
     private static final Map<Integer, SetEffect> setEffects = new HashMap<>();
     private static final Map<Integer, Integer> characterCards = new HashMap<>();
-    private static Map<Integer, AndroidInfo> androidInfo = new HashMap<>();
-    private static Map<Integer, BossSoul> soulCollection = new HashMap<>();
+    private static final Map<Integer, AndroidInfo> androidInfo = new HashMap<>();
+    private static final Map<Integer, BossSoul> soulCollection = new HashMap<>();
 
     private static final String SCROLL_STAT_ID = "1";
     private static final String ITEM_OPTION_ID = "2";
@@ -35,6 +35,11 @@ public class EtcData {
     public static void loadAndroidsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/Android";
         File dir = new File(wzDir);
+        if (!dir.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         for (File file : dir.listFiles()) {
             AndroidInfo ai = new AndroidInfo(Integer.parseInt(file.getName().replace(".img.xml", "")));
             Node node = XMLApi.getAllChildren(XMLApi.getRoot(file)).get(0);
@@ -74,6 +79,11 @@ public class EtcData {
         //String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/SetItemInfo";
         //Node root = XMLApi.getRoot(new File(wzDir));
         File file = new File(String.format("%s/Etc.wz/SetItemInfo.img.xml", ServerConstants.WZ_DIR));
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         Node root = XMLApi.getRoot(file);
         Node mainNode = XMLApi.getAllChildren(root).get(0);
         List<Node> nodes = XMLApi.getAllChildren(mainNode);
@@ -111,6 +121,11 @@ public class EtcData {
     public static void loadSoulCollectionFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/SoulCollection.img.xml";
         File dir = new File(wzDir);
+        if (!dir.exists()) {
+            log.error(dir + " does not exist.");
+            return;
+        }
+
         Node node = XMLApi.getFirstChildByNameBF(XMLApi.getRoot(dir), "SoulCollection.img");
         List<Node> nodes = XMLApi.getAllChildren(node);
         for (Node mainNode : nodes) {
@@ -134,10 +149,10 @@ public class EtcData {
                 Node soul1Node = XMLApi.getFirstChildByNameBF(soulNode, "0");
                 Node soul2Node = XMLApi.getFirstChildByNameBF(soulNode, "1");
                 if (soul1Node != null) {
-                    soul1 = Integer.valueOf(XMLApi.getNamedAttribute(soul1Node, "value"));
+                    soul1 = Integer.parseInt(XMLApi.getNamedAttribute(soul1Node, "value"));
                 }
                 if (soul2Node != null) {
-                    soul2 = Integer.valueOf(XMLApi.getNamedAttribute(soul2Node, "value"));
+                    soul2 = Integer.parseInt(XMLApi.getNamedAttribute(soul2Node, "value"));
                 }
                 int finalSkillId = -1;
                 if (i <= SoulType.Radiant.getVal()) { //normal soul
@@ -190,6 +205,11 @@ public class EtcData {
 
     public static void loadCharacterCardsFromWz() {
         File file = new File(String.format("%s/Etc.wz/CharacterCard.img.xml", ServerConstants.WZ_DIR));
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         Node root = XMLApi.getRoot(file);
         Node firstNode = XMLApi.getAllChildren(root).get(0);
         Node mainNode = XMLApi.getFirstChildByNameBF(firstNode, "Card");

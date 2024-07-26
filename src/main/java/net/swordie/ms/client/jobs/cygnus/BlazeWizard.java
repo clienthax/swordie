@@ -89,7 +89,7 @@ public class BlazeWizard extends Noblesse {
     public static final int GRAND_FLAME_ELEMENT = 12110024;
     public static final int FINAL_FLAME_ELEMENT = 12120007;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELEMENTAL_HARMONY_INT,
             IMPERIAL_RECALL,
             ELEMENTAL_EXPERT,
@@ -99,7 +99,7 @@ public class BlazeWizard extends Noblesse {
             ELEMENTAL_SHIFT2
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             IGNITION,
             WORD_OF_FIRE,
             PHOENIX_RUN,
@@ -114,7 +114,7 @@ public class BlazeWizard extends Noblesse {
     boolean used;
     Position chrPos;
     int prevmap;
-    private HashMap<Mob, ScheduledFuture> hashMap = new HashMap<>();
+    private final HashMap<Mob, ScheduledFuture> hashMap = new HashMap<>();
     private ScheduledFuture schFuture;
     private Summon summonFox;
     private Summon summonLion;
@@ -349,7 +349,7 @@ public class BlazeWizard extends Noblesse {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

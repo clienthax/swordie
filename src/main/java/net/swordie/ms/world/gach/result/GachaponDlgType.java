@@ -9,7 +9,7 @@ public enum GachaponDlgType {// or TicketEffect but nvm
     SPECIAL(5);// or you can call it powergach
     private final int type;
 
-    private GachaponDlgType(final int type) {
+    GachaponDlgType(final int type) {
         this.type = type;
     }
 

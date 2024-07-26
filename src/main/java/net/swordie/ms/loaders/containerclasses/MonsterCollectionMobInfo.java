@@ -1,6 +1,6 @@
 package net.swordie.ms.loaders.containerclasses;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Sjonnie

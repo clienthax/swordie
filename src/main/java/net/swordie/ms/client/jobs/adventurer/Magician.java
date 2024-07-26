@@ -146,7 +146,7 @@ public class Magician extends Beginner {
     public static final int MEGIDDO_FLAME_ATOM = 2121055;
 
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             MAPLE_RETURN,
     };
 
@@ -685,7 +685,7 @@ public class Magician extends Beginner {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -1192,8 +1192,7 @@ public class Magician extends Beginner {
                         rect = rect.moveRight();
                     }
                     for (Life life : chr.getField().getLifesInRect(rect)) {
-                        if (life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if (life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             o1.nOption = 1;
                             o1.rOption = skillID;
@@ -1236,8 +1235,7 @@ public class Magician extends Beginner {
                     rect = new Rect(inPacket.decodeShort(), inPacket.decodeShort(),
                             inPacket.decodeShort(), inPacket.decodeShort());
                     for (Life life : chr.getField().getLifesInRect(rect)) {
-                        if (life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if (life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             o1.nOption = si.getValue(x, slv);
                             o1.rOption = skillID;

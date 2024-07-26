@@ -28,7 +28,7 @@ public class ItemInfo {
     private boolean quest;
     private int reqQuestOnProgress;
     private int senseEXP;
-    private Set<Integer> questIDs = new HashSet<>();
+    private final Set<Integer> questIDs = new HashSet<>();
     private int mobID;
     private int mobHP;
     private int createID;
@@ -43,11 +43,11 @@ public class ItemInfo {
     private int reqSkillLv;
     private Set<Integer> skills = new HashSet<>();
     private int moveTo;
-    private Set<ItemRewardInfo> itemRewardInfos = new HashSet<>();
+    private final Set<ItemRewardInfo> itemRewardInfos = new HashSet<>();
     private int skillId;
     private int grade;
     private int android;
-    private Set<Integer> reqItemIds = new HashSet<>();
+    private final Set<Integer> reqItemIds = new HashSet<>();
 
     public Set<Integer> getReqItemIds() { return reqItemIds; }
 

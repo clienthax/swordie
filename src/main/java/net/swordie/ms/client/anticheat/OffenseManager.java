@@ -5,7 +5,7 @@ import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.util.FileTime;
 import org.apache.log4j.Logger;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

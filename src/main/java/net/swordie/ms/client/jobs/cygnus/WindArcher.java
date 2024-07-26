@@ -77,7 +77,7 @@ public class WindArcher extends Noblesse {
     public static final int STORM_BRINGER = 13121054;
     public static final int MONSOON = 13121052;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELEMENTAL_HARMONY_DEX,
             IMPERIAL_RECALL,
             ELEMENTAL_EXPERT,
@@ -87,7 +87,7 @@ public class WindArcher extends Noblesse {
             ELEMENTAL_SHIFT2
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             STORM_ELEMENTAL,
             BOW_BOOSTER,
             SYLVAN_AID,
@@ -326,7 +326,7 @@ public class WindArcher extends Noblesse {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

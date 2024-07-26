@@ -16,7 +16,7 @@ import net.swordie.ms.loaders.QuestData;
 import net.swordie.ms.loaders.containerclasses.QuestInfo;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -164,7 +164,7 @@ public class QuestManager {
         Set<QuestStartRequirement> questReqs = qi.getQuestStartRequirements().stream()
                 .filter(qsr -> qsr instanceof QuestStartCompletionRequirement)
                 .collect(Collectors.toSet());
-        boolean hasQuest = questReqs.size() == 0 ||
+        boolean hasQuest = questReqs.isEmpty() ||
                 questReqs.stream().anyMatch(q -> q.hasRequirements(chr));
         return hasQuest && qi.getQuestStartRequirements().stream()
                 .filter(qsr -> !(qsr instanceof QuestStartCompletionRequirement))

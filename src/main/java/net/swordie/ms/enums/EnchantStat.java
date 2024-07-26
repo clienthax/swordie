@@ -19,7 +19,7 @@ public enum EnchantStat implements Comparable<EnchantStat> {
     JUMP(0x1000),
     SPEED(0x2000);
     
-    private int val;
+    private final int val;
 
     EnchantStat(int val) {
         this.val = val;
@@ -30,73 +30,43 @@ public enum EnchantStat implements Comparable<EnchantStat> {
     }
 
     public EquipBaseStat getEquipBaseStat() {
-        switch(this) {
-            case PAD:
-                return EquipBaseStat.iPAD;
-            case MAD:
-                return EquipBaseStat.iMAD;
-            case STR:
-                return EquipBaseStat.iStr;
-            case DEX:
-                return EquipBaseStat.iDex;
-            case INT:
-                return EquipBaseStat.iInt;
-            case LUK:
-                return EquipBaseStat.iLuk;
-            case PDD:
-                return EquipBaseStat.iPDD;
-            case MDD:
-                return EquipBaseStat.iMDD;
-            case MHP:
-                return EquipBaseStat.iMaxHP;
-            case MMP:
-                return EquipBaseStat.iMaxMP;
-            case ACC:
-                return EquipBaseStat.iACC;
-            case EVA:
-                return EquipBaseStat.iEVA;
-            case JUMP:
-                return EquipBaseStat.iJump;
-            case SPEED:
-                return EquipBaseStat.iSpeed;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case PAD -> EquipBaseStat.iPAD;
+            case MAD -> EquipBaseStat.iMAD;
+            case STR -> EquipBaseStat.iStr;
+            case DEX -> EquipBaseStat.iDex;
+            case INT -> EquipBaseStat.iInt;
+            case LUK -> EquipBaseStat.iLuk;
+            case PDD -> EquipBaseStat.iPDD;
+            case MDD -> EquipBaseStat.iMDD;
+            case MHP -> EquipBaseStat.iMaxHP;
+            case MMP -> EquipBaseStat.iMaxMP;
+            case ACC -> EquipBaseStat.iACC;
+            case EVA -> EquipBaseStat.iEVA;
+            case JUMP -> EquipBaseStat.iJump;
+            case SPEED -> EquipBaseStat.iSpeed;
+            default -> null;
+        };
     }
 
     public static EnchantStat getByEquipBaseStat(EquipBaseStat ebs) {
-        switch(ebs) {
-            case iPAD:
-                return PAD;
-            case iMAD:
-                return MAD;
-            case iStr:
-                return STR;
-            case iDex:
-                return DEX;
-            case iInt:
-                return INT;
-            case iLuk:
-                return LUK;
-            case iPDD:
-                return PDD;
-            case iMDD:
-                return MDD;
-            case iMaxHP:
-                return MHP;
-            case iMaxMP:
-                return MMP;
-            case iACC:
-                return ACC;
-            case iEVA:
-                return EVA;
-            case iJump:
-                return JUMP;
-            case iSpeed:
-                return SPEED;
-            default:
-                return null;
-        }
+        return switch (ebs) {
+            case iPAD -> PAD;
+            case iMAD -> MAD;
+            case iStr -> STR;
+            case iDex -> DEX;
+            case iInt -> INT;
+            case iLuk -> LUK;
+            case iPDD -> PDD;
+            case iMDD -> MDD;
+            case iMaxHP -> MHP;
+            case iMaxMP -> MMP;
+            case iACC -> ACC;
+            case iEVA -> EVA;
+            case iJump -> JUMP;
+            case iSpeed -> SPEED;
+            default -> null;
+        };
     }
 
     public boolean isAttackType() {

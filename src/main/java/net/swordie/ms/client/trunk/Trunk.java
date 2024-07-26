@@ -11,7 +11,7 @@ import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.shop.cashshop.CashItemInfo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

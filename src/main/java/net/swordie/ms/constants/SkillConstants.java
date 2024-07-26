@@ -71,15 +71,13 @@ public class SkillConstants {
     //custom skill cd's
     public static int getSkillCooldown(int skillId) {
 
-        switch(skillId) {
-            case 32120052: //Sweeping Staff - BM Hyper
-            case 32120055: //Sweeping Staff - BM Hyper
-            case 32121052: //Sweeping Staff - BM Hyper
-                return 0;
+        return switch (skillId) { //Sweeping Staff - BM Hyper
+            //Sweeping Staff - BM Hyper
+            case 32120052, 32120055, 32121052 -> //Sweeping Staff - BM Hyper
+                    0;
+            default -> -1;
+        };
 
-        }
-
-        return -1;
     }
 
     public static boolean isSkillNeedMasterLevel(int skillId) {
@@ -168,39 +166,12 @@ public class SkillConstants {
     }
 
     public static boolean isIgnoreMasterLevel(int skillId) {
-        switch (skillId) {
-            case 1120012:
-            case 1320011:
-            case 2121009:
-            case 2221009:
-            case 2321010:
-            case 3210015:
-            case 4110012:
-            case 4210012:
-            case 4340009:
-            case 5120011:
-            case 5120012:
-            case 5220012:
-            case 5220014:
-            case 5320007:
-            case 5321004:
-            case 5321006:
-            case 21120011:
-            case 21120014:
-            case 21120020:
-            case 21120021:
-            case 22171069:
-            case 23120011:
-            case 23120012:
-            case 23120013:
-            case 23121008:
-            case 33120010:
-            case 35120014:
-            case 80001913:
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillId) {
+            case 1120012, 1320011, 2121009, 2221009, 2321010, 3210015, 4110012, 4210012, 4340009, 5120011, 5120012,
+                 5220012, 5220014, 5320007, 5321004, 5321006, 21120011, 21120014, 21120020, 21120021, 22171069,
+                 23120011, 23120012, 23120013, 23121008, 33120010, 35120014, 80001913 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isKeyDownSkill(int skillId) {
@@ -224,21 +195,11 @@ public class SkillConstants {
     }
 
     public static boolean isEvanForceSkill(int skillId) {
-        switch (skillId) {
-            case 22140022:
-            case 22111011:
-            case 22111012:
-            case 22110022:
-            case 22110023:
-            case 22111017:
-            case 80001894:
-            case 22171062:
-            case 22171063:
-            case 22141011:
-            case 22141012:
-                return true;
-        }
-        return false;
+        return switch (skillId) {
+            case 22140022, 22111011, 22111012, 22110022, 22110023, 22111017, 80001894, 22171062, 22171063, 22141011,
+                 22141012 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isSuperNovaSkill(int skillID) {
@@ -246,31 +207,11 @@ public class SkillConstants {
     }
 
     public static boolean isRushBombSkill(int skillID) {
-        switch (skillID) {
-            case 101120205:
-            case 101120203:
-            case 80011386:
-            case 101120200:
-            case 80011380:
-            case 61111113:
-            case 61111218:
-            case 61111111:
-            case 61111100:
-            case 40021186:
-            case 31201001:
-            case 27121201:
-            case 22140015:
-            case 22140024:
-            case 14111022:
-            case 5101014:
-            case 5301001:
-            case 12121001:
-            case 2221012:
-            case 5101012:
-                return true;
-
-        }
-        return false;
+        return switch (skillID) {
+            case 101120205, 101120203, 80011386, 101120200, 80011380, 61111113, 61111218, 61111111, 61111100, 40021186,
+                 31201001, 27121201, 22140015, 22140024, 14111022, 5101014, 5301001, 12121001, 2221012, 5101012 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isZeroSkill(int skillID) {
@@ -282,20 +223,11 @@ public class SkillConstants {
     }
 
     public static boolean isUsercloneSummonedAbleSkill(int skillID) {
-        switch (skillID) {
-            case 14001020:
-            case 14101020:
-            case 14101021:
-            case 14111020:
-            case 14111021:
-            case 14111022:
-            case 14111023:
-            case 14121001:
-            case 14121002:
-            case 14120045:
-                return true;
-        }
-        return false;
+        return switch (skillID) {
+            case 14001020, 14101020, 14101021, 14111020, 14111021, 14111022, 14111023, 14121001, 14121002, 14120045 ->
+                    true;
+            default -> false;
+        };
     }
 
     public static boolean isNoconsumeUsebulletMeleeAttack(int skillID) {
@@ -308,25 +240,11 @@ public class SkillConstants {
     }
 
     public static boolean isAranFallingStopSkill(int skillID) {
-        switch(skillID) {
-            case 21110028:
-            case 21120025:
-            case 21110026:
-            case 21001010:
-            case 21000006:
-            case 21000007:
-            case 21110022:
-            case 21110023:
-            case 80001925:
-            case 80001926:
-            case 80001927:
-            case 80001936:
-            case 80001937:
-            case 80001938:
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillID) {
+            case 21110028, 21120025, 21110026, 21001010, 21000006, 21000007, 21110022, 21110023, 80001925, 80001926,
+                 80001927, 80001936, 80001937, 80001938 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isFlipAffectAreaSkill(int skillID) {
@@ -339,74 +257,25 @@ public class SkillConstants {
         if (skillID / 10000 == 8000) {
             job = skillID / 100;
         }
-        switch (skillID) {
-            case 80001279:
-            case 80001914:
-            case 80001915:
-            case 80001880:
-            case 80001629:
-            case 33121052:
-            case 33101002:
-            case 14101006:
-            case 13101020:
-            case 1078:
-                return true;
-            default:
-                return getDummyBulletItemIDForJob(job, 0, 0) > 0
-                        || isShootSkillNotUsingShootingWeapon(skillID, false)
-                        || isFieldAttackObjSkill(skillID);
-
-        }
+        return switch (skillID) {
+            case 80001279, 80001914, 80001915, 80001880, 80001629, 33121052, 33101002, 14101006, 13101020, 1078 -> true;
+            default -> getDummyBulletItemIDForJob(job, 0, 0) > 0
+                    || isShootSkillNotUsingShootingWeapon(skillID, false)
+                    || isFieldAttackObjSkill(skillID);
+        };
     }
 
     private static boolean isShootSkillNotUsingShootingWeapon(int skillID, boolean bySteal) {
         if(bySteal || (skillID >= 80001848 && skillID <= 80001850)) {
             return true;
         }
-        switch (skillID) {
-            case 80001863:
-            case 80001880:
-            case 80001914:
-            case 80001915:
-            case 80001939:
-            case 101110204:
-            case 101110201:
-            case 101000202:
-            case 101100202:
-            case 80001858:
-            case 80001629:
-            case 80001829:
-            case 80001838:
-            case 80001856:
-            case 80001587:
-            case 80001418:
-            case 80001387:
-            case 61111215:
-            case 80001279:
-            case 61001101:
-            case 51121008:
-            case 51111007:
-            case 51001004:
-            case 36111010:
-            case 36101009:
-            case 31111005:
-            case 31111006: // ? was 26803624, guessing it's just a +1
-            case 31101000:
-            case 22110024:
-            case 22110014:
-            case 21120006:
-            case 21100007:
-            case 21110027:
-            case 21001009:
-            case 21000004:
-            case 5121013:
-            case 1078:
-            case 1079:
-                return true;
-            default:
-                return false;
-
-        }
+        return switch (skillID) { // ? was 26803624, guessing it's just a +1
+            case 80001863, 80001880, 80001914, 80001915, 80001939, 101110204, 101110201, 101000202, 101100202, 80001858,
+                 80001629, 80001829, 80001838, 80001856, 80001587, 80001418, 80001387, 61111215, 80001279, 61001101,
+                 51121008, 51111007, 51001004, 36111010, 36101009, 31111005, 31111006, 31101000, 22110024, 22110014,
+                 21120006, 21100007, 21110027, 21001009, 21000004, 5121013, 1078, 1079 -> true;
+            default -> false;
+        };
     }
 
     private static int getDummyBulletItemIDForJob(int job, int subJob, int skillID) {
@@ -551,247 +420,169 @@ public class SkillConstants {
     }
 
     public static int getAdvancedCountHyperSkill(int skillId) {
-        switch(skillId) {
-            case 4121013:
-                return 4120051;
-            case 5321012:
-                return 5320051;
-            default:
-                return 0;
-        }
+        return switch (skillId) {
+            case 4121013 -> 4120051;
+            case 5321012 -> 5320051;
+            default -> 0;
+        };
     }
 
     public static int getAdvancedAttackCountHyperSkill(int skillId) {
-        switch(skillId) {
-            case 25121005:
-                return 25120148;
-            case 31121001:
-                return 31120050;
-            case 31111005:
-                return 31120044;
-            case 22140023:
-                return 22170086;
-            case 21120022:
-            case 21121015:
-            case 21121016:
-            case 21121017:
-                return 21120066;
-            case 21120006:
-                return 21120049;
-            case 21110020:
-            case 21111021:
-                return 21120047;
-            case 15121002:
-                return 15120048;
-            case 14121002:
-                return 14120045;
-            case 15111022:
-            case 15120003:
-                return 15120045;
-            case 51121008:
-                return 51120048;
-            case 32111003:
-                return 32120047;
-            case 35121016:
-                return 35120051;
-            case 37110002:
-                return 37120045;
-            case 51120057:
-                return 51120058;
-            case 51121007:
-                return 51120051;
-            case 65121007:
-            case 65121008:
-            case 65121101:
-                return 65120051;
-            case 61121201:
-            case 61121100:
-                return 61120045;
-            case 51121009:
-                return 51120058;
-            case 13121002:
-                return 13120048;
-            case 5121016:
-            case 5121017:
-                return 5120051;
-            case 3121015:
-                return 3120048;
-            case 2121006:
-                return 2120048;
-            case 2221006:
-                return 2220048;
-            case 1221011:
-                return 1220050;
-            case 1120017:
-            case 1121008:
-                return 1120051;
-            case 1221009:
-                return 1220048;
-            case 4331000:
-                return 4340045;
-            case 3121020:
-                return 3120051;
-            case 3221017:
-                return 3220048;
-            case 4221007:
-                return 4220048;
-            case 4341009:
-                return 4340048;
-            case 5121007:
-                return 5120048;
-            case 5321004:
-                return 5320043;
+        return switch (skillId) {
+            case 25121005 -> 25120148;
+            case 31121001 -> 31120050;
+            case 31111005 -> 31120044;
+            case 22140023 -> 22170086;
+            case 21120022, 21121015, 21121016, 21121017 -> 21120066;
+            case 21120006 -> 21120049;
+            case 21110020, 21111021 -> 21120047;
+            case 15121002 -> 15120048;
+            case 14121002 -> 14120045;
+            case 15111022, 15120003 -> 15120045;
+            case 51121008 -> 51120048;
+            case 32111003 -> 32120047;
+            case 35121016 -> 35120051;
+            case 37110002 -> 37120045;
+            case 51120057 -> 51120058;
+            case 51121007 -> 51120051;
+            case 65121007, 65121008, 65121101 -> 65120051;
+            case 61121201, 61121100 -> 61120045;
+            case 51121009 -> 51120058;
+            case 13121002 -> 13120048;
+            case 5121016, 5121017 -> 5120051;
+            case 3121015 -> 3120048;
+            case 2121006 -> 2120048;
+            case 2221006 -> 2220048;
+            case 1221011 -> 1220050;
+            case 1120017, 1121008 -> 1120051;
+            case 1221009 -> 1220048;
+            case 4331000 -> 4340045;
+            case 3121020 -> 3120051;
+            case 3221017 -> 3220048;
+            case 4221007 -> 4220048;
+            case 4341009 -> 4340048;
+            case 5121007 -> 5120048;
+            case 5321004 -> 5320043;
             // if ( nSkillID != &loc_A9B1CF ) nothing done with line 172?
-            case 12110028:
-            case 12000026:
-            case 12100028:
-                return 12120045;
-            case 12120010:
-                return 12120045;
-            case 12120011:
-                return 12120046;
-            default:
-                return 0;
-        }
+            case 12110028, 12000026, 12100028 -> 12120045;
+            case 12120010 -> 12120045;
+            case 12120011 -> 12120046;
+            default -> 0;
+        };
     }
 
     public static boolean isKinesisPsychicLockSkill(int skillId) {
-        switch(skillId) {
-            case 142120000:
-            case 142120001:
-            case 142120002:
-            case 142120014:
-            case 142111002:
-            case 142100010:
-            case 142110003:
-            case 142110015:
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillId) {
+            case 142120000, 142120001, 142120002, 142120014, 142111002, 142100010, 142110003, 142110015 -> true;
+            default -> false;
+        };
     }
 
     public static int getActualSkillIDfromSkillID(int skillID) {
-        switch (skillID) {
-            case 101120206: //Zero - Severe Storm Break (Tile)
-                return 101120204; //Zero - Adv Storm Break
+        return switch (skillID) {
+            case 101120206 -> //Zero - Severe Storm Break (Tile)
+                    101120204; //Zero - Adv Storm Break
 
-            case 4221016: //Shadower - Assassinate 2
-                return 4221014; //Shadower - Assassinate 1
+            case 4221016 -> //Shadower - Assassinate 2
+                    4221014; //Shadower - Assassinate 1
 
-            case 41121020: //Hayato - Tornado Blade-Battoujutsu Link
-                return 41121017; //Tornado Blade
+            case 41121020 -> //Hayato - Tornado Blade-Battoujutsu Link
+                    41121017; //Tornado Blade
 
-            case 41121021: //Hayato - Sudden Strike-Battoujutsu Link
-                return 41121018; //Sudden Strike
+            case 41121021 -> //Hayato - Sudden Strike-Battoujutsu Link
+                    41121018; //Sudden Strike
 
-            case 5121017: //Bucc - Double Blast
-                return 5121016; //Bucc - Buccaneer Blast
+            case 5121017 -> //Bucc - Double Blast
+                    5121016; //Bucc - Buccaneer Blast
 
-            case 5101014: //Bucc - Energy Vortex
-                return 5101012; //Bucc - Tornado Uppercut
+            case 5101014 -> //Bucc - Energy Vortex
+                    5101012; //Bucc - Tornado Uppercut
 
-            case 5121020: //Bucc - Octopunch (Max Charge)
-                return 5121007; //Bucc - Octopunch
+            case 5121020 -> //Bucc - Octopunch (Max Charge)
+                    5121007; //Bucc - Octopunch
 
-            case 5111013: //Bucc - Hedgehog Buster
-                return 5111002; //Bucc - Energy Burst
+            case 5111013 -> //Bucc - Hedgehog Buster
+                    5111002; //Bucc - Energy Burst
 
-            case 5111015: //Bucc - Static Thumper
-                return 5111012; //Bucc - Static Thumper
+            case 5111015 -> //Bucc - Static Thumper
+                    5111012; //Bucc - Static Thumper
 
-            case 31011004: //DA - Exceed Double Slash 2
-            case 31011005: //DA - Exceed Double Slash 3
-            case 31011006: //DA - Exceed Double Slash 4
-            case 31011007: //DA - Exceed Double Slash Purple
-                return 31011000; //DA - Exceed Double Slash 1
+            //DA - Exceed Double Slash 2
+            //DA - Exceed Double Slash 3
+            //DA - Exceed Double Slash 4
+            case 31011004, 31011005, 31011006, 31011007 -> //DA - Exceed Double Slash Purple
+                    31011000; //DA - Exceed Double Slash 1
 
-            case 31201007: //DA - Exceed Demon Strike 2
-            case 31201008: //DA - Exceed Demon Strike 3
-            case 31201009: //DA - Exceed Demon Strike 4
-            case 31201010: //DA - Exceed Demon Strike Purple
-                return 31201000; //DA - Exceed Demon Strike 1
+            //DA - Exceed Demon Strike 2
+            //DA - Exceed Demon Strike 3
+            //DA - Exceed Demon Strike 4
+            case 31201007, 31201008, 31201009, 31201010 -> //DA - Exceed Demon Strike Purple
+                    31201000; //DA - Exceed Demon Strike 1
 
-            case 31211007: //DA - Exceed Lunar Slash 2
-            case 31211008: //DA - Exceed Lunar Slash 3
-            case 31211009: //DA - Exceed Lunar Slash 4
-            case 31211010: //DA - Exceed Lunar Slash Purple
-                return 31211000; //DA - Exceed Lunar Slash 1
+            //DA - Exceed Lunar Slash 2
+            //DA - Exceed Lunar Slash 3
+            //DA - Exceed Lunar Slash 4
+            case 31211007, 31211008, 31211009, 31211010 -> //DA - Exceed Lunar Slash Purple
+                    31211000; //DA - Exceed Lunar Slash 1
 
-            case 31221009: //DA - Exceed Execution 2
-            case 31221010: //DA - Exceed Execution 3
-            case 31221011: //DA - Exceed Execution 4
-            case 31221012: //DA - Exceed Execution Purple
-                return 31221000; //DA - Exceed Execution 1
+            //DA - Exceed Execution 2
+            //DA - Exceed Execution 3
+            //DA - Exceed Execution 4
+            case 31221009, 31221010, 31221011, 31221012 -> //DA - Exceed Execution Purple
+                    31221000; //DA - Exceed Execution 1
 
-            case 31211002: //DA - Shield Charge (Spikes)
-                return 31211011; //DA - Shield Charge (Rush)
+            case 31211002 -> //DA - Shield Charge (Spikes)
+                    31211011; //DA - Shield Charge (Rush)
 
-            case 61120219: //Kaiser - Dragon Slash (Final Form)
-                return 61001000; //Kaiser - Dragon Slash 1
+            case 61120219 -> //Kaiser - Dragon Slash (Final Form)
+                    61001000; //Kaiser - Dragon Slash 1
 
-            case 61111215: //Kaiser - Flame Surge (Final Form)
-                return 61001101; //Kaiser - Flame Surge
+            case 61111215 -> //Kaiser - Flame Surge (Final Form)
+                    61001101; //Kaiser - Flame Surge
 
-            case 61111216: //Kaiser - Impact Wave (Final Form)
-                return 61101100; //Kaiser - Impact Wave
+            case 61111216 -> //Kaiser - Impact Wave (Final Form)
+                    61101100; //Kaiser - Impact Wave
 
-            case 61111217: //Kaiser - Piercing Blaze (Final Form)
-                return 61101101; //Kaiser - Piercing Blaze
+            case 61111217 -> //Kaiser - Piercing Blaze (Final Form)
+                    61101101; //Kaiser - Piercing Blaze
 
-            case 61111111: //Kaiser - Wing Beat (Final Form)
-                return 61111100; //Kaiser - Wing Beat
+            case 61111111 -> //Kaiser - Wing Beat (Final Form)
+                    61111100; //Kaiser - Wing Beat
 
-            case 61111219: //Kaiser - Pressure Chain (Final Form)
-                return 61111101; //Kaiser - Pressure Chain
+            case 61111219 -> //Kaiser - Pressure Chain (Final Form)
+                    61111101; //Kaiser - Pressure Chain
 
-            case 61121201: //Kaiser - Gigas Wave (Final Form)
-                return 61121100; //Kaiser - Gigas Wave
+            case 61121201 -> //Kaiser - Gigas Wave (Final Form)
+                    61121100; //Kaiser - Gigas Wave
 
-            case 61121222: //Kaiser - Inferno Breath (Final Form)
-                return 61121105; //Kaiser - Inferno Breath
+            case 61121222 -> //Kaiser - Inferno Breath (Final Form)
+                    61121105; //Kaiser - Inferno Breath
 
-            case 61121203: //Kaiser - Dragon Barrage (Final Form)
-                return 61121102; //Kaiser - Dragon Barrage
+            case 61121203 -> //Kaiser - Dragon Barrage (Final Form)
+                    61121102; //Kaiser - Dragon Barrage
 
-            case 61121221: //Kaiser - Blade Burst (Final Form)
-                return 61121104; //Kaiser - Blade Burst
+            case 61121221 -> //Kaiser - Blade Burst (Final Form)
+                    61121104; //Kaiser - Blade Burst
 
-            case 14101021: //NW - Quint. Throw Finisher
-                return 14101020; //NW - Quint. Throw
+            case 14101021 -> //NW - Quint. Throw Finisher
+                    14101020; //NW - Quint. Throw
 
-            case 14111021: //NW - Quad Throw Finisher
-                return 14111020; //NW - Quad Throw
+            case 14111021 -> //NW - Quad Throw Finisher
+                    14111020; //NW - Quad Throw
 
-            case 14121002: //NW - Triple Throw Finisher
-                return 14121001; //NW - Triple Throw
+            case 14121002 -> //NW - Triple Throw Finisher
+                    14121001; //NW - Triple Throw
 
-            case STAGGERING_STRIKES:
-                return STUNNING_STRIKES;
-
-            case SMASH_WAVE_COMBO:
-                return SMASH_WAVE;
-
-            case FINAL_BLOW_COMBO:
-            case FINAL_BLOW_SMASH_SWING_COMBO:
-                return FINAL_BLOW;
-
-            case SOUL_SEEKER_ATOM:
-                return SOUL_SEEKER;
-
-            case 65101006: //AB - Lovely Sting Explosion
-                return LOVELY_STING;
-
-            case 65121007:
-            case 65121008:
-                return TRINITY;
-
-            case REVOLVING_CANNON_2:
-            case REVOLVING_CANNON_3:
-                return REVOLVING_CANNON;
-            default:
-                return skillID;
-        }
+            case STAGGERING_STRIKES -> STUNNING_STRIKES;
+            case SMASH_WAVE_COMBO -> SMASH_WAVE;
+            case FINAL_BLOW_COMBO, FINAL_BLOW_SMASH_SWING_COMBO -> FINAL_BLOW;
+            case SOUL_SEEKER_ATOM -> SOUL_SEEKER;
+            case 65101006 -> //AB - Lovely Sting Explosion
+                    LOVELY_STING;
+            case 65121007, 65121008 -> TRINITY;
+            case REVOLVING_CANNON_2, REVOLVING_CANNON_3 -> REVOLVING_CANNON;
+            default -> skillID;
+        };
     }
 
     public static int getKaiserGaugeIncrementBySkill(int skillID) {
@@ -838,35 +629,18 @@ public class SkillConstants {
     }
 
     public static boolean isEvanFusionSkill(int skillID) {
-        switch (skillID) {
-            case 22110014:
-            case 22110025:
-            case 22140014:
-            case 22140015:
-            case 22140024:
-            case 22140023:
-            case 22170065:
-            case 22170066:
-            case 22170067:
-            case 22170094:
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillID) {
+            case 22110014, 22110025, 22140014, 22140015, 22140024, 22140023, 22170065, 22170066, 22170067, 22170094 ->
+                    true;
+            default -> false;
+        };
     }
 
     public static boolean isShikigamiHauntingSkill(int skillID) {
-        switch(skillID) {
-            case 80001850:
-            case 42001000:
-            case 42001005:
-            case 42001006:
-            case 40021185:
-            case 80011067:
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillID) {
+            case 80001850, 42001000, 42001005, 42001006, 40021185, 80011067 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isStealableSkill(int skillID) {
@@ -881,179 +655,79 @@ public class SkillConstants {
         if(skillID % 100 == 54) {
             return 5;
         }
-        switch (skillID / 10000) {
+        return switch (skillID / 10000) {
 
             // 1st Job Tab
-            case 100:
-            case 200:
-            case 300:
-            case 400:
-            case 430:
-            case 500:
-            case 501:
-                return 1;
+            case 100, 200, 300, 400, 430, 500, 501 -> 1;
 
             // 2nd Job Tab
-            case 110:
-            case 120:
-            case 130:
-
-            case 210:
-            case 220:
-            case 230:
-
-
-            case 310:
-            case 320:
-
-            case 410:
-            case 420:
-            case 431:
-            case 432:
-
-            case 510:
-            case 520:
-            case 530:
-                return 2;
+            case 110, 120, 130, 210, 220, 230, 310, 320, 410, 420, 431, 432, 510, 520, 530 -> 2;
 
             // 3rd Job Tab
-            case 111:
-            case 121:
-            case 131:
-
-            case 211:
-            case 221:
-            case 231:
-
-            case 311:
-            case 321:
-
-            case 411:
-            case 421:
-            case 433:
-
-            case 511:
-            case 521:
-            case 531:
-                return 3;
+            case 111, 121, 131, 211, 221, 231, 311, 321, 411, 421, 433, 511, 521, 531 -> 3;
 
             // 4th job Tab
-            case 112:
-            case 122:
-            case 132:
-
-            case 212:
-            case 222:
-            case 232:
-
-            case 312:
-            case 322:
-
-            case 412:
-            case 422:
-            case 434:
-
-            case 512:
-            case 522:
-            case 532:
-                return 4;
-        }
-        return -1;
+            case 112, 122, 132, 212, 222, 232, 312, 322, 412, 422, 434, 512, 522, 532 -> 4;
+            default -> -1;
+        };
     }
 
     public static int getMaxPosBysmJobID(int smJobID) {
-        int maxPos = 0;
-        switch (smJobID) {
-            case 1:
-            case 2:
-                maxPos = 3;
-                break;
-            case 3:
-                maxPos = 2;
-                break;
-            case 4:
-            case 5:
-                maxPos = 1;
-                break;
-        }
+        int maxPos = switch (smJobID) {
+            case 1, 2 -> 3;
+            case 3 -> 2;
+            case 4, 5 -> 1;
+            default -> 0;
+        };
         return maxPos;
     }
 
     public static int getStartPosBysmJobID(int smJobID) {
-        int startPos = 0;
-        switch (smJobID) {
-            case 1:
-                startPos = 0;
-                break;
-            case 2:
-                startPos = 4;
-                break;
-            case 3:
-                startPos = 8;
-                break;
-            case 4:
-                startPos = 11;
-                break;
-            case 5:
-                startPos = 13;
-                break;
-        }
+        int startPos = switch (smJobID) {
+            case 1 -> 0;
+            case 2 -> 4;
+            case 3 -> 8;
+            case 4 -> 11;
+            case 5 -> 13;
+            default -> 0;
+        };
         return startPos;
     }
 
     public static int getImpecSkillIDBysmJobID(int smJobID) {
-        int impecSkillID = 0;
-        switch (smJobID) {
-            case 1:
-                impecSkillID = 24001001;
-                break;
-            case 2:
-                impecSkillID = 24101001;
-                break;
-            case 3:
-                impecSkillID = 24111001;
-                break;
-            case 4:
-                impecSkillID = 24121001;
-                break;
-            case 5:
-                impecSkillID = 24121054;
-                break;
-        }
+        int impecSkillID = switch (smJobID) {
+            case 1 -> 24001001;
+            case 2 -> 24101001;
+            case 3 -> 24111001;
+            case 4 -> 24121001;
+            case 5 -> 24121054;
+            default -> 0;
+        };
         return impecSkillID;
     }
 
     public static int getSMJobIdByImpecSkillId(int impecSkillId) {
-        switch (impecSkillId) {
-            case 24001001:  // 1st Job
-                return 1;
-            case 24101001:  // 2nd Job
-                return 2;
-            case 24111001:  // 3rd job
-                return 3;
-            case 24121001:  // 4th Job
-                return 4;
-            case 24121054:  // Hyper Skill
-                return 5;
-        }
-        return -1;
+        return switch (impecSkillId) {
+            case 24001001 ->  // 1st Job
+                    1;
+            case 24101001 ->  // 2nd Job
+                    2;
+            case 24111001 ->  // 3rd job
+                    3;
+            case 24121001 ->  // 4th Job
+                    4;
+            case 24121054 ->  // Hyper Skill
+                    5;
+            default -> -1;
+        };
     }
 
     public static boolean isIceSkill(int skillID) {
-        switch (skillID) {
-            case Magician.CHILLING_STEP:
-            case Magician.COLD_BEAM:
-            case Magician.ICE_STRIKE:
-            case Magician.GLACIER_CHAIN:
-            case Magician.FREEZING_BREATH:
-            case Magician.BLIZZARD:
-            case Magician.FROZEN_ORB:
-            case Magician.ELQUINES:
-                return true;
-
-            default:
-                return false;
-        }
+        return switch (skillID) {
+            case Magician.CHILLING_STEP, Magician.COLD_BEAM, Magician.ICE_STRIKE, Magician.GLACIER_CHAIN,
+                 Magician.FREEZING_BREATH, Magician.BLIZZARD, Magician.FROZEN_ORB, Magician.ELQUINES -> true;
+            default -> false;
+        };
     }
 
     public static int getLinkSkillByJob(short job) {
@@ -1112,13 +786,11 @@ public class SkillConstants {
     }
 
     public static int getLinkedSkill(int skillID) {
-        switch(skillID) {
-            case Zero.STORM_BREAK_INIT:
-                return Zero.STORM_BREAK;
-            case Zero.ADV_STORM_BREAK_SHOCK_INIT:
-                return Zero.ADV_STORM_BREAK;
-        }
-        return skillID;
+        return switch (skillID) {
+            case Zero.STORM_BREAK_INIT -> Zero.STORM_BREAK;
+            case Zero.ADV_STORM_BREAK_SHOCK_INIT -> Zero.ADV_STORM_BREAK;
+            default -> skillID;
+        };
     }
 
     public static boolean isPassiveSkill_NoPsdSkillsCheck(int skillId) {
@@ -1128,7 +800,7 @@ public class SkillConstants {
 
     public static boolean isPassiveSkill(int skillId) {
         SkillInfo si = SkillData.getSkillInfoById(skillId);
-        return si != null && si.isPsd() && si.getPsdSkills().size() == 0;
+        return si != null && si.isPsd() && si.getPsdSkills().isEmpty();
     }
 
     public static boolean isHyperstatSkill(int skillID) {
@@ -1148,57 +820,35 @@ public class SkillConstants {
     }
 
     public static int getNeededSpForHyperStatSkill(int lv) {
-        switch (lv) {
-            case 1:
-                return 1;
-            case 2:
-                return 2;
-            case 3:
-                return 4;
-            case 4:
-                return 8;
-            case 5:
-                return 10;
-            case 6:
-                return 15;
-            case 7:
-                return 20;
-            case 8:
-                return 25;
-            case 9:
-                return 30;
-            case 10:
-                return 35;
-            default:
-                return 0;
-        }
+        return switch (lv) {
+            case 1 -> 1;
+            case 2 -> 2;
+            case 3 -> 4;
+            case 4 -> 8;
+            case 5 -> 10;
+            case 6 -> 15;
+            case 7 -> 20;
+            case 8 -> 25;
+            case 9 -> 30;
+            case 10 -> 35;
+            default -> 0;
+        };
     }
 
     public static int getTotalNeededSpForHyperStatSkill(int lv) {
-        switch (lv) {
-            case 1:
-                return 1;
-            case 2:
-                return 3;
-            case 3:
-                return 7;
-            case 4:
-                return 15;
-            case 5:
-                return 25;
-            case 6:
-                return 40;
-            case 7:
-                return 60;
-            case 8:
-                return 85;
-            case 9:
-                return 115;
-            case 10:
-                return 150;
-            default:
-                return 0;
-        }
+        return switch (lv) {
+            case 1 -> 1;
+            case 2 -> 3;
+            case 3 -> 7;
+            case 4 -> 15;
+            case 5 -> 25;
+            case 6 -> 40;
+            case 7 -> 60;
+            case 8 -> 85;
+            case 9 -> 115;
+            case 10 -> 150;
+            default -> 0;
+        };
     }
 
     public static boolean isUnregisteredSkill(int skillID) {
@@ -1210,42 +860,27 @@ public class SkillConstants {
     }
 
     public static boolean isHomeTeleportSkill(int skillId) {
-        switch (skillId) {
-            case Warrior.MAPLE_RETURN: // All Adventurers
-            case BeastTamer.HOMEWARD_BOUND:
-            case Kinesis.RETURN_KINESIS:
-            case DawnWarrior.IMPERIAL_RECALL: // All KoC
-            case Aran.RETURN_TO_RIEN:
-            case Evan.BACK_TO_NATURE:
-                // Mercedes
-                // Luminous
-            case Phantom.TO_THE_SKIES:
-                // Shade
-            case AngelicBuster.DAY_DREAMER:
-                // Kaiser
-            case Demon.SECRET_ASSEMBLY: // All Resistance
-                // Hayato
-                // Kanna
-            case Zero.TEMPLE_RECALL:
-
-                return true;
-            default:
-                return false;
-        }
+        return switch (skillId) { // All Adventurers
+            // All KoC
+            // Mercedes
+            // Luminous
+            // Shade
+            // Kaiser
+            // All Resistance
+            // Hayato
+            // Kanna
+            case Warrior.MAPLE_RETURN, BeastTamer.HOMEWARD_BOUND, Kinesis.RETURN_KINESIS, DawnWarrior.IMPERIAL_RECALL,
+                 Aran.RETURN_TO_RIEN, Evan.BACK_TO_NATURE, Phantom.TO_THE_SKIES, AngelicBuster.DAY_DREAMER,
+                 Demon.SECRET_ASSEMBLY, Zero.TEMPLE_RECALL -> true;
+            default -> false;
+        };
     }
 
     public static boolean isArmorPiercingSkill(int skillId) {
-        switch (skillId) {
-            case 3120017:
-            case 95001000:
-            case 3120008:
-            case 3100001:
-            case 3100010:
-                return false;
-
-            default:
-                return true;
-        }
+        return switch (skillId) {
+            case 3120017, 95001000, 3120008, 3100001, 3100010 -> false;
+            default -> true;
+        };
     }
 
     public static int getBaseSpByLevel(short level) {
@@ -1281,20 +916,11 @@ public class SkillConstants {
     }
 
     public static boolean isMultiAttackCooldownSkill(int skillID) {
-        switch (skillID) {
-            case 5311010:
-            case 5711021:
-            case 22171063:
-            case 22141012:
-            case ThunderBreaker.GALE:
-            case ThunderBreaker.TYPHOON:
-            case Demon.DEMON_CRY:
-            case Mechanic.DISTORTION_BOMB:
-            case BALLISTIC_HURRICANE:
-            case BALLISTIC_HURRICANE_1:
-                return true;
-        }
-        return false;
+        return switch (skillID) {
+            case 5311010, 5711021, 22171063, 22141012, ThunderBreaker.GALE, ThunderBreaker.TYPHOON, Demon.DEMON_CRY,
+                 Mechanic.DISTORTION_BOMB, BALLISTIC_HURRICANE, BALLISTIC_HURRICANE_1 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isMatching(int rootId, int job) {
@@ -1309,36 +935,38 @@ public class SkillConstants {
 
     // is_skill_from_item(signed int nSkillID)
     public static boolean isSkillFromItem(int skillID) {
-        switch (skillID) {
-            case 80011123: // New Destiny
-            case 80011247: // Dawn Shield
-            case 80011248: // Dawn Shield
-            case 80011249: // Divine Guardian
-            case 80011250: // Divine Shield
-            case 80011251: // Divine Brilliance
-            case 80011261: // Monolith
-            case 80011295: // Scouter
-            case 80011346: // Ribbit Ring
-            case 80011347: // Krrr Ring
-            case 80011348: // Rawr Ring
-            case 80011349: // Pew Pew Ring
-            case 80011475: // Elunarium Power (ATT & M. ATT)
-            case 80011476: // Elunarium Power (Skill EXP)
-            case 80011477: // Elunarium Power (Boss Damage)
-            case 80011478: // Elunarium Power (Ignore Enemy DEF)
-            case 80011479: // Elunarium Power (Crit Rate)
-            case 80011480: // Elunarium Power (Crit Damage)
-            case 80011481: // Elunarium Power (Status Resistance)
-            case 80011482: // Elunarium Power (All Stats)
-            case 80011492: // Firestarter Ring
-            case 80001768: // Rope Lift
-            case 80001705: // Rope Lift
-            case 80001941: // Scouter
-            case 80010040: // Altered Fate
-                return true;
-        }
-        // Tower of Oz skill rings
-        return (skillID >= 80001455 && skillID <= 80001479);
+        return switch (skillID) { // New Destiny
+            // Dawn Shield
+            // Dawn Shield
+            // Divine Guardian
+            // Divine Shield
+            // Divine Brilliance
+            // Monolith
+            // Scouter
+            // Ribbit Ring
+            // Krrr Ring
+            // Rawr Ring
+            // Pew Pew Ring
+            // Elunarium Power (ATT & M. ATT)
+            // Elunarium Power (Skill EXP)
+            // Elunarium Power (Boss Damage)
+            // Elunarium Power (Ignore Enemy DEF)
+            // Elunarium Power (Crit Rate)
+            // Elunarium Power (Crit Damage)
+            // Elunarium Power (Status Resistance)
+            // Elunarium Power (All Stats)
+            // Firestarter Ring
+            // Rope Lift
+            // Rope Lift
+            // Scouter
+            case 80011123, 80011247, 80011248, 80011249, 80011250, 80011251, 80011261, 80011295, 80011346, 80011347,
+                 80011348, 80011349, 80011475, 80011476, 80011477, 80011478, 80011479, 80011480, 80011481, 80011482,
+                 80011492, 80001768, 80001705, 80001941, 80010040 -> // Altered Fate
+                    true;
+            default ->
+                // Tower of Oz skill rings
+                    (skillID >= 80001455 && skillID <= 80001479);
+        };
     }
 
     public static int getHyperPassiveSkillSpByLv(int level) {
@@ -1408,49 +1036,36 @@ public class SkillConstants {
 
     public static int getBuffSkillItem(int buffSkillID) {
         int novice = getNoviceSkillFromRace(buffSkillID);
-        switch (novice) {
+        return switch (novice) {
             // Angelic Blessing
-            case 86:
-                return 2022746;
+            case 86 -> 2022746;
             // Dark Angelic Blessing
-            case 88:
-                return 2022747;
+            case 88 -> 2022747;
             // Angelic Blessing
-            case 91:
-                return 2022764;
+            case 91 -> 2022764;
             // White Angelic Blessing
-            case 180:
-                return 2022823;
+            case 180 -> 2022823;
             // Lightning God's Blessing
-            case 80000086:
-                return 2023189;
+            case 80000086 -> 2023189;
             // White Angelic Blessing
-            case 80000155:
-                return 2022823;
+            case 80000155 -> 2022823;
             // Lightning God's Blessing
-            case 80010065:
-                return 2023189;
+            case 80010065 -> 2023189;
             // Goddess' Guard
-            case 80011150:
-                return 1112932;
-        }
-        return 0;
+            case 80011150 -> 1112932;
+            default -> 0;
+        };
     }
 
     public static String getMakingSkillName(int skillID) {
-        switch (skillID) {
-            case 92000000:
-                return "Herbalism";
-            case 92010000:
-                return "Mining";
-            case 92020000:
-                return "Smithing";
-            case 92030000:
-                return "Accessory Crafting";
-            case 92040000:
-                return "Alchemy";
-        }
-        return null;
+        return switch (skillID) {
+            case 92000000 -> "Herbalism";
+            case 92010000 -> "Mining";
+            case 92020000 -> "Smithing";
+            case 92030000 -> "Accessory Crafting";
+            case 92040000 -> "Alchemy";
+            default -> null;
+        };
     }
 
     public static int recipeCodeToMakingSkillCode(int skillID) {
@@ -1512,45 +1127,29 @@ public class SkillConstants {
     }
 
     public static boolean isKinesisPsychicAreaSkill(int skillId){
-        switch (skillId) {
-            case 142001002:
-            case 142120003:
-            case 142101009:
-            case 142111006:
-            case 142111007:
-            case 142121005:
-            case 142121030:
-                return true;
-        }
-        return false;
+        return switch (skillId) {
+            case 142001002, 142120003, 142101009, 142111006, 142111007, 142121005, 142121030 -> true;
+            default -> false;
+        };
     }
 
     public static boolean isNoConsumeBullet(int skillID) {
-        switch (skillID) {
-            case 14111023:
-            case 14111022:
-            case 14121052:
-            case NightWalker.SHADOW_BAT_ATOM:
-            case NightWalker.SHADOW_STITCH:
-                return true;
-        }
-        // Tower of Oz skill rings
-        return (skillID >= 80001455 && skillID <= 80001479);
+        return switch (skillID) {
+            case 14111023, 14111022, 14121052, NightWalker.SHADOW_BAT_ATOM, NightWalker.SHADOW_STITCH -> true;
+            default ->
+                // Tower of Oz skill rings
+                    (skillID >= 80001455 && skillID <= 80001479);
+        };
     }
 
     public static BeastTamerBeasts getBeastFromSkill(int skillId) {
-        switch (skillId / 10000) {
-            case 11200:
-                return BeastTamerBeasts.Bear;
-            case 11210:
-                return BeastTamerBeasts.Leopard;
-            case 11211:
-                return BeastTamerBeasts.Bird;
-            case 11212:
-                return BeastTamerBeasts.Cat;
-            default:
-                return BeastTamerBeasts.None;
-        }
+        return switch (skillId / 10000) {
+            case 11200 -> BeastTamerBeasts.Bear;
+            case 11210 -> BeastTamerBeasts.Leopard;
+            case 11211 -> BeastTamerBeasts.Bird;
+            case 11212 -> BeastTamerBeasts.Cat;
+            default -> BeastTamerBeasts.None;
+        };
     }
 
     public static boolean isKeydownCDSkill(int nSkillID)

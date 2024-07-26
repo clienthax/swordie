@@ -79,7 +79,7 @@ public enum UserEffectType {
     SetUsed(70),
     ;
 
-    private byte val;
+    private final byte val;
 
     UserEffectType(int val) {
         this.val = (byte) val;

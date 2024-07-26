@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created on 1/11/2018.
  */
-public class StringData {
+public class StringData implements DataCreator {
     public static Map<Integer, SkillStringInfo> skillString = new HashMap<>();
     public static Map<Integer, String> itemStrings = new HashMap<>();
     public static Map<Integer, String> mapStrings = new HashMap<>();
@@ -46,6 +46,11 @@ public class StringData {
         String[] files = new String[]{"Cash", "Consume", "Eqp", "Ins", "Pet", "Etc"};
         for(String fileDir : files) {
             File file = new File(wzDir + fileDir + ".img.xml");
+            if (!file.exists()) {
+                log.error(wzDir + " does not exist.");
+                continue;
+            }
+
             Document doc = XMLApi.getRoot(file);
             Node node = doc;
             List<Node> nodes = XMLApi.getAllChildren(node);
@@ -88,6 +93,11 @@ public class StringData {
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Skill.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         Document doc = XMLApi.getRoot(file);
         Node node = doc;
         List<Node> nodes = XMLApi.getAllChildren(node);
@@ -126,6 +136,11 @@ public class StringData {
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Mob.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         Document doc = XMLApi.getRoot(file);
         List<Node> nodes = XMLApi.getAllChildren(doc);
         for (Node topNode : nodes) {
@@ -150,6 +165,11 @@ public class StringData {
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Npc.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         Document doc = XMLApi.getRoot(file);
         List<Node> nodes = XMLApi.getAllChildren(doc);
         for (Node topNode : nodes) {
@@ -174,6 +194,11 @@ public class StringData {
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Map.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         Document doc = XMLApi.getRoot(file);
         List<Node> nodes = XMLApi.getAllChildren(doc);
         for (Node topNode : nodes) {
@@ -244,6 +269,11 @@ public class StringData {
     public static void loadSkillStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/skills.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
@@ -279,6 +309,11 @@ public class StringData {
     public static void loadItemStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/items.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
@@ -311,6 +346,11 @@ public class StringData {
     public static void loadMobStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/mobs.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
@@ -343,6 +383,11 @@ public class StringData {
     public static void loadNpcStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/npcs.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
@@ -359,6 +404,7 @@ public class StringData {
     private static void saveMapStrings(String dir) {
         Util.makeDirIfAbsent(dir);
         File file = new File(dir + "/maps.dat");
+
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
             dataOutputStream.writeInt(getMapStrings().size());
             for(Map.Entry<Integer, String> entry : getMapStrings().entrySet()) {
@@ -375,6 +421,11 @@ public class StringData {
     public static void loadMapStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/maps.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
@@ -530,7 +581,7 @@ public class StringData {
             sb.append(entry.getKey()).append(" - ").append(entry.getValue().getName()).append("\r\n");
         }
         try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/Skill.txt")))) {
-            pw.println(sb.toString());
+            pw.println(sb);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -545,7 +596,7 @@ public class StringData {
                 sb.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\r\n");
             }
             try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/" + fileName)))) {
-                pw.println(sb.toString());
+                pw.println(sb);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -567,7 +618,7 @@ public class StringData {
                 sb.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\r\n");
             }
             try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/" + fileName)))) {
-                pw.println(sb.toString());
+                pw.println(sb);
             } catch (IOException e) {
                 e.printStackTrace();
             }

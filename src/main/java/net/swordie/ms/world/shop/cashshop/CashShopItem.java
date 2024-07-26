@@ -9,9 +9,8 @@ import net.swordie.ms.connection.db.FileTimeConverter;
 import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 /**
  * Created on 4/21/2018.

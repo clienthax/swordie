@@ -21,9 +21,9 @@ public enum InstanceTableType {
     Skill_9204("92040000", 0, 0),
     ;
 
-    private String tableName;
-    private int type;
-    private int subType;
+    private final String tableName;
+    private final int type;
+    private final int subType;
 
     InstanceTableType(String tableName, int type, int subType) {
         this.tableName = tableName;

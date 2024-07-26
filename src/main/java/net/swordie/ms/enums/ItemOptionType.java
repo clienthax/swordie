@@ -19,7 +19,7 @@ public enum ItemOptionType {
     Glove(54),
     Shoes(55);
 
-    private int val;
+    private final int val;
 
     ItemOptionType(int val) {
         this.val = val;

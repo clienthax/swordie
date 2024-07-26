@@ -22,7 +22,6 @@ import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.enums.ForceAtomEnum;
-import net.swordie.ms.enums.Stat;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
@@ -98,7 +97,7 @@ public class AngelicBuster extends Job {
     public static final int AFFINITY_HEART_IV = 65120006;
 
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             DRESS_UP,
             SOUL_BUSTER,
             HYPER_COORDINATE,
@@ -240,7 +239,7 @@ public class AngelicBuster extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -413,7 +412,7 @@ public class AngelicBuster extends Job {
         }
         List<Mob> bossLifes = field.getBossMobsInRect(rect);
         Life life = Util.getRandomFromCollection(lifes);
-        if(bossLifes.size() > 0) {
+        if(!bossLifes.isEmpty()) {
             life = Util.getRandomFromCollection(bossLifes);
         }
         int anglenum = new Random().nextInt(10);

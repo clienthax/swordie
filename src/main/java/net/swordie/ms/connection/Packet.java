@@ -63,6 +63,7 @@ public class Packet implements Cloneable {
         return "[Pck] | " + Util.readableByteArray(data);
     }
     
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Packet clone() {
         return new Packet(data);

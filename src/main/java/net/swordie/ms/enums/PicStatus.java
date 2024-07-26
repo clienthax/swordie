@@ -10,7 +10,7 @@ public enum PicStatus {
     OUTDATED(4),
     ;
 
-    private byte val;
+    private final byte val;
 
     PicStatus(byte val) {
         this.val = val;

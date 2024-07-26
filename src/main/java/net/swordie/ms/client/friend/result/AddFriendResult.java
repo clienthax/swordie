@@ -9,7 +9,7 @@ import net.swordie.ms.client.friend.FriendType;
  */
 public class AddFriendResult implements FriendResult {
 
-    private Friend friend;
+    private final Friend friend;
 
     public AddFriendResult(Friend friend) {
         this.friend = friend;

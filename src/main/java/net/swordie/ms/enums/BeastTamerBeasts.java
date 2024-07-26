@@ -10,7 +10,7 @@ public enum BeastTamerBeasts {
     Cat(4),
     ;
 
-    private byte val;
+    private final byte val;
 
     BeastTamerBeasts(int val) {
         this.val = (byte) val;

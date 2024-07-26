@@ -215,40 +215,22 @@ public class JobConstants {
             return 0.0;
         }
         if (job < 220) {
-            switch (job) {
-                case 110:
-                case 111:
-                case 112:
-                    return 0.1;
-                case 200:
-                case 210:
-                case 211:
-                case 212:
-                    return 0.2;
-                default:
-                    return 0.0;
-            }
+            return switch (job) {
+                case 110, 111, 112 -> 0.1;
+                case 200, 210, 211, 212 -> 0.2;
+                default -> 0.0;
+            };
         }
         return 0.2;
     }
 
     public static int getJobCategory(short job) {
-        int res = 0;
-        switch (job / 100) {
-            case 27:
-            case 140:
-            case 142:
-                res = 2;
-                break;
-            case 36:
-                res = 4;
-                break;
-            case 37:
-                res = 1;
-                break;
-            default:
-                res = job % 1000 / 100;
-        }
+        int res = switch (job / 100) {
+            case 27, 140, 142 -> 2;
+            case 36 -> 4;
+            case 37 -> 1;
+            default -> job % 1000 / 100;
+        };
         return res;
     }
 
@@ -481,8 +463,8 @@ public class JobConstants {
         PINK_BEAN_EMPTY_14(800019, 13000),
         PINK_BEAN_EMPTY_15(800022, 13000);
 
-        private short jobId;
-        private short beginnerJobId;
+        private final short jobId;
+        private final short beginnerJobId;
 
         JobEnum(short jobId, short beginnerJobId) {
             this.jobId = jobId;
@@ -805,7 +787,7 @@ public class JobConstants {
         KINESIS(22, JobFlag.ENABLED, JobEnum.KINESIS_0);
 
         private final int jobType, flag;
-        private JobEnum beginJob;
+        private final JobEnum beginJob;
 
         LoginJob(int jobType, JobFlag flag, JobEnum beginJob) {
             this.jobType = jobType;
@@ -922,26 +904,10 @@ public class JobConstants {
     }
 
     public static boolean isBeginnerJob(short jobId) {
-        switch (jobId) {
-            case 8001:
-            case 13000:
-            case 14000:
-            case 6000:
-            case 6001:
-            case 5000:
-            case 4001:
-            case 4002:
-            case 3001:
-            case 3002:
-            case 2001:
-            case 2002:
-            case 2003:
-            case 2004:
-            case 2005:
-                return true;
-            default:
-                return jobId % 1000 == 0 || jobId / 100 == 8000;
-        }
+        return switch (jobId) {
+            case 8001, 13000, 14000, 6000, 6001, 5000, 4001, 4002, 3001, 3002, 2001, 2002, 2003, 2004, 2005 -> true;
+            default -> jobId % 1000 == 0 || jobId / 100 == 8000;
+        };
     }
 
     public static int getJobLevel(short jobId) {
@@ -997,30 +963,13 @@ public class JobConstants {
     }
 
     private static int getEvanJobLevel(short jobId) {
-        int result;
-        switch (jobId) {
-            case 2200:
-            case 2210:
-                result = 1;
-                break;
-            case 2211:
-            case 2212:
-            case 2213:
-                result = 2;
-                break;
-            case 2214:
-            case 2215:
-            case 2216:
-                result = 3;
-                break;
-            case 2217:
-            case 2218:
-                result = 4;
-                break;
-            default:
-                result = 0;
-                break;
-        }
+        int result = switch (jobId) {
+            case 2200, 2210 -> 1;
+            case 2211, 2212, 2213 -> 2;
+            case 2214, 2215, 2216 -> 3;
+            case 2217, 2218 -> 4;
+            default -> 0;
+        };
         return result;
     }
 

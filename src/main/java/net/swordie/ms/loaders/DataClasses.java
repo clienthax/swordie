@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class DataClasses {
     public static List<Class> dataClasses = new ArrayList<>();
-    public static List<Class> datCreators = new ArrayList<>();
+    public static List<Class<? extends DataCreator>> datCreators = new ArrayList<>();
     static {
         dataClasses.addAll(Arrays.asList(
                 ItemData.class,

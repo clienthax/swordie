@@ -2,7 +2,7 @@ package net.swordie.ms.loaders.containerclasses;
 
 import net.swordie.ms.enums.ItemJob;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Sjonnie

@@ -18,12 +18,12 @@ import java.util.*;
 /**
  * Created on 12/20/2017.
  */
-public class SkillData {
+public class SkillData implements DataCreator {
 
-    private static Map<Integer, SkillInfo> skills = new HashMap<>();
-    private static Map<Integer, Map<Integer, Integer>> eliteMobSkills = new HashMap<>();
-    private static Map<Short, Map<Short, MobSkillInfo>> mobSkillInfos = new HashMap<>();
-    private static Map<Integer, MakingSkillRecipe> makingSkillRecipes = new HashMap<>();
+    private static final Map<Integer, SkillInfo> skills = new HashMap<>();
+    private static final Map<Integer, Map<Integer, Integer>> eliteMobSkills = new HashMap<>();
+    private static final Map<Short, Map<Short, MobSkillInfo>> mobSkillInfos = new HashMap<>();
+    private static final Map<Integer, MakingSkillRecipe> makingSkillRecipes = new HashMap<>();
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
@@ -156,6 +156,11 @@ public class SkillData {
     private static void loadSkillsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz";
         File dir = new File(wzDir);
+        if (!dir.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.getName().contains("Dragon")) {
@@ -383,7 +388,7 @@ public class SkillData {
                 res.add(getSkillDeepCopyById(key));
             }
         });
-        if (!rec && res.size() == 0) {
+        if (!rec && res.isEmpty()) {
             loadSkillsOfJob(id);
             return getSkillsByJob(id, true);
         }
@@ -419,6 +424,11 @@ public class SkillData {
     private static void loadEliteMobSkillsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz/EliteMobSkill.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         Node root = XMLApi.getRoot(file);
         Node mainNode = XMLApi.getAllChildren(root).get(0);
         List<Node> nodes = XMLApi.getAllChildren(mainNode);
@@ -488,6 +498,11 @@ public class SkillData {
     public static void loadMobSkillsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz/MobSkill.img.xml";
         File file = new File(wzDir);
+        if (!file.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         Node root = XMLApi.getRoot(file);
         Node mainNode = XMLApi.getAllChildren(root).get(0);
         List<Node> nodes = XMLApi.getAllChildren(mainNode);
@@ -923,6 +938,11 @@ public class SkillData {
         for (Integer recipeCategory : recipes) {
             String wzDir = String.format(ServerConstants.WZ_DIR + "/Skill.wz/Recipe_%d.img.xml", recipeCategory);
             File file = new File(wzDir);
+            if (!file.exists()) {
+                log.error(file + " does not exist.");
+                return;
+            }
+
             Node root = XMLApi.getRoot(file);
             Node mainNode = XMLApi.getAllChildren(root).get(0);
             List<Node> nodes = XMLApi.getAllChildren(mainNode);

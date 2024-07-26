@@ -20,7 +20,7 @@ public enum EquipmentEnchantType {
     ShowUnknownFailResult(104),
     Unk(105);
 
-    private byte val;
+    private final byte val;
 
     EquipmentEnchantType(int val) {
         this.val = (byte) val;

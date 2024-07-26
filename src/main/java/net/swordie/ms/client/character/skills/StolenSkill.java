@@ -4,7 +4,7 @@ import net.swordie.ms.client.character.Char;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.loaders.SkillData;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created by Asura on 13-6-2018.

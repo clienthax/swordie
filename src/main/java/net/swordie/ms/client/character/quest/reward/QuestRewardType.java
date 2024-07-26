@@ -15,7 +15,7 @@ public enum QuestRewardType {
     BUFFITEM(4)
     ;
 
-    private byte val;
+    private final byte val;
 
     QuestRewardType(int val) {
         this.val = (byte) val;
@@ -40,19 +40,13 @@ public enum QuestRewardType {
 
 
     public QuestReward load(DataInputStream dis) throws IOException {
-        switch(this) {
-            case EXP:
-                return (QuestReward) new QuestExpReward().load(dis);
-            case ITEM:
-                return (QuestReward) new QuestItemReward().load(dis);
-            case MONEY:
-                return (QuestReward) new QuestMoneyReward().load(dis);
-            case POP:
-                return (QuestReward) new QuestPopReward().load(dis);
-            case BUFFITEM:
-                return (QuestReward) new QuestBuffItemReward().load(dis);
-            default:
-                return null;
-        }
+        return switch (this) {
+            case EXP -> (QuestReward) new QuestExpReward().load(dis);
+            case ITEM -> (QuestReward) new QuestItemReward().load(dis);
+            case MONEY -> (QuestReward) new QuestMoneyReward().load(dis);
+            case POP -> (QuestReward) new QuestPopReward().load(dis);
+            case BUFFITEM -> (QuestReward) new QuestBuffItemReward().load(dis);
+            default -> null;
+        };
     }
 }

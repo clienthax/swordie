@@ -16,7 +16,7 @@ public enum FriendFlag {
 
     ;
 
-    private int val;
+    private final int val;
 
     FriendFlag(int val) {
         this.val = val;

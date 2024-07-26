@@ -147,11 +147,11 @@ public class Pirate extends Beginner {
     public static final int ROLLING_RAINBOW = 5321052;
     public static final int POWER_UNITY = 5121052;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             MAPLE_RETURN,
     };
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             DASH,
             KNUCKLE_BOOSTER,
             ROLL_OF_THE_DICE_BUCC,
@@ -764,7 +764,7 @@ public class Pirate extends Beginner {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -939,7 +939,7 @@ public class Pirate extends Beginner {
 
     private void activateQuickdraw(AttackInfo attackInfo, TemporaryStatManager tsm) {
         Option o = new Option();
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         SkillInfo quickdrawInfo = SkillData.getSkillInfoById(QUICKDRAW);
         if (tsm.getOption(QuickDraw).nOption == 2) {
             if(hasHitMobs) {

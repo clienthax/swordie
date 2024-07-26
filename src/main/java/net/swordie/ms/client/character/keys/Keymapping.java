@@ -1,6 +1,6 @@
 package net.swordie.ms.client.character.keys;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 1/4/2018.

@@ -8,13 +8,8 @@ import net.swordie.ms.client.character.skills.Skill;
 import net.swordie.ms.client.character.skills.info.AttackInfo;
 import net.swordie.ms.client.jobs.Job;
 import net.swordie.ms.connection.InPacket;
-import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.constants.JobConstants;
-import net.swordie.ms.enums.Stat;
 import net.swordie.ms.loaders.SkillData;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created on 12/14/2017.
@@ -24,7 +19,7 @@ public class Beginner extends Job {
     public static final int NIMBLE_FEET = 1002;
     public static final int THREE_SNAILS = 1000;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
         RECOVERY,
         NIMBLE_FEET,
         THREE_SNAILS

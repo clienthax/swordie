@@ -2,7 +2,6 @@ package net.swordie.ms.scripts;
 
 import javax.script.Bindings;
 import javax.script.Invocable;
-import javax.script.ScriptEngine;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.Lock;
@@ -18,7 +17,7 @@ public class ScriptInfo {
     private String scriptName;
     private Invocable invocable;
     private final Lock lock = new ReentrantLock();
-    private Queue<Object> responses = new LinkedList<>();
+    private final Queue<Object> responses = new LinkedList<>();
     private int objectID;
     private String fileDir;
     private boolean isActive;
@@ -113,7 +112,7 @@ public class ScriptInfo {
     }
 
     public Object awaitResponse() {
-        if (responses.size() > 0) {
+        if (!responses.isEmpty()) {
             return responses.poll();
         }
         synchronized (lock) {

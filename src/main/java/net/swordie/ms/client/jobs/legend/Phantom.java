@@ -73,7 +73,7 @@ public class Phantom extends Job {
 
     public static final int CARTE_ATOM = 80001890;
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             JUDGMENT_DRAW_2,
             SKILL_SWIPE,
             LOADOUT,
@@ -96,7 +96,7 @@ public class Phantom extends Job {
     };
 
     private byte cardAmount;
-    private Set<Job> stealJobHandlers = new HashSet<>();
+    private final Set<Job> stealJobHandlers = new HashSet<>();
 
     public Phantom(Char chr) {
         super(chr);
@@ -228,24 +228,19 @@ public class Phantom extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         int randomInt = new Random().nextInt((skillId == JUDGMENT_DRAW_1 ? 2 : 5))+1;
-        int xOpt = 0;
-        switch (randomInt) {
-            case 1: // Crit Rate
-                xOpt = si.getValue(v, slv);
-                break;
-            case 2: // Item Drop Rate
-                xOpt = si.getValue(w, slv);
-                break;
-            case 3: // AsrR & TerR
-                xOpt = si.getValue(x, slv);
-                break;
-            case 4: // Defense %
-                xOpt = 10;
-                break;
-            case 5: // Life Drain
-                xOpt = 1;
-                break;
-        }
+        int xOpt = switch (randomInt) {
+            case 1 -> // Crit Rate
+                    si.getValue(v, slv);
+            case 2 -> // Item Drop Rate
+                    si.getValue(w, slv);
+            case 3 -> // AsrR & TerR
+                    si.getValue(x, slv);
+            case 4 -> // Defense %
+                    10;
+            case 5 -> // Life Drain
+                    1;
+            default -> 0;
+        };
         chr.write(UserPacket.effect(Effect.avatarOriented("Skill/2003.img/skill/20031210/affected/"+ (randomInt-1))));
         chr.write(UserRemote.effect(chr.getId(), Effect.avatarOriented("Skill/2003.img/skill/20031210/affected/"+ (randomInt-1))));
 
@@ -271,7 +266,7 @@ public class Phantom extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GachaponManager {
-    private Map<GachaponDlgType, List<Tuple<Item, Short>>> rewards = new HashMap<>();
+    private final Map<GachaponDlgType, List<Tuple<Item, Short>>> rewards = new HashMap<>();
 
     public GachaponManager() {
         rewards.put(GachaponDlgType.TOWN, new ArrayList<>());

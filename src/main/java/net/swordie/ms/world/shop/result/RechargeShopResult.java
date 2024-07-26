@@ -8,14 +8,14 @@ import net.swordie.ms.world.shop.NpcShopDlg;
  */
 public class RechargeShopResult implements ShopResult {
 
-    private NpcShopDlg shop;
+    private final NpcShopDlg shop;
 
     public RechargeShopResult(NpcShopDlg shop) {
         this.shop = shop;
     }
 
     @Override
-    public ShopResultType getType() {
+    public ShopResultType type() {
         return ShopResultType.RechargeSuccess;
     }
 

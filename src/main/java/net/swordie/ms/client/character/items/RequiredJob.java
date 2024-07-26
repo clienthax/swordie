@@ -12,7 +12,7 @@ public enum RequiredJob {
     Thief(0x8),
     Pirate(0x10);
 
-    private int val;
+    private final int val;
 
     RequiredJob(int val) {
         this.val = val;

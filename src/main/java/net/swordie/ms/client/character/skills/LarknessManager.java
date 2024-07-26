@@ -9,9 +9,9 @@ import net.swordie.ms.connection.packet.UserLocal;
  * Created on 2/10/2018.
  */
 public class LarknessManager {
-	private Char chr;
-	private LarknessInfo darkInfo = new LarknessInfo(20040217, 0, true);
-	private LarknessInfo lightInfo = new LarknessInfo(20040216, 0, false);
+	private final Char chr;
+	private final LarknessInfo darkInfo = new LarknessInfo(20040217, 0, true);
+	private final LarknessInfo lightInfo = new LarknessInfo(20040216, 0, false);
 	private int darkGauge;
 	private int lightGauge;
 	private int darkFeathers;

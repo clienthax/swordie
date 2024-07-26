@@ -2,8 +2,6 @@ package net.swordie.ms.enums;
 
 import net.swordie.ms.util.Util;
 
-import java.util.Arrays;
-
 /**
  * Created by Asura on 28-8-2018.
  */
@@ -17,7 +15,7 @@ public enum SceneType {
     // more but unknown as of now.
     ;
 
-    private int val;
+    private final int val;
 
     SceneType(int val) {this.val = val;}
 

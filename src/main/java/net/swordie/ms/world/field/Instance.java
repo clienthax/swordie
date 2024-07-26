@@ -31,9 +31,9 @@ public class Instance {
     private int enterFieldId;
     private int enterPortalId;
     private int forcedReturn;
-    private Map<Integer, Field> fields = new HashMap<>();
-    private Map<String, Object> properties = new HashMap<>();
-    private FieldInstanceType instanceType;
+    private final Map<Integer, Field> fields = new HashMap<>();
+    private final Map<String, Object> properties = new HashMap<>();
+    private final FieldInstanceType instanceType;
     private ScheduledFuture warpOutTimer;
     private long warpOutTimeout;
     private List<Char> chars = new ArrayList<>();

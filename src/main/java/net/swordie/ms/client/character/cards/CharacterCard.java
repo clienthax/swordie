@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.cards;
 
 import net.swordie.ms.connection.OutPacket;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created on 2/18/2017.

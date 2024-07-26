@@ -25,7 +25,7 @@ public enum InGameDirectionEventType {
     InputUI(17),
     ;
 
-    private int val;
+    private final int val;
 
     InGameDirectionEventType(int val) {
         this.val = val;

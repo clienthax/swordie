@@ -67,11 +67,11 @@ public class BattleMage extends Citizen {
     public static final int FOR_LIBERTY_BAM = 32121053;
     public static final int MASTER_OF_DEATH = 32121056;
 
-    private int[] addedSkills = new int[]{
+    private final int[] addedSkills = new int[]{
             SECRET_ASSEMBLY,
     };
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             CONDEMNATION,
             CONDEMNATION_I,
             CONDEMNATION_II,
@@ -89,7 +89,7 @@ public class BattleMage extends Citizen {
             MASTER_OF_DEATH,
     };
 
-    private int[] auras = new int[] {
+    private final int[] auras = new int[] {
             HASTY_AURA,
             DRAINING_AURA,
             BLUE_AURA,
@@ -344,7 +344,7 @@ public class BattleMage extends Citizen {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

@@ -20,7 +20,7 @@ public class MobSkillInfo {
     private Position lt;
     private Position lt2;
     private Position rb2;
-    private Set<Integer> ints = new HashSet<>();
+    private final Set<Integer> ints = new HashSet<>();
     private Position lt3;
     private Position rb3;
 

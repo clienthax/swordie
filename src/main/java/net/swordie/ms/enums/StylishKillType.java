@@ -10,7 +10,7 @@ public enum StylishKillType {
     COMBO(1),
     ;
 
-    private byte val;
+    private final byte val;
 
     StylishKillType(int val) { this.val = (byte) val;}
 

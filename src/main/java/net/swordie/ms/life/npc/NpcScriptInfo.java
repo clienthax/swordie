@@ -327,7 +327,7 @@ public class NpcScriptInfo {
 		FlipBoxChatAsPlayerNoEscape(0x31),
 		;
 
-		private int val;
+		private final int val;
 
 		Param(int val) {
 			this.val = val;

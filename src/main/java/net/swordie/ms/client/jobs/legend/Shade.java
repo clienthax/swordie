@@ -63,7 +63,7 @@ public class Shade extends Job {
     public static final int SPIRIT_BOND_MAX = 25121131;
     public static final int SPIRIT_INCARNATION = 25121030;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             FOX_TROT,
             SPIRIT_BOND_I,
     };
@@ -193,7 +193,7 @@ public class Shade extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

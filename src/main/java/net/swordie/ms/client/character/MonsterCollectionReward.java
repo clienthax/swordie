@@ -1,9 +1,7 @@
 package net.swordie.ms.client.character;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 
 /**

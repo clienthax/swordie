@@ -17,7 +17,7 @@ public enum CustomFieldScripts { // Custom Field Scripts
     russianRoulette_enter(RussianRouletteEvent.EVENT_MAP),
     vonbonInsideMob(105200520),
     ;
-    private int id;
+    private final int id;
 
     CustomFieldScripts(int val) {
         this.id = val;

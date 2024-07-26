@@ -5,12 +5,8 @@ import net.swordie.ms.client.character.items.Equip;
 import net.swordie.ms.client.character.items.Item;
 import net.swordie.ms.client.character.items.PetItem;
 import net.swordie.ms.connection.OutPacket;
-import net.swordie.ms.connection.db.FileTimeConverter;
-import net.swordie.ms.connection.db.InlinedIntArrayConverter;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,8 +58,7 @@ public class CashItemInfo {
         // GW_CashItemOption::Decode
         outPacket.encodeLong(0);
         outPacket.encodeFT(item.getDateExpire());
-        if (item instanceof Equip) {
-            Equip equip = (Equip) item;
+        if (item instanceof Equip equip) {
             outPacket.encodeInt(equip.getGrade());
             int totalOptSize = 3;
             for (int i = 0; i < totalOptSize; i++) {

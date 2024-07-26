@@ -12,7 +12,7 @@ public enum ShopRequestType {
     CLOSE(3),
     ;
 
-    private int val;
+    private final int val;
 
     ShopRequestType(int val) {
         this.val = val;

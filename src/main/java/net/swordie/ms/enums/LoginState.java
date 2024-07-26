@@ -9,5 +9,4 @@ public enum LoginState {
     Login,
     Loading,
     Game,
-    ;
 }

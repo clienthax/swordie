@@ -43,17 +43,18 @@ public class QuestStartCompletionRequirement implements QuestStartRequirement {
     @Override
     public boolean hasRequirements(Char chr) {
         QuestManager qm = chr.getQuestManager();
-        switch(getQuestStatus()) {
+        return switch (getQuestStatus()) {
 //            case 0: // Not started
 //                return !qm.hasQuestInProgress(getQuestID()) && !qm.hasQuestCompleted(getQuestID());
 //            case 1: // In progress
 //                return qm.hasQuestInProgress(getQuestID());
-            case 0: // Completed
-                return qm.hasQuestCompleted(getQuestID());
-            default:
+            case 0 -> // Completed
+                    qm.hasQuestCompleted(getQuestID());
+            default -> {
                 log.error(String.format("Unknown status %d.", getQuestStatus()));
-                return true;
-        }
+                yield true;
+            }
+        };
     }
 
     @Override

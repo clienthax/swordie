@@ -23,12 +23,12 @@ import java.util.*;
 public class MonsterCollectionData {
     private static final Logger log = Logger.getLogger(MonsterCollectionData.class);
 
-    private static Map<Integer, MonsterCollectionRegion> monsterCollectionInfo = new HashMap<>();
-    private static Map<Integer, Triple<Integer, Integer, Integer>> monsterInfo = new HashMap<>();
+    private static final Map<Integer, MonsterCollectionRegion> monsterCollectionInfo = new HashMap<>();
+    private static final Map<Integer, Triple<Integer, Integer, Integer>> monsterInfo = new HashMap<>();
     // reward from group -> hours for exploration
-    private static Map<Integer, Integer> rewardToMinutes = new HashMap<>();
+    private static final Map<Integer, Integer> rewardToMinutes = new HashMap<>();
     // reward from group -> (reward id, chance)
-    private static Map<Integer, Tuple<Integer, Integer>> explorationRewards = new HashMap<>();
+    private static final Map<Integer, Tuple<Integer, Integer>> explorationRewards = new HashMap<>();
 
     static {
         rewardToMinutes.put(2434929, 30);

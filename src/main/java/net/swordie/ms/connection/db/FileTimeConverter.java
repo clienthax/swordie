@@ -2,7 +2,7 @@ package net.swordie.ms.connection.db;
 
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 import java.sql.Timestamp;
 import java.time.*;
 

@@ -1,8 +1,6 @@
 package net.swordie.ms.client.character;
 
 import net.swordie.ms.client.character.items.Item;
-import net.swordie.ms.connection.OutPacket;
-import net.swordie.ms.connection.packet.MiniroomPacket;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.util.container.Tuple;
 
@@ -13,11 +11,11 @@ import java.util.*;
  * Created on 8/10/2018.
  */
 public class TradeRoom {
-    private Map<Char, List<Tuple<Integer, Item>>> offeredItems = new HashMap<>(); // wow
-    private Map<Char, Long> money = new HashMap<>();
-    private Set<Char> confirmedPlayers = new HashSet<>();
-    private Char other;
-    private Char chr;
+    private final Map<Char, List<Tuple<Integer, Item>>> offeredItems = new HashMap<>(); // wow
+    private final Map<Char, Long> money = new HashMap<>();
+    private final Set<Char> confirmedPlayers = new HashSet<>();
+    private final Char other;
+    private final Char chr;
 
     public TradeRoom(Char chr, Char other) {
         this.chr = chr;

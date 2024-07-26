@@ -3,7 +3,7 @@ package net.swordie.ms.client.character;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.util.Util;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

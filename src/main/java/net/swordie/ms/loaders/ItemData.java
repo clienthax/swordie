@@ -24,14 +24,14 @@ import static net.swordie.ms.enums.ScrollStat.*;
 /**
  * Created on 11/17/2017.
  */
-public class ItemData {
+public class ItemData implements DataCreator {
     public static Map<Integer, Equip> equips = new HashMap<>();
     public static Map<Integer, ItemInfo> items = new HashMap<>();
     public static Map<Integer, PetInfo> pets = new HashMap<>();
     public static Map<Integer, ItemOption> itemOptions = new HashMap<>();
     public static List<ItemOption> filteredItemOptions = new ArrayList<>();
     public static Map<Integer, Integer> skillIdByItemId = new HashMap<>();
-    private static Set<Integer> startingItems = new HashSet<>();
+    private static final Set<Integer> startingItems = new HashSet<>();
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
@@ -249,6 +249,11 @@ public class ItemData {
                 "Longcoat", "Mechanic", "Pants", "PetEquip", "Ring", "Shield", "Shoes", "Totem", "Weapon", "MonsterBook"};
         for (String subMap : subMaps) {
             File subDir = new File(String.format("%s/%s", wzDir, subMap));
+            if (!subDir.exists()) {
+                log.error(wzDir + " does not exist.");
+                continue;
+            }
+
             File[] files = subDir.listFiles();
             for (File file : files) {
                 Node node = XMLApi.getRoot(file);
@@ -714,6 +719,11 @@ public class ItemData {
     public static void loadPetsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
         File petDir = new File(String.format("%s/%s", wzDir, "Pet"));
+        if (!petDir.exists()) {
+            log.error(petDir + " does not exist.");
+            return;
+        }
+
         for (File file : petDir.listFiles()) {
             Document doc = XMLApi.getRoot(file);
             int id = Integer.parseInt(file.getName().replace(".img.xml", ""));
@@ -864,9 +874,15 @@ public class ItemData {
 
     public static void loadItemsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
+
         String[] subMaps = new String[]{"Cash", "Consume", "Etc", "Install", "Special"}; // not pet
         for (String subMap : subMaps) {
             File subDir = new File(String.format("%s/%s", wzDir, subMap));
+            if (!subDir.exists()) {
+                log.error(subDir + " does not exist.");
+                return;
+            }
+
             File[] files = subDir.listFiles();
             for (File file : files) {
                 Document doc = XMLApi.getRoot(file);
@@ -1500,6 +1516,11 @@ public class ItemData {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
         String itemOptionDir = String.format("%s/ItemOption.img.xml", wzDir);
         File file = new File(itemOptionDir);
+        if (!file.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         Document doc = XMLApi.getRoot(file);
         Node node = doc;
         List<Node> nodes = XMLApi.getAllChildren(node);
@@ -1889,6 +1910,11 @@ public class ItemData {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz";
         String itemOptionDir = String.format("%s/MakeCharInfo.img.xml", wzDir);
         File file = new File(itemOptionDir);
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
         startingItems.addAll(searchForStartingItems(XMLApi.getRoot(file)));
     }
 

@@ -105,20 +105,15 @@ public class Aran extends Job {
 
 
     public static int getOriginalSkillByID(int skillID) {
-        switch(skillID) {
-            case SMASH_WAVE_COMBO:
-                return SMASH_WAVE;
-
-            case FINAL_BLOW_COMBO:
-            case FINAL_BLOW_SMASH_SWING_COMBO:
-                return FINAL_BLOW;
-
-        }
-        return skillID; // no original skill linked with this one
+        return switch (skillID) {
+            case SMASH_WAVE_COMBO -> SMASH_WAVE;
+            case FINAL_BLOW_COMBO, FINAL_BLOW_SMASH_SWING_COMBO -> FINAL_BLOW;
+            default -> skillID;
+        };
     }
 
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             REGAINED_MEMORY,
             RETURN_TO_RIEN,
     };
@@ -270,7 +265,7 @@ public class Aran extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

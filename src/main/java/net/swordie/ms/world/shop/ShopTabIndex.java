@@ -23,7 +23,7 @@ public enum ShopTabIndex {
     CORE_2(15),
     ;
 
-    private int val;
+    private final int val;
 
     ShopTabIndex(int val) {
         this.val = val;

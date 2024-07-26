@@ -3,7 +3,6 @@ package net.swordie.ms.loaders;
 import net.swordie.ms.client.character.runestones.RuneStone;
 import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.constants.GameConstants;
-import net.swordie.ms.enums.FieldOption;
 import net.swordie.ms.enums.FieldType;
 import net.swordie.ms.world.field.*;
 import net.swordie.ms.life.Life;
@@ -29,10 +28,10 @@ import java.util.Objects;
 /**
  * Created on 12/21/2017.
  */
-public class FieldData {
+public class FieldData implements DataCreator {
 
-    private static List<Field> fields = new ArrayList<>();
-    private static List<Integer> worldMapFields = new ArrayList<>();
+    private static final List<Field> fields = new ArrayList<>();
+    private static final List<Integer> worldMapFields = new ArrayList<>();
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
     private static final boolean LOG_UNKS = false;
 
@@ -146,9 +145,31 @@ public class FieldData {
         Session session = DatabaseManager.getSession();
         Transaction transaction = session.beginTransaction();
 
+        /*
         Query loadNpcQuery = session.createNativeQuery("SELECT * FROM npc");
 
-        List<Object[]> results =loadNpcQuery.getResultList();
+        List<Object[]> results = loadNpcQuery.getResultList();
+
+        for(Object[] r : results) {
+            Npc n = NpcData.getNpcDeepCopyById((Integer)r[1]);
+            Field f = getFieldById( (Integer)r[2] );
+
+            Position p = new Position();
+            p.setX((Integer)r[3]);
+            p.setY((Integer)r[4]);
+
+            n.setPosition(p);
+            n.setCy((Integer)r[5]);
+            n.setRx0((Integer)r[6]);
+            n.setRx1((Integer)r[7]);
+            n.setFh((Integer)r[8]);
+
+            f.addLife(n);
+        }
+*/
+        Query loadNpcQuery = session.createNativeQuery("SELECT * FROM npc");
+
+        List<Object[]> results = loadNpcQuery.getResultList();
 
         for(Object[] r : results) {
             Npc n = NpcData.getNpcDeepCopyById((Integer)r[1]);
@@ -176,6 +197,11 @@ public class FieldData {
     private static void loadFieldInfoFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Map.wz/Map";
         File dir = new File(wzDir);
+        if (!dir.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.listFiles() == null) {
@@ -277,7 +303,7 @@ public class FieldData {
                             field.setVrRight(Integer.parseInt(value));
                             break;
                         case "fieldType":
-                            if (value.equals("")) {
+                            if (value.isEmpty()) {
                                 field.setFieldType(FieldType.DEAFULT);
                             } else {
                                 FieldType fieldType = FieldType.getByVal(Integer.parseInt(value));
@@ -695,6 +721,11 @@ public class FieldData {
     private static void loadWorldMapFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Map.wz/WorldMap";
         File dir = new File(wzDir);
+        if (!dir.exists()) {
+            log.fatal(wzDir + " does not exist.");
+            return;
+        }
+
         File[] files = dir.listFiles();
         for (File file : files) {
             Document doc = XMLApi.getRoot(file);
@@ -730,7 +761,13 @@ public class FieldData {
 
     public static void loadWorldMap() {
         long start = System.currentTimeMillis();
-        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(ServerConstants.DAT_DIR + "/worldMap.dat"))) {
+        File file = new File(ServerConstants.DAT_DIR + "/worldMap.dat");
+        if (!file.exists()) {
+            log.error(file + " does not exist.");
+            return;
+        }
+
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
                 worldMapFields.add(dataInputStream.readInt());

@@ -57,9 +57,9 @@ public enum DimensionalPortalType {
     Cygnus(49, 0, "Cygnus Empress"),
     Maplerunner(50, 993001000, "Maplerunner");
 
-    private int val;
-    private int mapID;
-    private String desc;
+    private final int val;
+    private final int mapID;
+    private final String desc;
 
     DimensionalPortalType(int val, int mapID, String desc) {
         this.val = val;

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ScriptMemory {
 
-    private List<NpcScriptInfo> memory = new ArrayList<>();
+    private final List<NpcScriptInfo> memory = new ArrayList<>();
     private int position;
 
     public List<NpcScriptInfo> getMemory() {

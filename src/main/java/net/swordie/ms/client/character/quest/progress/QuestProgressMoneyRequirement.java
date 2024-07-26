@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.quest.progress;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.loaders.DatSerializable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

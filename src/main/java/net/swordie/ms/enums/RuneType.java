@@ -14,7 +14,7 @@ public enum RuneType {
     Skill(8),
     ;
 
-    private byte val;
+    private final byte val;
 
     RuneType(int val) {this.val = (byte) val;}
 

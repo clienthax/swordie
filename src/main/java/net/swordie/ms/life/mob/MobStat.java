@@ -102,7 +102,9 @@ public enum MobStat {
     Laser(87),
     ;
 
-    private int val, pos, bitPos;
+    private final int val;
+    private final int pos;
+    private int bitPos;
 
     MobStat(int val, int pos) {
         this.val = val;
@@ -127,19 +129,10 @@ public enum MobStat {
     }
 
     public boolean isMovementAffectingStat() {
-        switch(this) {
-            case Speed:
-            case Stun:
-            case Freeze:
-            case RiseByToss:
-            case Lifting:
-            case Smite:
-            case TempMoveAbility:
-            case RWLiftPress:
-                return true;
-            default:
-                return false;
-        }
+        return switch (this) {
+            case Speed, Stun, Freeze, RiseByToss, Lifting, Smite, TempMoveAbility, RWLiftPress -> true;
+            default -> false;
+        };
     }
 
     public int getBitPos() {

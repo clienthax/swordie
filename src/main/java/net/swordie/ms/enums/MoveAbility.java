@@ -20,7 +20,7 @@ public enum MoveAbility {
 
     ;
 
-    private byte val;
+    private final byte val;
 
     MoveAbility(int val) {
         this.val = (byte) val;

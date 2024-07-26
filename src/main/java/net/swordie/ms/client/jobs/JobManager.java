@@ -21,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
  * Created on 12/14/2017.
  */
 public class JobManager {
-    private static final Class[] jobClasses = new Class[] {
+    private static final Class<? extends Job>[] jobClasses = new Class[] {
             Archer.class,
             BeastTamer.class,
             Beginner.class,
@@ -83,7 +83,7 @@ public class JobManager {
     }
 
     public static void handleAtt(Client c, AttackInfo attackInfo) {
-        for(Class clazz : jobClasses) {
+        for(Class<? extends Job> clazz : jobClasses) {
             Job job = null;
             try {
                 job = (Job) clazz.newInstance();
@@ -97,7 +97,7 @@ public class JobManager {
     }
 
     public static void handleSkill(Client c, InPacket inPacket) {
-        for(Class clazz : jobClasses) {
+        for(Class<? extends Job> clazz : jobClasses) {
             Job job = null;
             try {
                 job = (Job) clazz.newInstance();
@@ -123,7 +123,7 @@ public class JobManager {
 
     public static Job getJobById(short id, Char chr) {
         Job job = null;
-        for(Class clazz : jobClasses) {
+        for(Class<? extends Job> clazz : jobClasses) {
             try {
                 job = (Job) clazz.getConstructor(Char.class).newInstance(chr);
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {

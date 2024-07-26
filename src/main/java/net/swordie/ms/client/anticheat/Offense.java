@@ -3,7 +3,7 @@ package net.swordie.ms.client.anticheat;
 import net.swordie.ms.connection.db.FileTimeConverter;
 import net.swordie.ms.util.FileTime;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "offenses")
@@ -113,7 +113,7 @@ public class Offense {
         Manual(5), // Manual offense (by doing !ban or something)
         ;
 
-        private int points;
+        private final int points;
 
         Type(int points) {
             this.points = points;

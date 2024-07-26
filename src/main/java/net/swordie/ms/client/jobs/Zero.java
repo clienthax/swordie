@@ -86,7 +86,7 @@ public class Zero extends Job {
     public static final int IMMUNE_BARRIER = 101120109;
     public static final int ARMOR_SPLIT = 101110103;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             DUAL_COMBAT,
             DUAL_COMBAT_2,
             TEMPLE_RECALL,
@@ -96,7 +96,7 @@ public class Zero extends Job {
             BURST_LEAP,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             DIVINE_FORCE,
             DIVINE_SPEED,
             RHINNES_PROTECTION,
@@ -108,60 +108,64 @@ public class Zero extends Job {
     private int doubleTimePrevSkill = 0;
 
     public static int getAlphaOrBetaSkill(int skillID) {
-        switch(skillID) {
-            case 101001200: //Moon Strike
-            case 101000200: //Piercing Thrust
-            case 101000201: //Shadow Strike
-            case 101000202: //Shadow Strike
+        return switch (skillID) { //Moon Strike
+            //Piercing Thrust
+            //Shadow Strike
+            //Shadow Strike
 
-            case 101101200: //Flash Assault
-            case 101100200: //Spin Cutter
-            case 101100201: //Adv Spin Cutter
-            case 101100202: //Adv Blade Ring
+            //Flash Assault
+            //Spin Cutter
+            //Adv Spin Cutter
+            //Adv Blade Ring
 
-            case 101110200: //Grand Rolling Cross
-            case 101110201: //Grand Rolling Cross
-            case 101111200: //Rolling Cross
-            case 101110202: //Rolling Assault
-            case 101110203: //Advanced Rolling Assault
-            case 101110204: //Advanced Rolling Assault
+            //Grand Rolling Cross
+            //Grand Rolling Cross
+            //Rolling Cross
+            //Rolling Assault
+            //Advanced Rolling Assault
+            //Advanced Rolling Assault
 
-            case 101120200: //Wind Cutter
-            case 101120201: //Wind Striker
-            case 101120202: //Storm Break
-            case 101120203: //Storm Break
-            case 101120204: //Advanced Storm Break
-            case 101120205: //Severe Storm Break (Tile)
-            case 101120206: //Severe Storm Break
-            case 101121101: //Hurricane Wind
-            case 101121200: //Wind Cutter:
-                return 1; //Alpha skills
+            //Wind Cutter
+            //Wind Striker
+            //Storm Break
+            //Storm Break
+            //Advanced Storm Break
+            //Severe Storm Break (Tile)
+            //Severe Storm Break
+            //Hurricane Wind
+            case 101001200, 101000200, 101000201, 101000202, 101101200, 101100200, 101100201, 101100202, 101110200,
+                 101110201, 101111200, 101110202, 101110203, 101110204, 101120200, 101120201, 101120202, 101120203,
+                 101120204, 101120205, 101120206, 101121101, 101121200 -> //Wind Cutter:
+                    1; //Alpha skills
 
-            case 101001100: //Rising Slash
-            case 101000100: //Air Raid
-            case 101000101: //Air Riot
-            case 101000102: //Air Riot
+            //Rising Slash
+            //Air Raid
+            //Air Riot
+            //Air Riot
 
-            case 101101100: //Flash Cut
-            case 101100100: //Throwing Weapon
-            case 101100101: //Adv. Throwing Weapon
+            //Flash Cut
+            //Throwing Weapon
+            //Adv. Throwing Weapon
 
-            case 101111100: //Spin Driver
-            case 101110101: //Wheel Wind
-            case 101110102: //Adv Wheel Wind
-            case 101110104: //Adv Blade Tempest
+            //Spin Driver
+            //Wheel Wind
+            //Adv Wheel Wind
+            //Adv Blade Tempest
 
-            case 101121100: //Giga Crash
-            case 101120100: //Falling Star
-            case 101120101: //Falling Star
-            case 101120102: //Earth Break
-            case 101120103: //Groundbreaker
-            case 101120104: //Adv Earth Break
-            case 101120105: //Mega Groundbreaker (Tile)
-                return 2; //Beta skills
+            //Giga Crash
+            //Falling Star
+            //Falling Star
+            //Earth Break
+            //Groundbreaker
+            //Adv Earth Break
+            case 101001100, 101000100, 101000101, 101000102, 101101100, 101100100, 101100101, 101111100, 101110101,
+                 101110102, 101110104, 101121100, 101120100, 101120101, 101120102, 101120103, 101120104,
+                 101120105 -> //Mega Groundbreaker (Tile)
+                    2;
+            default -> //Beta skills
 
-        }
-        return skillID; // no original skill linked with this one
+                    skillID;
+        };
     }
 
     public Zero(Char chr) {
@@ -346,7 +350,7 @@ public class Zero extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -631,8 +635,8 @@ public class Zero extends Job {
         AvatarLook mainLook = chr.getAvatarData().getAvatarLook();
         chr.getAvatarData().setZeroAvatarLook(mainLook.deepCopy());
         AvatarLook zeroLook = chr.getAvatarData().getZeroAvatarLook();
-        mainLook.getHairEquips().remove(new Integer(1562000));
-        zeroLook.getHairEquips().remove(new Integer(1572000));
+        mainLook.getHairEquips().remove(Integer.valueOf(1562000));
+        zeroLook.getHairEquips().remove(Integer.valueOf(1572000));
         zeroLook.setWeaponId(1562000);
         zeroLook.setGender(1);
         zeroLook.setSkin(chr.getAvatarData().getAvatarLook().getSkin());

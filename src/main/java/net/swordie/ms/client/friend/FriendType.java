@@ -65,7 +65,7 @@ public enum FriendType {
     // Star planet after this, not interesting
     ;
 
-    private int val;
+    private final int val;
 
     FriendType(int val) {
         this.val = val;

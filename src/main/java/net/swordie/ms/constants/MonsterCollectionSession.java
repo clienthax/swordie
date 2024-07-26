@@ -5,7 +5,6 @@ import net.swordie.ms.connection.packet.UserLocal;
 import net.swordie.ms.loaders.containerclasses.MonsterCollectionMobInfo;
 import net.swordie.ms.util.Util;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -85,9 +84,7 @@ public class MonsterCollectionSession {
             stringBuilder.append(active);
         }
         // total is 6 ints = 6 * 32. Mob info = 25 * 3. 6 * 32 - 25 * 3 = 117.
-        for (int i = 0; i < 117; i++) {
-            stringBuilder.append("0"); // TODO Indicate which rewards are available
-        }
+        stringBuilder.append("0".repeat(117)); // TODO Indicate which rewards are available
         String binaryString = stringBuilder.toString();
         // put them back into ints
         int INT_SIZE = Integer.SIZE;
@@ -101,8 +98,8 @@ public class MonsterCollectionSession {
         }
         // and then convert them back into a hexstring
         stringBuilder = new StringBuilder(sessionKey % 100 + "=");
-        for (int i = 0; i < total.length; i++) {
-            stringBuilder.append(Util.leftPaddedString(8, '0', Integer.toHexString(total[i])));
+        for (int j : total) {
+            stringBuilder.append(Util.leftPaddedString(8, '0', Integer.toHexString(j)));
         }
         chr.write(UserLocal.collectionRecordMessage(sessionKey, stringBuilder.toString()));
     }

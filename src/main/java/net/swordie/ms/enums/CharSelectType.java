@@ -8,7 +8,7 @@ public enum CharSelectType {
     ClientAlreadyRunning(55),
     HavingTroubleLoggingIn(67);
 
-    private byte val;
+    private final byte val;
 
     CharSelectType(byte val) {
         this.val = val;

@@ -9,22 +9,16 @@ import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.connection.packet.ChatSocket;
 import net.swordie.ms.connection.packet.FieldPacket;
 import net.swordie.ms.connection.packet.UserPacket;
-import net.swordie.ms.enums.BaseStat;
 import net.swordie.ms.enums.ChatUserType;
 import net.swordie.ms.enums.GroupMessageType;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.loaders.StringData;
-import net.swordie.ms.scripts.ScriptManagerImpl;
-import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static net.swordie.ms.enums.ChatType.*;
 
@@ -53,8 +47,7 @@ public class ChatHandler {
 
         // doesn't start with command prefix
         if (commandClasses == null) {
-            chr.getField().broadcastPacket(UserPacket.chat(chr.getId(), ChatUserType.User, msg,
-                    false, 0, c.getWorldId()));
+            chr.getField().broadcastPacket(UserPacket.chat(chr.getId(), ChatUserType.User, msg, false, 0, c.getWorldId()));
             return;
         }
 
@@ -71,17 +64,13 @@ public class ChatHandler {
                 }
 
                 try {
-                    ICommand iCommand = null;
+                    ICommand iCommand = switch (msg.charAt(0)) {
+                        case ServerConfig.PLAYER_COMMAND -> (PlayerCommand) commandClass.getConstructor().newInstance();
+                        case ServerConfig.ADMIN_COMMAND -> (AdminCommand) commandClass.getConstructor().newInstance();
+                        default -> null;
 
-                    // TODO replace this switch statement with something prettier
-                    switch (msg.charAt(0)) {
-                        case ServerConfig.PLAYER_COMMAND:
-                            iCommand = (PlayerCommand) commandClass.getConstructor().newInstance();
-                            break;
-                        case ServerConfig.ADMIN_COMMAND:
-                            iCommand = (AdminCommand) commandClass.getConstructor().newInstance();
-                            break;
-                    }
+                        // TODO replace this switch statement with something prettier
+                    };
 
                     commandClass.getDeclaredMethod("execute", Char.class, String[].class)
                             .invoke(iCommand, chr, msg.split(" "));

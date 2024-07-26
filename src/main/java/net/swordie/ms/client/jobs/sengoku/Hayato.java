@@ -76,14 +76,14 @@ public class Hayato extends Job {
     public static final int TORNADO_BLADE_BATTOUJUTSU = 41121020;
     public static final int SUDDEN_STRIKE_BATTOUJUTSU = 41121021;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             QUICK_DRAW,
             SUMMER_RAIN,
             MASTER_OF_BLADES,
             SHIMADA_HEART,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             QUICK_DRAW,
             BATTOUJUTSU_ADVANCE,
             KATANA_BOOSTER,
@@ -374,7 +374,7 @@ public class Hayato extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

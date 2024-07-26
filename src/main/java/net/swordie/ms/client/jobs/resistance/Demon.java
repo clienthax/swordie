@@ -138,12 +138,12 @@ public class Demon extends Job {
     public static final int THOUSAND_SWORDS = 31221052;
 
 
-    private int[] addedSkillsDS = new int[] {
+    private final int[] addedSkillsDS = new int[] {
             SECRET_ASSEMBLY,
             CURSE_OF_FURY,
     };
 
-    private int[] addedSkillsDA = new int[] {
+    private final int[] addedSkillsDA = new int[] {
             SECRET_ASSEMBLY,
             EXCEED,
             BLOOD_PACT,
@@ -151,7 +151,7 @@ public class Demon extends Job {
             STAR_FORCE_CONVERSION,
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             BATTLE_PACT_DS,
             BATTLE_PACT_DA,
             VENGEANCE,
@@ -355,13 +355,13 @@ public class Demon extends Job {
             int recovery = si.getValue(x, slv);
             int duration = si.getValue(w, slv);
             chr.heal((int) (chr.getMaxHP() / ((double) 100 / recovery)));
-            diabolicRecoveryTimer = EventManager.addEvent(() -> diabolicRecoveryHPRecovery(), duration, TimeUnit.SECONDS);
+            diabolicRecoveryTimer = EventManager.addEvent(this::diabolicRecoveryHPRecovery, duration, TimeUnit.SECONDS);
         }
     }
 
     public void regenDFInterval() {
         chr.healMP(10);
-        EventManager.addEvent(() -> regenDFInterval(), 4, TimeUnit.SECONDS);
+        EventManager.addEvent(this::regenDFInterval, 4, TimeUnit.SECONDS);
     }
 
 
@@ -375,7 +375,7 @@ public class Demon extends Job {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());

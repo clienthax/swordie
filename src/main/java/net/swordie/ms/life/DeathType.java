@@ -13,7 +13,7 @@ public enum DeathType {
     ANIMATION_DEATH_3(6),
 
     ;
-    private byte val;
+    private final byte val;
 
     DeathType(byte val) {
         this.val = val;

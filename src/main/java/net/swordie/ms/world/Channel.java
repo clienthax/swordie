@@ -6,7 +6,6 @@ import net.swordie.ms.client.Client;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.GameConstants;
-import net.swordie.ms.life.Life;
 import net.swordie.ms.loaders.FieldData;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
@@ -21,15 +20,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Channel {
     //CHANNELITEM struct
-    private int port;
-    private String name;
-    private int worldId, channelId;
+    private final int port;
+    private final String name;
+    private final int worldId;
+    private final int channelId;
     private boolean adultChannel;
     private List<Field> fields;
     private Map<Integer, Tuple<Byte, Client>> transfers;
-    private Map<Integer, Char> chars = new HashMap<>();
+    private final Map<Integer, Char> chars = new HashMap<>();
     public final int MAX_SIZE = 1000;
-    private Map<Integer, Map<Integer, Long>> areaBossSpawns = new HashMap<>();
+    private final Map<Integer, Map<Integer, Long>> areaBossSpawns = new HashMap<>();
 
     private Channel(String name, World world, int channelId, boolean adultChannel) {
         this.name = name;
@@ -178,7 +178,7 @@ public class Channel {
     public void clearCache() {
         Set<Field> toRemove = new HashSet<>();
         for (Field field : getFields()) {
-            if (field.getChars().size() == 0 && field.getDrops().size() == 0) {
+            if (field.getChars().isEmpty() && field.getDrops().isEmpty()) {
                 toRemove.add(field);
             }
         }
@@ -235,7 +235,7 @@ public class Channel {
     }
 
     public boolean tryEnterSilentCrusadePortal(Char c, int targetFieldId, int curChannelId) {
-        if (c.getOrCreateFieldByCurrentInstanceType(targetFieldId).getChars().size() > 0) { // there is already someone inside
+        if (!c.getOrCreateFieldByCurrentInstanceType(targetFieldId).getChars().isEmpty()) { // there is already someone inside
             c.chatMessage("You may have better luck on another channel..");
             return false;
         }

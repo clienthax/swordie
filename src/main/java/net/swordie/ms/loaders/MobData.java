@@ -24,11 +24,11 @@ import static net.swordie.ms.life.mob.MobStat.*;
 /**
  * Created on 12/30/2017.
  */
-public class MobData {
+public class MobData implements DataCreator {
     private static final boolean LOG_UNKS = false;
     private static final org.apache.log4j.Logger log = LogManager.getRootLogger();
 
-    private static Map<Integer, Mob> mobs = new HashMap<>();
+    private static final Map<Integer, Mob> mobs = new HashMap<>();
 
     public static Map<Integer, Mob> getMobs() {
         return mobs;
@@ -406,6 +406,17 @@ public class MobData {
         File[] files1 = dir1.listFiles();
         File dir2 = new File(wzDir2);
         File[] files2 = dir2.listFiles();
+
+        if (!dir1.exists()) {
+            log.error(wzDir1 + " does not exist.");
+            return;
+        }
+
+        if (!dir2.exists()) {
+            log.error(wzDir2 + " does not exist.");
+            return;
+        }
+
         List<File> files = new ArrayList<>();
         files.addAll(Arrays.asList(files1));
         files.addAll(Arrays.asList(files2));
@@ -803,7 +814,7 @@ public class MobData {
                                         mobSkill.setLevel(Integer.parseInt(skillNodeValue));
                                         break;
                                     case "effectAfter":
-                                        if (!skillNodeValue.equals("")) {
+                                        if (!skillNodeValue.isEmpty()) {
                                             mobSkill.setEffectAfter(Integer.parseInt(skillNodeValue));
                                         }
                                         break;

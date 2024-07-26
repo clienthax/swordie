@@ -17,16 +17,26 @@ import java.util.stream.Collectors;
 /**
  * Created on 4/21/2018.
  */
-public class ReactorData {
+public class ReactorData implements DataCreator {
 
     private static final boolean LOG_UNKS = false;
     private static final Logger log = Logger.getLogger(ReactorData.class);
-    private static HashMap<Integer, ReactorInfo> reactorInfo = new HashMap<>();
+    private static final HashMap<Integer, ReactorInfo> reactorInfo = new HashMap<>();
 
     private static void loadReactorsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Reactor.wz";
         File dir = new File(wzDir);
         File[] files = dir.listFiles();
+        if (!dir.exists()) {
+            log.error(wzDir + " does not exist.");
+            return;
+        }
+
+        if (files != null && files.length == 0) {
+            log.error(wzDir + " is empty.");
+            return;
+        }
+
         for (File file : files) {
             int id = Integer.parseInt(file.getName().replace(".img.xml", ""));
             ReactorInfo ri = new ReactorInfo();

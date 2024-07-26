@@ -12,7 +12,7 @@ public enum MedalReissueResultType {
     Unknown(4),
     ;
 
-    private byte val;
+    private final byte val;
 
     MedalReissueResultType(int val) {
         this.val = (byte) val;

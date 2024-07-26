@@ -2,13 +2,11 @@ package net.swordie.ms.client.character.items;
 
 import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.constants.GameConstants;
-import net.swordie.ms.constants.ItemConstants;
-import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.InvType;
 import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -104,7 +102,7 @@ public class Inventory {
 
     public Item getFirstItemByBodyPart(BodyPart bodyPart) {
         List<Item> items = getItemsByBodyPart(bodyPart);
-        return items != null && items.size() > 0 ? items.get(0) : null;
+        return items != null && !items.isEmpty() ? items.get(0) : null;
     }
 
     public List<Item> getItemsByBodyPart(BodyPart bodyPart) {

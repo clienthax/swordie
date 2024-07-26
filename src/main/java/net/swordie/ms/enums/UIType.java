@@ -326,7 +326,7 @@ public enum UIType {
     UI_WND_NO(1117),
     UI_NOT_DEFINED(-1);
     
-    private int val;
+    private final int val;
     
     UIType(int val) {
         this.val =  val;

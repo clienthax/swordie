@@ -70,7 +70,7 @@ public class RandomPortal extends Life implements Encodable {
         Inferno("random_portal_inferno"),
         ;
 
-        private String script;
+        private final String script;
 
         Type(String script) {
             this.script = script;

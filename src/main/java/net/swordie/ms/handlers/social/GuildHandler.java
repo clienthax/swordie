@@ -10,7 +10,6 @@ import net.swordie.ms.client.character.skills.SkillStat;
 import net.swordie.ms.client.character.skills.info.SkillInfo;
 import net.swordie.ms.client.guild.Guild;
 import net.swordie.ms.client.guild.GuildMember;
-import net.swordie.ms.client.guild.GuildRequestor;
 import net.swordie.ms.client.guild.GuildSkill;
 import net.swordie.ms.client.guild.bbs.BBSRecord;
 import net.swordie.ms.client.guild.bbs.BBSReply;
@@ -20,7 +19,6 @@ import net.swordie.ms.client.guild.result.GuildResult;
 import net.swordie.ms.client.guild.result.GuildType;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.connection.db.DatabaseManager;
-import net.swordie.ms.connection.packet.UserRemote;
 import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.constants.SkillConstants;
@@ -31,7 +29,6 @@ import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
-import net.swordie.ms.world.field.Field;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -78,7 +75,7 @@ public class GuildHandler {
                     guilds = q.list();
                     t.commit();
                 }
-                if (guilds == null || guilds.size() == 0) {
+                if (guilds == null || guilds.isEmpty()) {
                     guild = new Guild();
                     guild.setLevel(1);
                     guild.setName(name);
@@ -285,7 +282,7 @@ public class GuildHandler {
                 chr.write(WvsContext.guildSearchResult(guildCol));
                 break;
             default:
-                log.error(String.format("Unhandled guild request %s", grt.toString()));
+                log.error(String.format("Unhandled guild request %s", grt));
                 break;
 
         }

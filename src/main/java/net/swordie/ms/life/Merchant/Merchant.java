@@ -32,11 +32,11 @@ public class Merchant extends Life {
 
     public Merchant(int templateId) {
         super(templateId);
-        this.visitors = new ArrayList<Char>();
+        this.visitors = new ArrayList<>();
         this.money = 0;
         this.shopHasPassword = true;
-        this.items = new ArrayList<MerchantItem>();
-        this.boughtitems = new ArrayList<BoughtItem>();
+        this.items = new ArrayList<>();
+        this.boughtitems = new ArrayList<>();
     }
 
     public String getOwnerName() {
@@ -64,8 +64,8 @@ public class Merchant extends Life {
             return;
         }
         int newCharSlot = visitors.size();
-        for (int k = 0; k < visitors.size(); k++) {
-            visitors.get(k).write(MiniroomPacket.shopVisitorAdd(visitor, newCharSlot));
+        for (Char aChar : visitors) {
+            aChar.write(MiniroomPacket.shopVisitorAdd(visitor, newCharSlot));
         }
         visitors.add(visitor);
     }
@@ -198,7 +198,7 @@ public class Merchant extends Life {
     }
 
     public void tidyMerchant(Char chr) {
-        Long earnings = chr.getMerchant().getMesos();
+        long earnings = chr.getMerchant().getMesos();
         if (!chr.canAddMoney(earnings)) {
             chr.chatMessage("You cannot hold that much mesos.");
             return;

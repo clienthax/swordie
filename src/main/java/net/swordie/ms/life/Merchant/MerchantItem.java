@@ -2,7 +2,7 @@ package net.swordie.ms.life.Merchant;
 
 import net.swordie.ms.client.character.items.Item;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "merchantitems")

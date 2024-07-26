@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Client extends NettyClient {
 	private Char chr;
-	private Lock lock;
+	private final Lock lock;
 	private Account account;
 	private User user;
 	private byte channel;

@@ -47,14 +47,23 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.BootstrapServiceRegistry;
+import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.SystemTime;
+import org.hibernate.cfg.Environment;
 import org.hibernate.query.Query;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -67,77 +76,110 @@ public class DatabaseManager {
     private static SessionFactory sessionFactory;
     private static List<Session> sessions;
 
-
     public static void init() {
-        Configuration configuration = new Configuration().configure();
-        configuration.setProperty("autoReconnect", "true");
-        Class[] dbClasses = new Class[] {
-                User.class,
-                FileTime.class,
-                SystemTime.class,
-                NonCombatStatDayLimit.class,
-                CharacterCard.class,
-                Item.class,
-                Equip.class,
-                Inventory.class,
-                Skill.class,
-                FuncKeyMap.class,
-                Keymapping.class,
-                SPSet.class,
-                ExtendSP.class,
-                CharacterStat.class,
-                AvatarLook.class,
-                AvatarData.class,
-                Char.class,
-                Account.class,
-                QuestManager.class,
-                Quest.class,
-                QuestProgressRequirement.class,
-                QuestProgressLevelRequirement.class,
-                QuestProgressItemRequirement.class,
-                QuestProgressMobRequirement.class,
-                QuestProgressMoneyRequirement.class,
-                Guild.class,
-                GuildMember.class,
-                GuildRequestor.class,
-                GuildSkill.class,
-                BBSRecord.class,
-                BBSReply.class,
-                Friend.class,
-                Macro.class,
-                DamageSkinSaveData.class,
-                Trunk.class,
-                PetItem.class,
-                MonsterBookInfo.class,
-                CharacterPotential.class,
-                LinkSkill.class,
-                Familiar.class,
-                StolenSkill.class,
-                ChosenSkill.class,
-                CashItemInfo.class,
-                CashShopItem.class,
-                CashShopCategory.class,
-                MonsterCollectionSessionRewardInfo.class,
-                MonsterCollectionGroupRewardInfo.class,
-                MonsterCollectionMobInfo.class,
-                MonsterCollection.class,
-                MonsterCollectionReward.class,
-                MonsterCollectionExploration.class,
-                Alliance.class,
-                DropInfo.class,
-                Offense.class,
-                OffenseManager.class,
-                NpcShopItem.class,
-                EquipDrop.class,
-                EmployeeTrunk.class,
-                MerchantItem.class,
-        };
-        for(Class clazz : dbClasses) {
-            configuration.addAnnotatedClass(clazz);
+        try {
+            // Create a BootstrapServiceRegistryBuilder
+            BootstrapServiceRegistryBuilder bootstrapRegistryBuilder = new BootstrapServiceRegistryBuilder();
+            BootstrapServiceRegistry bootstrapRegistry = bootstrapRegistryBuilder.build();
+
+            // Create a StandardServiceRegistryBuilder
+            StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder(bootstrapRegistry);
+
+            // Hibernate settings equivalent to hibernate.cfg.xml's properties
+            Map<String, Object> settings = new HashMap<>();
+            settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+            settings.put(Environment.URL, "jdbc:mysql://127.0.0.1:3306/mydatabase?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            settings.put(Environment.USER, "root");
+            settings.put(Environment.PASS, "cheese");
+            settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+            settings.put(Environment.SHOW_SQL, "true");
+            settings.put(Environment.FORMAT_SQL, "true");
+            settings.put(Environment.USE_SQL_COMMENTS, "true");
+            settings.put(Environment.HBM2DDL_AUTO, "update");
+            settings.put("hibernate.enable_lazy_load_no_trans", "true");
+
+            registryBuilder.applySettings(settings);
+
+            // Create a StandardServiceRegistry
+            StandardServiceRegistry registry = registryBuilder.build();
+
+            // Create MetadataSources and add annotated classes
+            MetadataSources sources = new MetadataSources(registry)
+                    .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(FileTime.class)
+                    .addAnnotatedClass(SystemTime.class)
+                    .addAnnotatedClass(NonCombatStatDayLimit.class)
+                    .addAnnotatedClass(CharacterCard.class)
+                    .addAnnotatedClass(Item.class)
+                    .addAnnotatedClass(Equip.class)
+                    .addAnnotatedClass(Inventory.class)
+                    .addAnnotatedClass(Skill.class)
+                    .addAnnotatedClass(FuncKeyMap.class)
+                    .addAnnotatedClass(Keymapping.class)
+                    .addAnnotatedClass(SPSet.class)
+                    .addAnnotatedClass(ExtendSP.class)
+                    .addAnnotatedClass(CharacterStat.class)
+                    .addAnnotatedClass(AvatarLook.class)
+                    .addAnnotatedClass(AvatarData.class)
+                    .addAnnotatedClass(Char.class)
+                    .addAnnotatedClass(Account.class)
+                    .addAnnotatedClass(QuestManager.class)
+                    .addAnnotatedClass(Quest.class)
+                    .addAnnotatedClass(QuestProgressRequirement.class)
+                    .addAnnotatedClass(QuestProgressLevelRequirement.class)
+                    .addAnnotatedClass(QuestProgressItemRequirement.class)
+                    .addAnnotatedClass(QuestProgressMobRequirement.class)
+                    .addAnnotatedClass(QuestProgressMoneyRequirement.class)
+                    .addAnnotatedClass(Guild.class)
+                    .addAnnotatedClass(GuildMember.class)
+                    .addAnnotatedClass(GuildRequestor.class)
+                    .addAnnotatedClass(GuildSkill.class)
+                    .addAnnotatedClass(BBSRecord.class)
+                    .addAnnotatedClass(BBSReply.class)
+                    .addAnnotatedClass(Friend.class)
+                    .addAnnotatedClass(Macro.class)
+                    .addAnnotatedClass(DamageSkinSaveData.class)
+                    .addAnnotatedClass(Trunk.class)
+                    .addAnnotatedClass(PetItem.class)
+                    .addAnnotatedClass(MonsterBookInfo.class)
+                    .addAnnotatedClass(CharacterPotential.class)
+                    .addAnnotatedClass(LinkSkill.class)
+                    .addAnnotatedClass(Familiar.class)
+                    .addAnnotatedClass(StolenSkill.class)
+                    .addAnnotatedClass(ChosenSkill.class)
+                    .addAnnotatedClass(CashItemInfo.class)
+                    .addAnnotatedClass(CashShopItem.class)
+                    .addAnnotatedClass(CashShopCategory.class)
+                    .addAnnotatedClass(MonsterCollectionSessionRewardInfo.class)
+                    .addAnnotatedClass(MonsterCollectionGroupRewardInfo.class)
+                    .addAnnotatedClass(MonsterCollectionMobInfo.class)
+                    .addAnnotatedClass(MonsterCollection.class)
+                    .addAnnotatedClass(MonsterCollectionReward.class)
+                    .addAnnotatedClass(MonsterCollectionExploration.class)
+                    .addAnnotatedClass(Alliance.class)
+                    .addAnnotatedClass(DropInfo.class)
+                    .addAnnotatedClass(Offense.class)
+                    .addAnnotatedClass(OffenseManager.class)
+                    .addAnnotatedClass(NpcShopItem.class)
+                    .addAnnotatedClass(EquipDrop.class)
+                    .addAnnotatedClass(EmployeeTrunk.class)
+                    .addAnnotatedClass(MerchantItem.class);
+
+            // Create Metadata
+            Metadata metadata = sources.getMetadataBuilder().build();
+
+            // Create SessionFactory
+            sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+            // Initialize session list
+            sessions = new ArrayList<>();
+
+            // Start heart beat
+            sendHeartBeat();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ExceptionInInitializerError(e);
         }
-        sessionFactory = configuration.buildSessionFactory();
-        sessions = new ArrayList<>();
-        sendHeartBeat();
     }
 
     /**
@@ -146,7 +188,7 @@ public class DatabaseManager {
     private static void sendHeartBeat() {
         Session session = getSession();
         Transaction t = session.beginTransaction();
-        Query q = session.createQuery("from Char where id = 1");
+        Query<Char> q = session.createQuery("from Char where id = 1", Char.class);
         q.list();
         t.commit();
         session.close();
@@ -160,7 +202,7 @@ public class DatabaseManager {
     }
 
     public static void cleanUpSessions() {
-        sessions.removeAll(sessions.stream().filter(s -> !s.isOpen()).collect(Collectors.toList()));
+        sessions.removeAll(sessions.stream().filter(s -> !s.isOpen()).toList());
     }
 
     public static void saveToDB(Object obj) {
@@ -195,10 +237,10 @@ public class DatabaseManager {
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
             // session.get doesn't work for Chars for whatever reason
-            javax.persistence.Query query = session.createQuery(String.format("FROM %s WHERE id = :val", clazz.getName()));
+            Query query = session.createQuery(String.format("FROM %s WHERE id = :val", clazz.getName()));
             query.setParameter("val", id);
             List l = ((org.hibernate.query.Query) query).list();
-            if (l != null && l.size() > 0) {
+            if (l != null && !l.isEmpty()) {
                 o = l.get(0);
             }
             transaction.commit();
@@ -217,10 +259,10 @@ public class DatabaseManager {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            javax.persistence.Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
+            Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
             query.setParameter("val", value);
             List l = ((org.hibernate.query.Query) query).list();
-            if (l != null && l.size() > 0) {
+            if (l != null && !l.isEmpty()) {
                 o = l.get(0);
             }
             transaction.commit();
@@ -235,7 +277,7 @@ public class DatabaseManager {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            javax.persistence.Query query = session.createQuery(String.format("FROM %s", clazz.getName()));
+            Query query = session.createQuery(String.format("FROM %s", clazz.getName()));
             list = ((org.hibernate.query.Query) query).list();
             transaction.commit();
             session.close();
@@ -249,7 +291,7 @@ public class DatabaseManager {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            javax.persistence.Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
+            Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
             query.setParameter("val", value);
             list = ((org.hibernate.query.Query) query).list();
             transaction.commit();

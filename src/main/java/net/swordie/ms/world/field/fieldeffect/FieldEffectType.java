@@ -35,7 +35,7 @@ public enum FieldEffectType {
 
     ;
 
-    private byte val;
+    private final byte val;
 
     FieldEffectType(int val) {
         this.val = (byte) val;

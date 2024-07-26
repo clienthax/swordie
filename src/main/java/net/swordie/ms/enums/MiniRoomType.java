@@ -1,8 +1,5 @@
 package net.swordie.ms.enums;
 
-import net.swordie.ms.client.character.Char;
-import net.swordie.ms.connection.OutPacket;
-
 import java.util.Arrays;
 
 /**
@@ -59,7 +56,7 @@ public enum MiniRoomType {
     OPEN3(80),
     ;
 
-    private byte val;
+    private final byte val;
 
     MiniRoomType(int val) {this.val = (byte) val;}
     public byte getVal() {return val;}

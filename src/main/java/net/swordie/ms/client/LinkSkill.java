@@ -1,6 +1,6 @@
 package net.swordie.ms.client;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**

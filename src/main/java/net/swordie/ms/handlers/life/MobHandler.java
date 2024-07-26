@@ -81,11 +81,10 @@ public class MobHandler {
         Field field = c.getChr().getField();
         int objectID = inPacket.decodeInt();
         Life life = field.getLifeByObjectID(objectID);
-        if (!(life instanceof Mob)) {
+        if (!(life instanceof Mob mob)) {
             return;
         }
         MobSkillAttackInfo msai = new MobSkillAttackInfo();
-        Mob mob = (Mob) life;
         Char controller = field.getLifeToControllers().get(mob);
         byte idk0 = inPacket.decodeByte(); // check if the templateID / 10000 == 250 or 251. No idea for what it's used
         short moveID = inPacket.decodeShort();
@@ -113,7 +112,7 @@ public class MobHandler {
                     skillList = skillList.stream()
                             .filter(ms -> mob.hasSkillOffCooldown(ms.getSkillID(), ms.getLevel()))
                             .collect(Collectors.toList());
-                    if (skillList.size() > 0) {
+                    if (!skillList.isEmpty()) {
                         mobSkill = skillList.get(Randomizer.nextInt(skillList.size()));
                     }
                 }
@@ -130,7 +129,7 @@ public class MobHandler {
                             mobSkill.getSkillID(), MobSkillID.getMobSkillIDByVal(mobSkill.getSkillID()), mobSkill.getLevel()));
                     mob.putSkillCooldown(skillID, slv, nextUseableTime);
                     if (mobSkill.getSkillAfter() > 0) {
-                        List<Rect> rects = new ArrayList<Rect>();
+                        List<Rect> rects = new ArrayList<>();
                         MobSkillID msID = MobSkillID.getMobSkillIDByVal(skillID);
                         switch (msID) {
                             case Toos:
@@ -193,10 +192,9 @@ public class MobHandler {
     @Handler(op = InHeader.MOB_SKILL_DELAY_END)
     public static void handleMobSkillDelayEnd(Char chr, InPacket inPacket) {
         Life life = chr.getField().getLifeByObjectID(inPacket.decodeInt());
-        if (!(life instanceof Mob)) {
+        if (!(life instanceof Mob mob)) {
             return;
         }
-        Mob mob = (Mob) life;
         int skillID = inPacket.decodeInt();
         int slv = inPacket.decodeInt();
         int remainCount = 0; // only set in MobDelaySkill::UpdateSequenceMode
@@ -217,16 +215,15 @@ public class MobHandler {
         Field field = c.getChr().getField();
         int mobID = inPacket.decodeInt();
         Life life = field.getLifeByTemplateId(mobID);
-        if (!(life instanceof Mob)) {
+        if (!(life instanceof Mob mob)) {
             return;
         }
-        Mob mob = (Mob) life;
         Char chr = c.getChr();
         if (mob.isBanMap()) {
             if (mob.getBanType() == 1) {
                 if (mob.getBanMsgType() == 1) { // found 2 types (1(most of ban types), 2).
                     String banMsg = mob.getBanMsg();
-                    if (banMsg != null && !banMsg.equals("")) {
+                    if (banMsg != null && !banMsg.isEmpty()) {
                         chr.write(WvsContext.message(MessageType.SYSTEM_MESSAGE, 0, banMsg, (byte) 0));
                     }
                 }
@@ -285,8 +282,7 @@ public class MobHandler {
         int mobID = inPacket.decodeInt();
         Position pos = inPacket.decodePositionInt();
         Life life = chr.getField().getLifeByObjectID(mobID);
-        if (life instanceof Mob) {
-            Mob mob = (Mob) life;
+        if (life instanceof Mob mob) {
             // Should this be handled like this? I doubt it, but it works :D
             int dataType = 0;
             switch (life.getTemplateId()) {
@@ -336,10 +332,9 @@ public class MobHandler {
         Field field = chr.getField();
         int objectID = inPacket.decodeInt();
         Life life = field.getLifeByObjectID(objectID);
-        if (!(life instanceof Mob)) {
+        if (!(life instanceof Mob mob)) {
             return;
         }
-        Mob mob = (Mob) life;
         if (mob.isEscortMob()) {
 
             // [Grand Athenaeum] Ariant : Escort Hatsar's Servant
@@ -358,10 +353,9 @@ public class MobHandler {
         Field field = chr.getField();
         int objectID = inPacket.decodeInt();
         Life life = field.getLifeByObjectID(objectID);
-        if (!(life instanceof Mob)) {
+        if (!(life instanceof Mob mob)) {
             return;
         }
-        Mob mob = (Mob) life;
         int collision = inPacket.decodeInt();
 
         EscortDest escortDest = mob.getEscortDest().get(collision - 1);

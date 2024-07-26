@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class CharacterPotentialMan {
 
-    private Char chr;
+    private final Char chr;
 
     public CharacterPotentialMan(Char chr) {
         this.chr = chr;

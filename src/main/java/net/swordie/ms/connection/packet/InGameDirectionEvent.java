@@ -12,7 +12,7 @@ import net.swordie.ms.util.Position;
  * Created on 8/31/2018.
  */
 public class InGameDirectionEvent implements Encodable {
-    private InGameDirectionEventType type;
+    private final InGameDirectionEventType type;
     private int arg1, arg2, arg3, arg4, arg5;
     private String str;
     private Position pos;

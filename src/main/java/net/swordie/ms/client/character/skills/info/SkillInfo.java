@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.*;
 
@@ -38,10 +37,10 @@ public class SkillInfo {
     private int hyperstat;
     private int vehicleId;
     private int reqTierPoint;
-    private Map<Integer, Integer> reqSkills = new HashMap<>();
+    private final Map<Integer, Integer> reqSkills = new HashMap<>();
     private boolean notCooltimeReset;
     private boolean notIncBuffDuration;
-    private static ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine("JavaScript");
+    private static final ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine("JavaScript");
     private boolean psd;
     private Set<Integer> addAttackSkills = new HashSet<>();
     private Map<Integer, Integer> extraSkillInfo = new HashMap<>();
@@ -158,11 +157,11 @@ public class SkillInfo {
     }
 
     public Rect getLastRect() {
-        return rects != null && rects.size() > 0 ? rects.get(rects.size() - 1) : null;
+        return rects != null && !rects.isEmpty() ? rects.get(rects.size() - 1) : null;
     }
 
     public Rect getFirstRect() {
-        return rects != null && rects.size() > 0 ? rects.get(0) : null;
+        return rects != null && !rects.isEmpty() ? rects.get(0) : null;
     }
 
     public boolean isMassSpell() {

@@ -12,7 +12,7 @@ import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Util;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 
 import static net.swordie.ms.enums.ChatType.SystemNotice;
@@ -1196,83 +1196,47 @@ public class Equip extends Item {
     }
 
     public int getTotalStat(EquipBaseStat stat) {
-        switch (stat) {
-            case tuc:
-                return getTuc();
-            case cuc:
-                return getCuc();
-            case iStr:
-                return getiStr() + getfSTR() + getEnchantStat(EnchantStat.STR) + getSocketStat(ScrollStat.incSTR);
-            case iDex:
-                return getiDex() + getfDEX() + getEnchantStat(EnchantStat.DEX) + getSocketStat(ScrollStat.incDEX);
-            case iInt:
-                return getiInt() + getfINT() + getEnchantStat(EnchantStat.INT) + getSocketStat(ScrollStat.incINT);
-            case iLuk:
-                return getiLuk() + getfLUK() + getEnchantStat(EnchantStat.LUK) + getSocketStat(ScrollStat.incLUK);
-            case iMaxHP:
-                return getiMaxHp() + getfHP() + getEnchantStat(EnchantStat.MHP) + getSocketStat(ScrollStat.incMHP);
-            case iMaxMP:
-                return getiMaxMp() + getfMP() + getEnchantStat(EnchantStat.MMP) + getSocketStat(ScrollStat.incMMP);
-            case iPAD:
-                return getiPad() + getfATT() + getEnchantStat(EnchantStat.PAD) + getSocketStat(ScrollStat.incPAD);
-            case iMAD:
-                return getiMad() + getfMATT() + getEnchantStat(EnchantStat.MAD) + getSocketStat(ScrollStat.incMAD);
-            case iPDD:
-                return getiPDD() + getfDEF() + getEnchantStat(EnchantStat.PDD) + getSocketStat(ScrollStat.incPDD);
-            case iMDD:
-                return getiMDD() + getfDEF() + getEnchantStat(EnchantStat.MDD) + getSocketStat(ScrollStat.incMDD);
-            case iACC:
-                return getiAcc() + getEnchantStat(EnchantStat.ACC) + getSocketStat(ScrollStat.incACC);
-            case iEVA:
-                return getiEva() + getEnchantStat(EnchantStat.EVA) + getSocketStat(ScrollStat.incEVA);
-            case iCraft:
-                return getiCraft();
-            case iSpeed:
-                return getiSpeed() + getfSpeed() + getEnchantStat(EnchantStat.SPEED) + getSocketStat(ScrollStat.incSpeed);
-            case iJump:
-                return getiJump() + getfJump() + getEnchantStat(EnchantStat.JUMP) + getSocketStat(ScrollStat.incJump);
-            case attribute:
-                return getAttribute();
-            case levelUpType:
-                return getLevelUpType();
-            case level:
-                return getLevel();
-            case exp:
-                return getExp();
-            case durability:
-                return getDurability();
-            case iuc:
-                return getIuc(); // hammer
-            case iPvpDamage:
-                return getiPvpDamage();
-            case iReduceReq:
-                return (byte) (getiReduceReq() + getfLevel());
-            case specialAttribute:
-                return getSpecialAttribute();
-            case durabilityMax:
-                return getDurabilityMax();
-            case iIncReq:
-                return getiIncReq();
-            case growthEnchant:
-                return getGrowthEnchant(); // ygg
-            case psEnchant:
-                return getPsEnchant(); // final strike
-            case bdr:
-                return getBdr() + getfBoss() + getSocketStat(ScrollStat.boss); // bd
-            case imdr:
-                return getImdr() + getSocketStat(ScrollStat.ignoreTargetDEF); // ied
-            case damR:
-                return getDamR() + getfDamage() + getSocketStat(ScrollStat.incDAMr); // td
-            case statR:
-                return getStatR() + getfAllStat(); // as
-            case cuttable:
-                return getCuttable(); // sok
-            case exGradeOption:
-                return getExGradeOption();
-            case hyperUpgrade:
-                return getHyperUprade();
-        }
-        return 0;
+        return switch (stat) {
+            case tuc -> getTuc();
+            case cuc -> getCuc();
+            case iStr -> getiStr() + getfSTR() + getEnchantStat(EnchantStat.STR) + getSocketStat(ScrollStat.incSTR);
+            case iDex -> getiDex() + getfDEX() + getEnchantStat(EnchantStat.DEX) + getSocketStat(ScrollStat.incDEX);
+            case iInt -> getiInt() + getfINT() + getEnchantStat(EnchantStat.INT) + getSocketStat(ScrollStat.incINT);
+            case iLuk -> getiLuk() + getfLUK() + getEnchantStat(EnchantStat.LUK) + getSocketStat(ScrollStat.incLUK);
+            case iMaxHP -> getiMaxHp() + getfHP() + getEnchantStat(EnchantStat.MHP) + getSocketStat(ScrollStat.incMHP);
+            case iMaxMP -> getiMaxMp() + getfMP() + getEnchantStat(EnchantStat.MMP) + getSocketStat(ScrollStat.incMMP);
+            case iPAD -> getiPad() + getfATT() + getEnchantStat(EnchantStat.PAD) + getSocketStat(ScrollStat.incPAD);
+            case iMAD -> getiMad() + getfMATT() + getEnchantStat(EnchantStat.MAD) + getSocketStat(ScrollStat.incMAD);
+            case iPDD -> getiPDD() + getfDEF() + getEnchantStat(EnchantStat.PDD) + getSocketStat(ScrollStat.incPDD);
+            case iMDD -> getiMDD() + getfDEF() + getEnchantStat(EnchantStat.MDD) + getSocketStat(ScrollStat.incMDD);
+            case iACC -> getiAcc() + getEnchantStat(EnchantStat.ACC) + getSocketStat(ScrollStat.incACC);
+            case iEVA -> getiEva() + getEnchantStat(EnchantStat.EVA) + getSocketStat(ScrollStat.incEVA);
+            case iCraft -> getiCraft();
+            case iSpeed ->
+                    getiSpeed() + getfSpeed() + getEnchantStat(EnchantStat.SPEED) + getSocketStat(ScrollStat.incSpeed);
+            case iJump ->
+                    getiJump() + getfJump() + getEnchantStat(EnchantStat.JUMP) + getSocketStat(ScrollStat.incJump);
+            case attribute -> getAttribute();
+            case levelUpType -> getLevelUpType();
+            case level -> getLevel();
+            case exp -> getExp();
+            case durability -> getDurability();
+            case iuc -> getIuc(); // hammer
+            case iPvpDamage -> getiPvpDamage();
+            case iReduceReq -> (byte) (getiReduceReq() + getfLevel());
+            case specialAttribute -> getSpecialAttribute();
+            case durabilityMax -> getDurabilityMax();
+            case iIncReq -> getiIncReq();
+            case growthEnchant -> getGrowthEnchant(); // ygg
+            case psEnchant -> getPsEnchant(); // final strike
+            case bdr -> getBdr() + getfBoss() + getSocketStat(ScrollStat.boss); // bd
+            case imdr -> getImdr() + getSocketStat(ScrollStat.ignoreTargetDEF); // ied
+            case damR -> getDamR() + getfDamage() + getSocketStat(ScrollStat.incDAMr); // td
+            case statR -> getStatR() + getfAllStat(); // as
+            case cuttable -> getCuttable(); // sok
+            case exGradeOption -> getExGradeOption();
+            case hyperUpgrade -> getHyperUprade();
+        };
     }
 
     private boolean hasStat(EquipBaseStat ebs) {
@@ -1406,122 +1370,67 @@ public class Equip extends Item {
     }
 
     public long getBaseStat(EquipBaseStat equipBaseStat) {
-        switch (equipBaseStat) {
-            case tuc:
-                return getTuc();
-            case cuc:
-                return getCuc();
-            case iStr:
-                return getiStr();
-            case iDex:
-                return getiDex();
-            case iInt:
-                return getiInt();
-            case iLuk:
-                return getiLuk();
-            case iMaxHP:
-                return getiMaxHp();
-            case iMaxMP:
-                return getiMaxMp();
-            case iPAD:
-                return getiPad();
-            case iMAD:
-                return getiMad();
-            case iPDD:
-                return getiPDD();
-            case iMDD:
-                return getiMDD();
-            case iACC:
-                return getiAcc();
-            case iEVA:
-                return getiEva();
-            case iCraft:
-                return getiCraft();
-            case iSpeed:
-                return getiSpeed();
-            case iJump:
-                return getiJump();
-            case attribute:
-                return getAttribute();
-            case levelUpType:
-                return getLevelUpType();
-            case level:
-                return getLevel();
-            case exp:
-                return getExp();
-            case durability:
-                return getDurability();
-            case iuc:
-                return getIuc();
-            case iPvpDamage:
-                return getiPvpDamage();
-            case iReduceReq:
-                return getiReduceReq();
-            case specialAttribute:
-                return getSpecialAttribute();
-            case durabilityMax:
-                return getDurabilityMax();
-            case iIncReq:
-                return getiIncReq();
-            case growthEnchant:
-                return getGrowthEnchant();
-            case psEnchant:
-                return getPsEnchant();
-            case bdr:
-                return getBdr();
-            case imdr:
-                return getImdr();
-            case damR:
-                return getDamR();
-            case statR:
-                return getStatR();
-            case cuttable:
-                return getCuttable();
-            case exGradeOption:
-                return getExGradeOption();
-            case hyperUpgrade:
-                return getHyperUprade();
-            default:
-                return 0;
-        }
+        return switch (equipBaseStat) {
+            case tuc -> getTuc();
+            case cuc -> getCuc();
+            case iStr -> getiStr();
+            case iDex -> getiDex();
+            case iInt -> getiInt();
+            case iLuk -> getiLuk();
+            case iMaxHP -> getiMaxHp();
+            case iMaxMP -> getiMaxMp();
+            case iPAD -> getiPad();
+            case iMAD -> getiMad();
+            case iPDD -> getiPDD();
+            case iMDD -> getiMDD();
+            case iACC -> getiAcc();
+            case iEVA -> getiEva();
+            case iCraft -> getiCraft();
+            case iSpeed -> getiSpeed();
+            case iJump -> getiJump();
+            case attribute -> getAttribute();
+            case levelUpType -> getLevelUpType();
+            case level -> getLevel();
+            case exp -> getExp();
+            case durability -> getDurability();
+            case iuc -> getIuc();
+            case iPvpDamage -> getiPvpDamage();
+            case iReduceReq -> getiReduceReq();
+            case specialAttribute -> getSpecialAttribute();
+            case durabilityMax -> getDurabilityMax();
+            case iIncReq -> getiIncReq();
+            case growthEnchant -> getGrowthEnchant();
+            case psEnchant -> getPsEnchant();
+            case bdr -> getBdr();
+            case imdr -> getImdr();
+            case damR -> getDamR();
+            case statR -> getStatR();
+            case cuttable -> getCuttable();
+            case exGradeOption -> getExGradeOption();
+            case hyperUpgrade -> getHyperUprade();
+            default -> 0;
+        };
     }
 
     public long getBaseStatFlame(EquipBaseStat equipBaseStat) {
-        switch (equipBaseStat) {
-            case iStr:
-                return getfSTR();
-            case iDex:
-                return getfDEX();
-            case iInt:
-                return getfINT();
-            case iLuk:
-                return getfLUK();
-            case iMaxHP:
-                return getfHP();
-            case iMaxMP:
-                return getfMP();
-            case iPAD:
-                return getfATT();
-            case iMAD:
-                return getfMATT();
-            case iPDD:
-            case iMDD:
-                return getfDEF();
-            case iSpeed:
-                return getfSpeed();
-            case iJump:
-                return getfJump();
-            case statR:
-                return getfAllStat();
-            case bdr:
-                return getfBoss();
-            case damR:
-                return getfDamage();
-            case iReduceReq:
-                return getfLevel();
-            default:
-                return 0;
-        }
+        return switch (equipBaseStat) {
+            case iStr -> getfSTR();
+            case iDex -> getfDEX();
+            case iInt -> getfINT();
+            case iLuk -> getfLUK();
+            case iMaxHP -> getfHP();
+            case iMaxMP -> getfMP();
+            case iPAD -> getfATT();
+            case iMAD -> getfMATT();
+            case iPDD, iMDD -> getfDEF();
+            case iSpeed -> getfSpeed();
+            case iJump -> getfJump();
+            case statR -> getfAllStat();
+            case bdr -> getfBoss();
+            case damR -> getfDamage();
+            case iReduceReq -> getfLevel();
+            default -> 0;
+        };
     }
 
     public void setBaseStatFlame(EquipBaseStat equipBaseStat, int amount) {
@@ -1576,34 +1485,21 @@ public class Equip extends Item {
     }
 
     public long getEnchantmentStat(EquipBaseStat equipBaseStat) {
-        switch (equipBaseStat) {
-            case iStr:
-                return getEnchantStat(EnchantStat.STR);
-            case iDex:
-                return getEnchantStat(EnchantStat.DEX);
-            case iInt:
-                return getEnchantStat(EnchantStat.INT);
-            case iLuk:
-                return getEnchantStat(EnchantStat.LUK);
-            case iMaxHP:
-                return getEnchantStat(EnchantStat.MHP);
-            case iMaxMP:
-                return getEnchantStat(EnchantStat.MMP);
-            case iPAD:
-                return getEnchantStat(EnchantStat.PAD);
-            case iMAD:
-                return getEnchantStat(EnchantStat.MAD);
-            case iPDD:
-                return getEnchantStat(EnchantStat.PDD);
-            case iMDD:
-                return getEnchantStat(EnchantStat.MDD);
-            case iSpeed:
-                return getEnchantStat(EnchantStat.SPEED);
-            case iJump:
-                return getEnchantStat(EnchantStat.JUMP);
-            default:
-                return 0;
-        }
+        return switch (equipBaseStat) {
+            case iStr -> getEnchantStat(EnchantStat.STR);
+            case iDex -> getEnchantStat(EnchantStat.DEX);
+            case iInt -> getEnchantStat(EnchantStat.INT);
+            case iLuk -> getEnchantStat(EnchantStat.LUK);
+            case iMaxHP -> getEnchantStat(EnchantStat.MHP);
+            case iMaxMP -> getEnchantStat(EnchantStat.MMP);
+            case iPAD -> getEnchantStat(EnchantStat.PAD);
+            case iMAD -> getEnchantStat(EnchantStat.MAD);
+            case iPDD -> getEnchantStat(EnchantStat.PDD);
+            case iMDD -> getEnchantStat(EnchantStat.MDD);
+            case iSpeed -> getEnchantStat(EnchantStat.SPEED);
+            case iJump -> getEnchantStat(EnchantStat.JUMP);
+            default -> 0;
+        };
     }
 
     public void addStat(EquipBaseStat stat, int amount) {
@@ -1963,7 +1859,7 @@ public class Equip extends Item {
     // Gets ATT bonus by flame tier.
     public short getATTBonus(short tier) {
         if (ItemConstants.isWeapon(getItemId())) {
-            final double multipliers[] = isBossReward() ? ItemConstants.WEAPON_FLAME_MULTIPLIER_BOSS_WEAPON : ItemConstants.WEAPON_FLAME_MULTIPLIER;
+            final double[] multipliers = isBossReward() ? ItemConstants.WEAPON_FLAME_MULTIPLIER_BOSS_WEAPON : ItemConstants.WEAPON_FLAME_MULTIPLIER;
             Equip baseEquip = ItemData.getEquipById(getItemId());
             int att = Math.max(baseEquip.getiPad(), baseEquip.getiMad());
             return (short) Math.ceil(att * (multipliers[tier - 1] * getFlameLevel()) / 100.0);
@@ -2130,7 +2026,7 @@ public class Equip extends Item {
         int scrollID = scroll.getItemId();
         boolean boom = false;
         Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
-        if (vals.size() > 0) {
+        if (!vals.isEmpty()) {
             boolean recover = vals.getOrDefault(ScrollStat.recover, 0) != 0;
             if (getBaseStat(EquipBaseStat.tuc) <= 0 && !recover) {
                 chr.dispose();

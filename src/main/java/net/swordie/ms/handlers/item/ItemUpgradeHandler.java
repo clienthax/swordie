@@ -14,7 +14,6 @@ import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.constants.QuestConstants;
 import net.swordie.ms.enums.*;
-import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.handlers.header.OutHeader;
@@ -61,7 +60,7 @@ public class ItemUpgradeHandler {
         }
 
         Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(flame.getItemId()).getScrollStats();
-        if (vals.size() > 0) {
+        if (!vals.isEmpty()) {
             int reqEquipLevelMax = vals.getOrDefault(ScrollStat.reqEquipLevelMax, 250);
 
             if (equip.getrLevel() + equip.getiIncReq() > reqEquipLevelMax) {
@@ -146,7 +145,7 @@ public class ItemUpgradeHandler {
 
         Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(hammer.getItemId()).getScrollStats();
 
-        if (vals.size() > 0) {
+        if (!vals.isEmpty()) {
             if (equip.getIuc() >= maxHammers) {
                 chr.getOffenseManager().addOffense(String.format("Character %d tried to use hammer (id %d) an invalid equip (id %d)",
                         chr.getId(), hammerID, equip.getItemId()));
@@ -265,7 +264,7 @@ public class ItemUpgradeHandler {
         int scrollID = scroll.getItemId();
         boolean success = true;
         Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
-        if (vals.size() > 0) {
+        if (!vals.isEmpty()) {
             int chance = vals.getOrDefault(ScrollStat.success, 100);
             success = Util.succeedProp(chance);
             boolean chaos = vals.containsKey(ScrollStat.randStat);

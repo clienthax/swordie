@@ -64,7 +64,7 @@ public class DawnWarrior extends Noblesse {
     public static final int GLORY_OF_THE_GUARDIANS_DW = 11121053;
 
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             ELEMENTAL_HARMONY_STR,
             IMPERIAL_RECALL,
             ELEMENTAL_EXPERT,
@@ -74,7 +74,7 @@ public class DawnWarrior extends Noblesse {
             ELEMENTAL_SHIFT2
     };
 
-    private int[] buffs = new int[] {
+    private final int[] buffs = new int[] {
             SOUL_ELEMENT,
             SOUL_SPEED,
             FALLING_MOON,
@@ -238,7 +238,7 @@ public class DawnWarrior extends Noblesse {
             }
             chr.heal(heal);
         }
-        willOfSteelTimer = EventManager.addEvent(() -> willOfSteel(), 4, TimeUnit.SECONDS);
+        willOfSteelTimer = EventManager.addEvent(this::willOfSteel, 4, TimeUnit.SECONDS);
     }
 
 
@@ -252,7 +252,7 @@ public class DawnWarrior extends Noblesse {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
@@ -442,8 +442,7 @@ public class DawnWarrior extends Noblesse {
                         rect = rect.moveRight();
                     }
                     for(Life life : chr.getField().getLifesInRect(rect)) {
-                        if(life instanceof Mob && ((Mob) life).getHp() > 0) {
-                            Mob mob = (Mob) life;
+                        if(life instanceof Mob mob && ((Mob) life).getHp() > 0) {
                             MobTemporaryStat mts = mob.getTemporaryStat();
                             if(Util.succeedProp(si.getValue(prop, slv))) {
                                 o1.nOption = -(si.getValue(v, slv));

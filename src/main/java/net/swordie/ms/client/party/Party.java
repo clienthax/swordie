@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class Party implements Encodable {
     private int id;
-    private PartyMember[] partyMembers = new PartyMember[6];
+    private final PartyMember[] partyMembers = new PartyMember[6];
     private boolean appliable;
     private String name;
     private int partyLeaderID;

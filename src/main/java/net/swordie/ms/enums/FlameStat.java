@@ -30,7 +30,7 @@ public enum FlameStat {
     Damage(19),
     LevelReduction(20);
 
-    private int val;
+    private final int val;
 
     FlameStat(int val) {
         this.val = val;

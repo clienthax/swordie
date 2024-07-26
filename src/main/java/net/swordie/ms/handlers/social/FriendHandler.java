@@ -2,7 +2,6 @@ package net.swordie.ms.handlers.social;
 
 import net.swordie.ms.client.Account;
 import net.swordie.ms.client.Client;
-import net.swordie.ms.client.User;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.client.friend.Friend;
 import net.swordie.ms.client.friend.FriendFlag;
@@ -259,8 +258,8 @@ public class FriendHandler {
                 chr.write(WvsContext.friendResult(new UpdateFriendResult(friend)));
                 break;
             default:
-                chr.chatMessage(String.format("Unhandled friend request type %s", ft.toString()));
-                log.error(String.format("Unhandled friend request type %s", ft.toString()));
+                chr.chatMessage(String.format("Unhandled friend request type %s", ft));
+                log.error(String.format("Unhandled friend request type %s", ft));
                 break;
         }
     }

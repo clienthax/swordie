@@ -9,7 +9,7 @@ import net.swordie.ms.connection.OutPacket;
  */
 public class PartyResult implements Encodable {
 
-    private PartyType type;
+    private final PartyType type;
     private Party party;
     private PartyMember member;
     private Char chr;

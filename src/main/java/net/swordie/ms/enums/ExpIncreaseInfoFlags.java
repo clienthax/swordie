@@ -30,7 +30,7 @@ public enum ExpIncreaseInfoFlags {
     MobKillBonusExp(0x2000000),
     LiveEventBonusExp(0x4000000);
 
-    private int val;
+    private final int val;
 
     ExpIncreaseInfoFlags(int val) {
         this.val = val;

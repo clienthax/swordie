@@ -1265,7 +1265,7 @@ public enum OutHeader {
     ;
 
 
-    private static List<OutHeader> spam = Arrays.asList(
+    private static final List<OutHeader> spam = Arrays.asList(
             ALIVE_REQ,
             PRIVATE_SERVER_PACKET,
             MOB_CONTROL_ACK,
@@ -1292,7 +1292,7 @@ public enum OutHeader {
             MESSAGE
     );
 
-    private short value;
+    private final short value;
 
     OutHeader(int value) {
         this.value = (short) value;

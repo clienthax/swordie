@@ -47,7 +47,7 @@ public enum WeaponType {
     ArmCannon(58),
         ;
 
-    private int val;
+    private final int val;
 
     WeaponType(int val) {
         this.val = val;

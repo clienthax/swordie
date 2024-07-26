@@ -11,7 +11,7 @@ import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Util;
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,13 +36,13 @@ public class Quest {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "questID")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    private List<QuestProgressRequirement> progressRequirements;
+    private final List<QuestProgressRequirement> progressRequirements;
 
     @Convert(converter = FileTimeConverter.class)
     private FileTime completedTime;
 
     @Transient
-    private Map<String, String> properties = new HashMap<>();
+    private final Map<String, String> properties = new HashMap<>();
 
     public Quest() {
         progressRequirements = new ArrayList<>();

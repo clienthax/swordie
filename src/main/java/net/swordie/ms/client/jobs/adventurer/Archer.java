@@ -103,11 +103,11 @@ public class Archer extends Beginner {
     private QuiverCartridge quiverCartridge;
     private long lastArmorBreak = Long.MIN_VALUE;
 
-    private int[] addedSkills = new int[] {
+    private final int[] addedSkills = new int[] {
             MAPLE_RETURN,
     };
 
-    private int[] buffs = new int[]{
+    private final int[] buffs = new int[]{
             BOW_BOOSTER,
             XBOW_BOOSTER,
             SOUL_ARROW_BOW,
@@ -413,7 +413,7 @@ public class Archer extends Beginner {
         POISON(2),
         MAGIC(3),
         ;
-        private byte val;
+        private final byte val;
 
         QCType(int val) {
             this.val = (byte) val;
@@ -430,7 +430,7 @@ public class Archer extends Beginner {
         private int poison; // 2
         private int magic; // 3
         private int type;
-        private Char chr;
+        private final Char chr;
 
         public QuiverCartridge(Char chr) {
             blood = getMaxNumberOfArrows(QCType.BLOOD.getVal());
@@ -514,7 +514,7 @@ public class Archer extends Beginner {
         Skill skill = chr.getSkill(attackInfo.skillId);
         int skillID = 0;
         SkillInfo si = null;
-        boolean hasHitMobs = attackInfo.mobAttackInfo.size() > 0;
+        boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
             si = SkillData.getSkillInfoById(skill.getSkillId());
