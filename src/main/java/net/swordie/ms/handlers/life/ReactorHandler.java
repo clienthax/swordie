@@ -8,7 +8,7 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.Reactor;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.ReactorData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ReactorInfo;
 import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.world.field.Field;
@@ -30,11 +30,11 @@ public class ReactorHandler {
         byte type = inPacket.decodeByte();
         Life life = chr.getField().getLifeByObjectID(objID);
         if (!(life instanceof Reactor reactor)) {
-            log.error("Could not find reactor with objID " + objID);
+            log.error("Could not find reactor with objID {}", objID);
             return;
         }
         int templateID = reactor.getTemplateId();
-        ReactorInfo ri = ReactorData.getReactorInfoByID(templateID);
+        ReactorInfo ri = Loaders.getInstance().getReactorData().getReactorInfoByID(templateID);
         String action = ri.getAction();
         if (chr.getScriptManager().isActive(ScriptType.Reactor)
                 && chr.getScriptManager().getParentIDByScriptType(ScriptType.Reactor) == templateID) {
@@ -55,11 +55,11 @@ public class ReactorHandler {
 
         Life life = chr.getField().getLifeByObjectID(objID);
         if (!(life instanceof Reactor reactor)) {
-            log.error("Could not find reactor with objID " + objID);
+            log.error("Could not find reactor with objID {}", objID);
             return;
         }
         int templateID = reactor.getTemplateId();
-        ReactorInfo ri = ReactorData.getReactorInfoByID(templateID);
+        ReactorInfo ri = Loaders.getInstance().getReactorData().getReactorInfoByID(templateID);
         String action = ri.getAction();
         if (action.isEmpty()) {
             action = templateID + "action";

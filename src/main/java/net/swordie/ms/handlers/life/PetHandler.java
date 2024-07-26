@@ -20,7 +20,7 @@ import net.swordie.ms.life.drop.Drop;
 import net.swordie.ms.life.movement.MovementInfo;
 import net.swordie.ms.life.pet.Pet;
 import net.swordie.ms.life.pet.PetSkill;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.world.field.Field;
 import org.apache.logging.log4j.LogManager;
@@ -172,7 +172,7 @@ public class PetHandler {
     public static void handleUserRegisterPetAutoBuffRequest(Char chr, InPacket inPacket) {
         int petIdx = inPacket.decodeInt();
         int skillID = inPacket.decodeInt();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         Skill skill = chr.getSkill(skillID);
         Pet pet = chr.getPetByIdx(petIdx);
         int coolTime = si == null ? 0 : si.getValue(SkillStat.cooltime, 1);

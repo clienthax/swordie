@@ -3,8 +3,8 @@ package net.swordie.ms.life;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.drop.DropInfo;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ReactorInfo;
-import net.swordie.ms.loaders.ReactorData;
 import net.swordie.ms.connection.packet.ReactorPool;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.world.field.Field;
@@ -83,7 +83,7 @@ public class Reactor extends Life {
     }
 
     public void init() {
-        ReactorInfo ri = ReactorData.getReactorInfoByID(getTemplateId());
+        ReactorInfo ri = Loaders.getInstance().getReactorData().getReactorInfoByID(getTemplateId());
         setState((byte) 0);
         setName(ri.getViewName());
         setPosition(getHomePosition());
@@ -148,7 +148,7 @@ public class Reactor extends Life {
                 fhID = fhBelow.getId();
             }
         }
-        Set<DropInfo> dropInfoSet = ReactorData.getReactorInfoByID(getTemplateId()).getDrops();
+        Set<DropInfo> dropInfoSet = Loaders.getInstance().getReactorData().getReactorInfoByID(getTemplateId()).getDrops();
         getField().drop(dropInfoSet, getField().getFootholdById(fhID), getPosition(), ownerID, 100,
                 100);
     }

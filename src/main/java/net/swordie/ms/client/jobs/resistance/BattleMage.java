@@ -22,7 +22,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -108,7 +108,7 @@ public class BattleMage extends Citizen {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -127,7 +127,7 @@ public class BattleMage extends Citizen {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -292,7 +292,7 @@ public class BattleMage extends Citizen {
     public void spawnDeath(int skillID, byte slv) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         Field field = c.getChr().getField();
         death = Summon.getSummonBy(c.getChr(), skillID, slv);
         death.setFlyMob(true);
@@ -347,7 +347,7 @@ public class BattleMage extends Citizen {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -453,7 +453,7 @@ public class BattleMage extends Citizen {
 
     private int doCondemnationAttack(int killCount) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        if(lastCondemnationAttack + (getCondemnationCooldown() * 1000) < System.currentTimeMillis()) {
+        if(lastCondemnationAttack + (getCondemnationCooldown() * 1000L) < System.currentTimeMillis()) {
             spawnDeath(getCondemnationSkill().getSkillId(), (byte)1);
             death = tsm.getOption(IndieEmpty).summon;
             chr.write(Summoned.summonedAssistAttackRequest(death));
@@ -467,7 +467,7 @@ public class BattleMage extends Citizen {
     private int getCondemnationCooldown() {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = getCondemnationSkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 
         // Master of Death Buff
         if(tsm.getOptByCTSAndSkill(AttackCountX, MASTER_OF_DEATH) != null) {
@@ -480,7 +480,7 @@ public class BattleMage extends Citizen {
     private int getCondemnationKillReq() {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = getCondemnationSkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 
         // Master of Death Buff
         if(tsm.getOptByCTSAndSkill(AttackCountX, MASTER_OF_DEATH) != null) {
@@ -516,7 +516,7 @@ public class BattleMage extends Citizen {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         int duration = 1000 * si.getValue(subTime, slv);
         if ((tsm.getOptByCTSAndSkill(BMageAura, DRAINING_AURA) != null) && (drainAuraCD + duration < System.currentTimeMillis())) {
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -535,16 +535,13 @@ public class BattleMage extends Citizen {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
             if (mob == null) {
                 continue;
             }
             int totaldmg = Arrays.stream(mai.damages).sum();
-            if(mob == null) {
-                return;
-            }
             if (totaldmg >= mob.getHp()) {
                 int maxHP = chr.getMaxHP();
                 int healingrate = si.getValue(x, slv);
@@ -558,7 +555,7 @@ public class BattleMage extends Citizen {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(WEAKENING_AURA);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o = new Option();
         int delay = si.getValue(y, slv);
         if (tsm.getOptByCTSAndSkill(BMageAura, skill.getSkillId()) != null) {
@@ -581,7 +578,7 @@ public class BattleMage extends Citizen {
 
     @Override
     public int getFinalAttackSkill() {
-        SkillInfo si = SkillData.getSkillInfoById(DARK_GENESIS_FA);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DARK_GENESIS_FA);
         if(chr.getSkill(DARK_GENESIS) != null) {
             byte slv = (byte) chr.getSkill(DARK_GENESIS).getCurrentLevel();
             if (Util.succeedProp(si.getValue(prop, slv))) {
@@ -603,7 +600,7 @@ public class BattleMage extends Citizen {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {

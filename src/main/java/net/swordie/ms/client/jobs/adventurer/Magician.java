@@ -27,8 +27,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.FieldData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -208,7 +207,7 @@ public class Magician extends Beginner {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -227,7 +226,7 @@ public class Magician extends Beginner {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -402,7 +401,7 @@ public class Magician extends Beginner {
                     List<PartyMember> eligblePartyMemberList = field.getPartyMembersInRect(chr, rect).stream().
                             filter(pml -> pml.getChr().getId() != chr.getId() &&
                                     pml.getChr().getHP() <= 0).
-                            collect(Collectors.toList());
+                            toList();
                     for (PartyMember partyMember : eligblePartyMemberList) {
                         Char partyChr = partyMember.getChr();
                         partyChr.healHPMP();
@@ -537,7 +536,7 @@ public class Magician extends Beginner {
             return;
         }
         Skill skill = getBlessedSkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -599,7 +598,7 @@ public class Magician extends Beginner {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(skillID);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         int rate = 0;
         int maxHP = chr.getMaxHP();
         int healrate = 0;
@@ -621,7 +620,7 @@ public class Magician extends Beginner {
                 break;
         }
         if(tsm.hasStat(VengeanceOfAngel)) {
-            SkillInfo hsi = SkillData.getSkillInfoById(RIGHTEOUSLY_INDIGNANT);
+            SkillInfo hsi = Loaders.getInstance().getSkillData().getSkillInfoById(RIGHTEOUSLY_INDIGNANT);
             healrate = (int) (healrate / ((double) 100 / (hsi.getValue(hp, 1))));
         }
         return healrate;
@@ -643,7 +642,7 @@ public class Magician extends Beginner {
         Option o1 = new Option();
         Skill skill = chr.getSkill(getInfinitySkill());
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         infinityStack++;
         if(tsm.hasStat(Infinity)) {
             o1.nValue = infinityStack * si.getValue(damage, slv);
@@ -688,7 +687,7 @@ public class Magician extends Beginner {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -928,13 +927,13 @@ public class Magician extends Beginner {
 
     private void createMegiddoFlameForceAtom() {
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById(MEGIDDO_FLAME);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(MEGIDDO_FLAME);
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if (!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> lifes = field.getMobsInRect(rect);
-        if(lifes.size() <= 0) {
+        if(lifes.isEmpty()) {
             return;
         }
         Mob life = Util.getRandomFromCollection(lifes);
@@ -950,7 +949,7 @@ public class Magician extends Beginner {
     }
 
     private void recreateMegiddoFlameForceAtom(int skillID, byte slv, AttackInfo attackInfo) {
-        SkillInfo si = SkillData.getSkillInfoById(MEGIDDO_FLAME);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(MEGIDDO_FLAME);
         int anglenum = new Random().nextInt(360);
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -978,7 +977,7 @@ public class Magician extends Beginner {
         if (skill == null) {
             return;
         }
-        SkillInfo arcaneAimInfo = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo arcaneAimInfo = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         int arcaneAimProp = arcaneAimInfo.getValue(prop, slv);
         if (!Util.succeedProp(arcaneAimProp)) {
@@ -1023,12 +1022,12 @@ public class Magician extends Beginner {
     }
 
     private void applyIgniteOnMob(AttackInfo attackInfo, TemporaryStatManager tsm) {
-        SkillInfo si = SkillData.getSkillInfoById(attackInfo.skillId);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(attackInfo.skillId);
         if (si == null || !si.getElemAttr().contains("f") || attackInfo.skillId == IGNITE || attackInfo.skillId == IGNITE_AA) {
             return;
         }
         if (tsm.hasStat(WizardIgnite)) {
-            SkillInfo igniteInfo = SkillData.getSkillInfoById(IGNITE);
+            SkillInfo igniteInfo = Loaders.getInstance().getSkillData().getSkillInfoById(IGNITE);
             Skill skill = chr.getSkill(IGNITE);
             byte slv = (byte) skill.getCurrentLevel();
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -1070,7 +1069,7 @@ public class Magician extends Beginner {
 
     private void fpBurnedInfo(Mob mob, Skill attackSkill) {
         int attackSlv = attackSkill.getCurrentLevel();
-        int biDuration = SkillData.getSkillInfoById(attackSkill.getSkillId()).getValue(dotTime, attackSlv);
+        int biDuration = Loaders.getInstance().getSkillData().getSkillInfoById(attackSkill.getSkillId()).getValue(dotTime, attackSlv);
         MobTemporaryStat mts = mob.getTemporaryStat();
         mts.createAndAddBurnedInfo(chr, attackSkill);
         setFerventDrainStack(getFerventDrainStack() + 1);
@@ -1088,17 +1087,17 @@ public class Magician extends Beginner {
             return;
         }
         Skill skill = chr.getSkill(getElementalDrainSkill());
-        SkillInfo edi = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo edi = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         Option o1 = new Option();
 
-        o.nOption = (getFerventDrainStack() > 5 ? 5 : getFerventDrainStack());
+        o.nOption = (Math.min(getFerventDrainStack(), 5));
         o.rOption = ELEMENTAL_DRAIN;
         tsm.putCharacterStatValue(DotBasedBuff, o);
 
-        o1.nOption = ( (getFerventDrainStack() > 5 ? 5 : getFerventDrainStack()) * edi.getValue(x, slv) );
+        o1.nOption = ( (Math.min(getFerventDrainStack(), 5)) * edi.getValue(x, slv) );
         o1.rOption = ELEMENTAL_DRAIN;
         tsm.putCharacterStatValue(DamR, o1);
         if(getFerventDrainStack() <= 0) {
@@ -1138,7 +1137,7 @@ public class Magician extends Beginner {
     @Override
     public int getFinalAttackSkill() {
         if(JobConstants.isFirePoison(chr.getJob())) {
-            SkillInfo si = SkillData.getSkillInfoById(METEOR_SHOWER_FA);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(METEOR_SHOWER_FA);
             if(chr.getSkill(METEOR_SHOWER) != null) {
                 byte slv = (byte) chr.getSkill(METEOR_SHOWER).getCurrentLevel();
                 if(Util.succeedProp(si.getValue(prop, slv))) {
@@ -1148,7 +1147,7 @@ public class Magician extends Beginner {
 
         }
         else if(JobConstants.isIceLightning(chr.getJob())) {
-            SkillInfo si = SkillData.getSkillInfoById(BLIZZARD_FA);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(BLIZZARD_FA);
             if(chr.getSkill(BLIZZARD) != null) {
                 byte slv = (byte) chr.getSkill(BLIZZARD).getCurrentLevel();
                 if(Util.succeedProp(si.getValue(prop, slv))) {
@@ -1171,7 +1170,7 @@ public class Magician extends Beginner {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         changeBlessedCount();
         if (isBuff(skillID)) {
@@ -1244,11 +1243,11 @@ public class Magician extends Beginner {
                         }
                     }
                     break;
-                case DISPEL:
+                case DISPEL, HEROS_WILL_FP, HEROS_WILL_IL, HEROS_WILL_BISH:
                     tsm.removeAllDebuffs();
                     break;
                 case MYSTIC_DOOR:
-                    Field townField = FieldData.getFieldById(chr.getField().getReturnMap());
+                    Field townField = Loaders.getInstance().getFieldData().getFieldById(chr.getField().getReturnMap());
                     int x = townField.getPortalByName("tp").getX();
                     int y = townField.getPortalByName("tp").getY();
                     Position townPosition = new Position(x, y); // Grabs the Portal Co-ordinates for the TownPortalPoint
@@ -1261,18 +1260,13 @@ public class Magician extends Beginner {
                     townPortal.spawnTownPortal();
                     chr.dispose();
                     break;
-                case HEROS_WILL_FP:
-                case HEROS_WILL_IL:
-                case HEROS_WILL_BISH:
-                    tsm.removeAllDebuffs();
-                    break;
             }
         }
     }
 
     private void createChillStepAA() {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo chillingStepInfo = SkillData.getSkillInfoById(CHILLING_STEP);
+        SkillInfo chillingStepInfo = Loaders.getInstance().getSkillData().getSkillInfoById(CHILLING_STEP);
         int slv = chr.getSkill(CHILLING_STEP).getCurrentLevel();
         if (tsm.hasStat(ChillingStep) && Util.succeedProp(chillingStepInfo.getValue(prop, slv))) {
             for (int i = 0; i < 168; i += 56) {
@@ -1300,7 +1294,7 @@ public class Magician extends Beginner {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if(tsm.hasStat(MagicGuard)) {
             Skill skill = chr.getSkill(MAGIC_GUARD);
-            SkillInfo si = SkillData.getSkillInfoById(MAGIC_GUARD);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(MAGIC_GUARD);
             int dmgPerc = si.getValue(x, skill.getCurrentLevel());
             int dmg = hitInfo.hpDamage;
             int mpDmg = (int) (dmg * (dmgPerc / 100D));
@@ -1324,7 +1318,7 @@ public class Magician extends Beginner {
         if(chr.hasSkill(ELEMENTAL_ADAPTATION_IL) && tsm.getOptByCTSAndSkill(AntiMagicShell, ELEMENTAL_ADAPTATION_IL) != null) {
             if(tsm.getOption(AntiMagicShell).bOption == 0) {
                 Skill skill = chr.getSkill(ELEMENTAL_ADAPTATION_IL);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
 
                 tsm.removeStatsBySkill(skill.getSkillId());
@@ -1359,7 +1353,7 @@ public class Magician extends Beginner {
         Option o = new Option();
         Skill skill = chr.getSkill(ELEMENTAL_ADAPTATION_FP);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         int proc = si.getValue(prop, slv);
 
         int stack = tsm.getOption(AntiMagicShell).nOption;

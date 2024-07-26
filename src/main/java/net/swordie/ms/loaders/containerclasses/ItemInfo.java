@@ -4,7 +4,7 @@ import net.swordie.ms.client.character.items.Item;
 import net.swordie.ms.enums.InvType;
 import net.swordie.ms.enums.ScrollStat;
 import net.swordie.ms.enums.SpecStat;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 
 import java.util.*;
 
@@ -332,7 +332,7 @@ public class ItemInfo {
         double rand = new Random().nextDouble() * 100 + 1;
         for (ItemRewardInfo iri : iris) {
             if (rand <= iri.getProb()) {
-                Item item = ItemData.getItemDeepCopy(iri.getItemID());
+                Item item = Loaders.getInstance().getItemData().getItemDeepCopy(iri.getItemID());
                 item.setQuantity(iri.getCount());
                 return item;
             }

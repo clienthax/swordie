@@ -21,7 +21,7 @@ import net.swordie.ms.connection.packet.UserRemote;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.enums.*;
 import net.swordie.ms.handlers.EventManager;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.world.field.Field;
 import org.apache.logging.log4j.LogManager;
@@ -203,7 +203,7 @@ public class Summon extends Life {
     }
 
     public static Summon getSummonBy(Char chr, int skillID, byte slv) {
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         Summon summon = new Summon(-1);
         summon.setChr(chr);
         summon.setSkillID(skillID);
@@ -240,7 +240,7 @@ public class Summon extends Life {
                 .filter(s -> s instanceof Summon &&
                         ((Summon) s).getChr() == chr &&
                         ((Summon) s).getSkillID() == Kanna.KISHIN_SHOUKAN)
-                .collect(Collectors.toList());
+                .toList();
         for(Life life : oldKishins) {
             field.removeLife(life.getObjectId(), false);
         }

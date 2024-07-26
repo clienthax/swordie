@@ -17,7 +17,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 
 import java.util.Arrays;
@@ -105,7 +105,7 @@ public class Blaster extends Citizen {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -124,7 +124,7 @@ public class Blaster extends Citizen {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -189,7 +189,7 @@ public class Blaster extends Citizen {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -207,7 +207,7 @@ public class Blaster extends Citizen {
                     addAmmo(chr.hasSkill(ADVANCED_CHARGE_MASTERY) ? 2 : 1);
                 }
                 int realSkillId = skillID == BOBBING_CHARGED ? BOBBING : WEAVING;
-                si = SkillData.getSkillInfoById(realSkillId);
+                si = Loaders.getInstance().getSkillData().getSkillInfoById(realSkillId);
                 skill = chr.getSkill(realSkillId);
                 o1.nOption = si.getValue(w, skill.getCurrentLevel());
                 o1.rOption = realSkillId;
@@ -219,7 +219,7 @@ public class Blaster extends Citizen {
             case HAMMER_SMASH_CHARGE:
                 if (chr.hasSkill(CHARGE_MASTERY) && getAmmo() > 0 && getAmmo() < getMaxAmmo())
                     addAmmo(chr.hasSkill(ADVANCED_CHARGE_MASTERY) ? 2 : 1);
-                SkillInfo hmc = SkillData.getSkillInfoById(HAMMER_SMASH);
+                SkillInfo hmc = Loaders.getInstance().getSkillData().getSkillInfoById(HAMMER_SMASH);
                 AffectedArea hmci = AffectedArea.getPassiveAA(chr, HAMMER_SMASH, (byte) slv);
                 hmci.setMobOrigin((byte) 0);
                 hmci.setPosition(chr.getPosition());
@@ -244,7 +244,7 @@ public class Blaster extends Citizen {
                 if (getGauge() < 3 || tsm.hasStat(RWOverHeat)) {
                     return;
                 }
-                si = SkillData.getSkillInfoById(BUNKER_BUSTER_EXPLOSION_4);
+                si = Loaders.getInstance().getSkillData().getSkillInfoById(BUNKER_BUSTER_EXPLOSION_4);
                 o1.nOption = si.getValue(v2, 1);
                 o1.rOption = BUNKER_BUSTER_EXPLOSION_4;
                 o1.tOption = si.getValue(time, 1);
@@ -390,7 +390,7 @@ public class Blaster extends Citizen {
         if (!chr.hasSkill(COMBO_TRAINING)) {
             return;
         }
-        SkillInfo chargeInfo = SkillData.getSkillInfoById(COMBO_TRAINING);
+        SkillInfo chargeInfo = Loaders.getInstance().getSkillData().getSkillInfoById(COMBO_TRAINING);
         int amount = 1;
         if (tsm.hasStat(RWCombination)) {
             amount = tsm.getOption(RWCombination).nOption;
@@ -415,7 +415,7 @@ public class Blaster extends Citizen {
             o1.tTerm = 10;
             tsm.putCharacterStatValue(IndieBooster, o1);
         }
-        chargeInfo = SkillData.getSkillInfoById(COMBO_TRAINING_II);
+        chargeInfo = Loaders.getInstance().getSkillData().getSkillInfoById(COMBO_TRAINING_II);
         Option o2 = new Option();
         o2.nOption = chr.hasSkill(COMBO_TRAINING_II) ? (3 + (chr.getSkillLevel(COMBO_TRAINING_II) / 10)) * amount : chr.getSkillLevel(COMBO_TRAINING) / 3 * amount; //diff calculation depends if player has combo training 2
         o2.rOption = chargeInfo.getCurrentLevel();
@@ -433,12 +433,6 @@ public class Blaster extends Citizen {
         tsm.sendSetStatPacket();
     }
 
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
-
 
     // Skill related methods -------------------------------------------------------------------------------------------
 
@@ -450,7 +444,7 @@ public class Blaster extends Citizen {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -494,7 +488,7 @@ public class Blaster extends Citizen {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (chr.hasSkill(BLAST_SHIELD) && hitInfo.hpDamage > 0 && !tsm.hasStat(RWBarrier)) {
             Skill shieldSkill = getBlastShieldSkill();
-            SkillInfo shieldInfo = SkillData.getSkillInfoById(shieldSkill.getSkillId());
+            SkillInfo shieldInfo = Loaders.getInstance().getSkillData().getSkillInfoById(shieldSkill.getSkillId());
             int amount = Math.min(hitInfo.hpDamage * shieldInfo.getValue(x, shieldSkill.getCurrentLevel()) / 100 + 1, chr.getMaxHP());
             putOnShield(amount);
         }
@@ -521,7 +515,7 @@ public class Blaster extends Citizen {
             return;
         }
         Skill shieldSkill = getBlastShieldSkill();
-        SkillInfo si = SkillData.getSkillInfoById(shieldSkill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(shieldSkill.getSkillId());
         int oldShield = tsm.getOption(RWBarrier).nOption;
         int newShield = (oldShield * si.getValue(y, shieldSkill.getCurrentLevel()) / 100) - si.getValue(z, shieldSkill.getCurrentLevel());
         if (newShield <= 0) {

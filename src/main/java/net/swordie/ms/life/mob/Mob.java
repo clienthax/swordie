@@ -26,9 +26,7 @@ import net.swordie.ms.life.drop.Drop;
 import net.swordie.ms.life.drop.DropInfo;
 import net.swordie.ms.life.mob.skill.MobSkill;
 import net.swordie.ms.life.mob.skill.ShootingMoveStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.MobData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -1280,10 +1278,10 @@ public class Mob extends Life {
             if (field.getKilledElites() >= GameConstants.ELITE_BOSS_REQUIRED_KILLS) {
                 field.setKilledElites(field.getKilledElites() % GameConstants.ELITE_BOSS_REQUIRED_KILLS);
                 int bossTemplate = Util.getRandomFromCollection(GameConstants.ELITE_BOSS_TEMPLATES);
-                Mob mob = MobData.getMobDeepCopyById(bossTemplate);
+                Mob mob = Loaders.getInstance().getMobData().getMobDeepCopyById(bossTemplate);
                 mob.setEliteType(3);
                 mob.setNotRespawnable(true);
-                mob.setMaxHp(MobData.getMobDeepCopyById(getTemplateId()).getMaxHp() * GameConstants.ELITE_BOSS_HP_RATE);
+                mob.setMaxHp(Loaders.getInstance().getMobData().getMobDeepCopyById(getTemplateId()).getMaxHp() * GameConstants.ELITE_BOSS_HP_RATE);
                 mob.setHp(mob.getMaxHp());
                 mob.setHomeFoothold(getCurFoodhold().deepCopy());
                 mob.setCurFoodhold(getCurFoodhold().deepCopy());
@@ -1366,11 +1364,7 @@ public class Mob extends Life {
         if (getDamageDone().containsKey(chr)) {
             cur = getDamageDone().get(chr);
         }
-        if (damage <= getHp()) {
-            cur += damage;
-        } else {
-            cur += getHp();
-        }
+        cur += Math.min(damage, getHp());
         getDamageDone().put(chr, cur);
     }
 
@@ -1488,7 +1482,7 @@ public class Mob extends Life {
         Field field = chr.getField();
         Position position = origin.getPosition();
 
-        Mob copy = MobData.getMobDeepCopyById(origin.getTemplateId());
+        Mob copy = Loaders.getInstance().getMobData().getMobDeepCopyById(origin.getTemplateId());
         copy.setSplit(true);
         copy.setPosition(position);
         copy.setHp(origin.getHp());
@@ -1539,7 +1533,7 @@ public class Mob extends Life {
 
     private void doRevive() {
         for (int reviveTemplateID : getRevives()) {
-            Mob mob = MobData.getMobDeepCopyById(reviveTemplateID);
+            Mob mob = Loaders.getInstance().getMobData().getMobDeepCopyById(reviveTemplateID);
             mob.setNotRespawnable(true);
             mob.setPosition(getPosition());
             getField().spawnLife(mob, null);
@@ -1620,7 +1614,7 @@ public class Mob extends Life {
     }
 
     public void spawnEliteVersion() {
-        Mob elite = MobData.getMobDeepCopyById(getTemplateId());
+        Mob elite = Loaders.getInstance().getMobData().getMobDeepCopyById(getTemplateId());
         elite.setHomePosition(getPosition().deepCopy());
         elite.setPosition(getPosition().deepCopy());
         elite.setCurFoodhold(getCurFoodhold().deepCopy());
@@ -1633,7 +1627,7 @@ public class Mob extends Life {
         long newExp = (long) (eliteInfo.getRight() * elite.getForcedMobStat().getExp());
         elite.setEliteType(1);
         elite.setEliteGrade(eliteGrade);
-        Map<Integer, Integer> possibleSkillsMap = SkillData.getEliteMobSkillsByGrade(eliteGrade);
+        Map<Integer, Integer> possibleSkillsMap = Loaders.getInstance().getSkillData().getEliteMobSkillsByGrade(eliteGrade);
         List<Tuple<Integer, Integer>> possibleSkills = new ArrayList<>();
         possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple(k, v)));
         for (int i = 0; i < GameConstants.ELITE_MOB_SKILL_COUNT; i++) {
@@ -1649,7 +1643,7 @@ public class Mob extends Life {
     }
 
     public void spawnEliteMobRuneOfDarkness() {
-        Mob elite = MobData.getMobDeepCopyById(getTemplateId());
+        Mob elite = Loaders.getInstance().getMobData().getMobDeepCopyById(getTemplateId());
         elite.setHomePosition(getPosition().deepCopy());
         elite.setPosition(getPosition().deepCopy());
         elite.setCurFoodhold(getCurFoodhold().deepCopy());
@@ -1662,7 +1656,7 @@ public class Mob extends Life {
         long newExp = (long) (eliteInfo.getRight() * elite.getForcedMobStat().getExp());
         elite.setEliteType(1);
         elite.setEliteGrade(eliteGrade);
-        Map<Integer, Integer> possibleSkillsMap = SkillData.getEliteMobSkillsByGrade(eliteGrade);
+        Map<Integer, Integer> possibleSkillsMap = Loaders.getInstance().getSkillData().getEliteMobSkillsByGrade(eliteGrade);
         List<Tuple<Integer, Integer>> possibleSkills = new ArrayList<>();
         possibleSkillsMap.forEach((k, v) -> possibleSkills.add(new Tuple(k, v)));
         for (int i = 0; i < GameConstants.ELITE_MOB_SKILL_COUNT; i++) {
@@ -1719,12 +1713,12 @@ public class Mob extends Life {
 
         // Exp Orb spawning from Mob every 50 combos
         if (chr.getComboCounter() % 50 == 0) {
-            Item item = ItemData.getItemDeepCopy(GameConstants.BLUE_EXP_ORB_ID); // Blue Exp Orb
+            Item item = Loaders.getInstance().getItemData().getItemDeepCopy(GameConstants.BLUE_EXP_ORB_ID); // Blue Exp Orb
             if (chr.getComboCounter() >= GameConstants.COMBO_KILL_REWARD_PURPLE) {
-                item = ItemData.getItemDeepCopy(GameConstants.PURPLE_EXP_ORB_ID); // Purple Exp Orb
+                item = Loaders.getInstance().getItemData().getItemDeepCopy(GameConstants.PURPLE_EXP_ORB_ID); // Purple Exp Orb
             }
             if (chr.getComboCounter() >= GameConstants.COMBO_KILL_REWARD_RED) {
-                item = ItemData.getItemDeepCopy(GameConstants.RED_EXP_ORB_ID); // Red Exp Orb
+                item = Loaders.getInstance().getItemData().getItemDeepCopy(GameConstants.RED_EXP_ORB_ID); // Red Exp Orb
             }
             Drop drop = new Drop(-1, item);
             drop.setMobExp(getForcedMobStat().getExp());
@@ -1907,7 +1901,7 @@ public class Mob extends Life {
     public void handleDamageReflect(Char chr, int skillID, long totalDamage) {
         MobTemporaryStat mts = getTemporaryStat();
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         boolean hasIgnoreCounterCts =
                 tsm.hasStat(CharacterTemporaryStat.IgnoreAllCounter)
                 || tsm.hasStat(CharacterTemporaryStat.IgnoreAllImmune);

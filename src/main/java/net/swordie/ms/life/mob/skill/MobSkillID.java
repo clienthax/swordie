@@ -145,7 +145,7 @@ public enum MobSkillID {
                     capital = true;
                 }
             }
-            System.out.printf("%s(%d),%n", s.toString(), msi.val);
+            System.out.printf("%s(%d),%n", s, msi.val);
         }
     }
 

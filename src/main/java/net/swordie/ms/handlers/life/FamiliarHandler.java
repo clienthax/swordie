@@ -11,8 +11,7 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Familiar;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.movement.MovementInfo;
-import net.swordie.ms.loaders.EtcData;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -116,8 +115,8 @@ public class FamiliarHandler {
         if (activeFamiliar.getSkillID() != 0) {
             chr.getTemporaryStatManager().removeStatsBySkill(-activeFamiliar.getSkillID());
         }
-        int skillID = EtcData.getSkillByFamiliarID(familiarID);
-        Item item = ItemData.getItemDeepCopy(skillID);
+        int skillID = Loaders.getInstance().getEtcData().getSkillByFamiliarID(familiarID);
+        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(skillID);
         chr.useStatChangeItem(item, false);
         chr.getActiveFamiliar().setSkillID(skillID);
     }

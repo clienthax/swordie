@@ -8,9 +8,8 @@ import net.swordie.ms.client.character.Char;
 public interface ICommand {
 
     char prefix = '@';
-    static void execute(Char chr, String[] args){
 
-    }
+    void execute(Char chr, String[] args);
 
 	static char getPrefix() {
         return prefix;

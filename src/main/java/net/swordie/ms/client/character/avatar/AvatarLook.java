@@ -316,46 +316,46 @@ public class AvatarLook {
         } else if (getBeastTamerDefFaceAcc() != 0) {
             faceAcc = getBeastTamerDefFaceAcc();
         }
-        data[0] |= getGender() & 1;
-        data[0] |= (getSkin() & 0xF) << 1;
-        data[0] |= ((getFace() % 1000) & 0x3FF) << 5;
-        data[1] |= (getFace() / 1000 % 10 & 7) << 7;
-        data[2] |= (getFace() / 10000 == 4 ? 1 : 0) << 2;
-        data[2] |= ((getFace() % 1000) & 0x3FF) << 3;
-        data[3] |= (getFace() / 1000 % 10 & 0xF) << 5;
-        data[4] |= ((hairEquips[1] % 1000) & 0x3FF) << 1;
-        data[5] |= (hairEquips[1] / 1000 % 10 & 7) << 3;
-        data[5] |= ((hairEquips[2] % 1000) & 0x3FF) << 6;
-        data[7] |= faceAcc / 1000 % 10 & 3;
-        data[7] |= (hairEquips[3] % 1000) & 0x3FF;
-        data[8] |= (hairEquips[3] / 1000 % 10 & 3) << 4;
-        data[8] |= ((hairEquips[4] % 1000) & 0x3FF) << 6;
-        data[10] |= hairEquips[4] / 1000 % 10 & 3;
-        data[10] |= (hairEquips[5] / 10000 == 105 ? 1 : 0) << 2;
-        data[10] |= ((hairEquips[5] % 1000) & 0x3FF) << 3;
-        data[11] |= ((hairEquips[5] / 1000 % 10) & 0xF) << 5;
-        data[12] |= ((hairEquips[6] % 1000) & 0x3FF) << 1;
-        data[13] |= (hairEquips[6] / 1000 % 10 & 3) << 3;
-        data[13] |= ((hairEquips[7] % 1000) & 0x3FF) << 5;
-        data[14] |= (hairEquips[7] / 1000 % 10 & 3) << 7;
-        data[15] |= ((hairEquips[8] % 1000) & 0x3FF) << 1;
-        data[16] |= (hairEquips[8] / 1000 % 10 & 3) << 3;
-        data[16] |= ((hairEquips[9] % 1000) & 0x3FF) << 5;
-        data[17] |= (hairEquips[9] / 1000 % 10 & 3) << 7;
+        data[0] |= (byte) (getGender() & 1);
+        data[0] |= (byte) ((getSkin() & 0xF) << 1);
+        data[0] |= (byte) (((getFace() % 1000) & 0x3FF) << 5);
+        data[1] |= (byte) ((getFace() / 1000 % 10 & 7) << 7);
+        data[2] |= (byte) ((getFace() / 10000 == 4 ? 1 : 0) << 2);
+        data[2] |= (byte) (((getFace() % 1000) & 0x3FF) << 3);
+        data[3] |= (byte) ((getFace() / 1000 % 10 & 0xF) << 5);
+        data[4] |= (byte) (((hairEquips[1] % 1000) & 0x3FF) << 1);
+        data[5] |= (byte) ((hairEquips[1] / 1000 % 10 & 7) << 3);
+        data[5] |= (byte) (((hairEquips[2] % 1000) & 0x3FF) << 6);
+        data[7] |= (byte) (faceAcc / 1000 % 10 & 3);
+        data[7] |= (byte) ((hairEquips[3] % 1000) & 0x3FF);
+        data[8] |= (byte) ((hairEquips[3] / 1000 % 10 & 3) << 4);
+        data[8] |= (byte) (((hairEquips[4] % 1000) & 0x3FF) << 6);
+        data[10] |= (byte) (hairEquips[4] / 1000 % 10 & 3);
+        data[10] |= (byte) ((hairEquips[5] / 10000 == 105 ? 1 : 0) << 2);
+        data[10] |= (byte) (((hairEquips[5] % 1000) & 0x3FF) << 3);
+        data[11] |= (byte) (((hairEquips[5] / 1000 % 10) & 0xF) << 5);
+        data[12] |= (byte) (((hairEquips[6] % 1000) & 0x3FF) << 1);
+        data[13] |= (byte) ((hairEquips[6] / 1000 % 10 & 3) << 3);
+        data[13] |= (byte) (((hairEquips[7] % 1000) & 0x3FF) << 5);
+        data[14] |= (byte) ((hairEquips[7] / 1000 % 10 & 3) << 7);
+        data[15] |= (byte) (((hairEquips[8] % 1000) & 0x3FF) << 1);
+        data[16] |= (byte) ((hairEquips[8] / 1000 % 10 & 3) << 3);
+        data[16] |= (byte) (((hairEquips[9] % 1000) & 0x3FF) << 5);
+        data[17] |= (byte) ((hairEquips[9] / 1000 % 10 & 3) << 7);
         int val = hairEquips[10];
         if (val / 10000 == 109) {
             val = 1;
         } else {
             val = (val / 10000 != 134 ? 1 : 0) + 2;
         }
-        data[18] |= (val & 3) << 1;
-        data[19] |= ((hairEquips[10] % 1000) & 0x3FF) << 3;
-        data[19] |= (hairEquips[10] / 1000 % 10 & 0xF) << 5;
-        data[20] |= getWeaponStickerId() / 100000 == 17 ? 2 : 0;
-        data[20] |= ((weaponID % 1000) & 0x3FF) << 2;
-        data[21] |= (weaponID / 1000 % 10 & 3) << 4;
-        data[21] |= (wt & 0x1F) << 6;
-        data[22] |= (isDrawElfEar() ? 1 : 0) << 3;
+        data[18] |= (byte) ((val & 3) << 1);
+        data[19] |= (byte) (((hairEquips[10] % 1000) & 0x3FF) << 3);
+        data[19] |= (byte) ((hairEquips[10] / 1000 % 10 & 0xF) << 5);
+        data[20] |= (byte) (getWeaponStickerId() / 100000 == 17 ? 2 : 0);
+        data[20] |= (byte) (((weaponID % 1000) & 0x3FF) << 2);
+        data[21] |= (byte) ((weaponID / 1000 % 10 & 3) << 4);
+        data[21] |= (byte) ((wt & 0x1F) << 6);
+        data[22] |= (byte) ((isDrawElfEar() ? 1 : 0) << 3);
         for (int i = 0; i < 3; i++) {
             for (int j = 7; j >= 0; j--) {
                 // basically encoding 3 sequential longs in little endian

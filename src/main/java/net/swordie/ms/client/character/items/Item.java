@@ -7,7 +7,7 @@ import net.swordie.ms.connection.db.FileTimeConverter;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.enums.InvType;
 import net.swordie.ms.connection.packet.WvsContext;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 
 import jakarta.persistence.*;
@@ -47,7 +47,7 @@ public class Item implements Serializable, Encodable {
     private String owner = "";
 
     public boolean isTradable() {
-        return !ItemData.getItemInfoByID(getItemId()).isTradeBlock();
+        return !Loaders.getInstance().getItemData().getItemInfoByID(getItemId()).isTradeBlock();
     }
 
     public enum Type {

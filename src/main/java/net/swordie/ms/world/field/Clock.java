@@ -23,7 +23,7 @@ public class Clock {
         this.clockType = clockType;
         this.field = field;
         this.seconds = seconds;
-        this.timeInMillis = (seconds*1000) + System.currentTimeMillis();
+        this.timeInMillis = (seconds* 1000L) + System.currentTimeMillis();
 
         createClock();
     }
@@ -51,10 +51,10 @@ public class Clock {
         if(field.getClock() != null) {
             switch (field.getClock().getClockType()) {
                 case SecondsClock:
-                    chr.write(FieldPacket.clock(ClockPacket.secondsClock((int) getRemainingTime())));
+                    chr.write(FieldPacket.clock(ClockPacket.secondsClock(getRemainingTime())));
                     break;
                 case StopWatch:
-                    chr.write(FieldPacket.clock(ClockPacket.stopWatch((int) getRemainingTime())));
+                    chr.write(FieldPacket.clock(ClockPacket.stopWatch(getRemainingTime())));
                     break;
                 case TimerGauge:
                     chr.write(FieldPacket.clock(ClockPacket.timerGauge(seconds * 1000, seconds * 1000)));

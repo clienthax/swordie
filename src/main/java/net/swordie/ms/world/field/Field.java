@@ -23,10 +23,7 @@ import net.swordie.ms.life.drop.DropInfo;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.skill.MobSkillStat;
 import net.swordie.ms.life.npc.Npc;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.MobData;
-import net.swordie.ms.loaders.NpcData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.*;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.loaders.containerclasses.MobSkillInfo;
 import net.swordie.ms.scripts.ScriptManager;
@@ -696,8 +693,8 @@ public class Field {
 
     public void spawnAffectedArea(AffectedArea aa) {
         addLife(aa);
-        SkillInfo si = SkillData.getSkillInfoById(aa.getSkillID());
-        MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(aa.getSkillID(), aa.getSlv());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(aa.getSkillID());
+        MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(aa.getSkillID(), aa.getSlv());
         if (si != null || (aa.getMobOrigin() > 0 && msi != null)) {
             int duration = 0;
             if (aa.getMobOrigin() > 0 && msi != null) {
@@ -728,9 +725,10 @@ public class Field {
         spawnAffectedArea(aa);
     }
 
-    private <T> Set<T> getLifesByClass(Class clazz) {
-        return (Set<T>) getLifes().values().stream()
-                .filter(l -> l.getClass().equals(clazz))
+    private <T> Set<T> getLifesByClass(Class<T> clazz) {
+        return getLifes().values().stream()
+                .filter(l -> l.getClass().isInstance(clazz))
+                .map(clazz::cast)
                 .collect(Collectors.toSet());
     }
 
@@ -941,7 +939,7 @@ public class Field {
         boolean isTradable = true;
         Item item = drop.getItem();
         if (item != null) {
-            ItemInfo itemInfo = ItemData.getItemInfoByID(item.getItemId());
+            ItemInfo itemInfo = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId());
             // must be tradable, and if not an equip, not a quest item
             isTradable = ignoreTradability ||
                     (item.isTradable() && (ItemConstants.isEquip(item.getItemId()) || itemInfo != null
@@ -985,7 +983,7 @@ public class Field {
         boolean isTradable = true;
         Item item = drop.getItem();
         if (item != null) {
-            ItemInfo itemInfo = ItemData.getItemInfoByID(item.getItemId());
+            ItemInfo itemInfo = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId());
             // must be tradable, and if not an equip, not a quest item
             isTradable = ignoreTradability ||
                     (item.isTradable() && (ItemConstants.isEquip(item.getItemId()) || itemInfo != null
@@ -1031,16 +1029,16 @@ public class Field {
         drop.setOwnerID(ownerID);
         Set<Integer> quests = new HashSet<>();
         if (itemID != 0) {
-            item = ItemData.getItemDeepCopy(itemID, true);
+            item = Loaders.getInstance().getItemData().getItemDeepCopy(itemID, true);
             if (item != null) {
                 item.setQuantity(dropInfo.getQuantity());
                 drop.setItem(item);
-                ItemInfo ii = ItemData.getItemInfoByID(itemID);
+                ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
                 if (ii != null && ii.isQuest()) {
                     quests = ii.getQuestIDs();
                 }
             } else {
-                log.error("Was not able to find the item to drop! id = " + itemID);
+                log.error("Was not able to find the item to drop! id = {}", itemID);
                 return;
             }
         } else {
@@ -1172,7 +1170,7 @@ public class Field {
 
                 if (itemID > 999999) { // item
                     Drop drop = new Drop(getNewObjectID());
-                    drop.setItem(ItemData.getItemDeepCopy(itemID));
+                    drop.setItem(Loaders.getInstance().getItemData().getItemDeepCopy(itemID));
                     drop.getItem().setQuantity(quantity);
                     Position startPos = new Position(startPosX, startPosY);
                     Position endPos = new Position(endPosX, findFootHoldBelow(new Position(endPosX, startPosY-25)).getY1());
@@ -1223,18 +1221,14 @@ public class Field {
 
     public int getAliveMobCount() {
         // not using getMobs() to only have to iterate `lifes' once
-        return getLifes().values().stream()
-                .filter(life -> life instanceof Mob && ((Mob) life).isAlive())
-                .collect(Collectors.toList())
-                .size();
+        return (int) getLifes().values().stream()
+                .filter(life -> life instanceof Mob && ((Mob) life).isAlive()).count();
     }
 
     public int getAliveMobCount(int mobID) {
         // not using getMobs() to only have to iterate `lifes' once
-        return getLifes().values().stream()
-                .filter(life -> life instanceof Mob && life.getTemplateId() == mobID && ((Mob) life).isAlive())
-                .collect(Collectors.toList())
-                .size();
+        return (int) getLifes().values().stream()
+                .filter(life -> life instanceof Mob && life.getTemplateId() == mobID && ((Mob) life).isAlive()).count();
     }
 
     public String getFieldScript() {
@@ -1246,7 +1240,7 @@ public class Field {
     }
 
     public Mob spawnMobWithAppearType(int id, int x, int y, int appearType, int option) {
-        Mob mob = MobData.getMobDeepCopyById(id);
+        Mob mob = Loaders.getInstance().getMobData().getMobDeepCopyById(id);
         Position pos = new Position(x, y);
         mob.setPosition(pos.deepCopy());
         mob.setPrevPos(pos.deepCopy());
@@ -1265,7 +1259,7 @@ public class Field {
      * Spawns an NPC at given coordinates.
      */
     public void spawnNpc(int npcId, int pX, int pY) {
-        Npc npc = NpcData.getNpcDeepCopyById(npcId);
+        Npc npc = Loaders.getInstance().getNpcData().getNpcDeepCopyById(npcId);
         Position position = new Position(pX, pY);
         npc.setPosition(position);
         npc.setCy(pY);
@@ -1294,7 +1288,7 @@ public class Field {
     }
 
     public Mob spawnMob(int id, int x, int y, boolean respawnable, long hp) {
-        Mob mob = MobData.getMobDeepCopyById(id);
+        Mob mob = Loaders.getInstance().getMobData().getMobDeepCopyById(id);
         Position pos = new Position(x, y);
         mob.setPosition(pos.deepCopy());
         mob.setPrevPos(pos.deepCopy());
@@ -1312,7 +1306,7 @@ public class Field {
     }
 
     public void spawnRuneStone() {
-        if (getMobs().size() <= 0 || getBossMobID() != 0 || !isChannelField()) {
+        if (getMobs().isEmpty() || getBossMobID() != 0 || !isChannelField()) {
             return;
         }
 
@@ -1389,7 +1383,7 @@ public class Field {
         if(!getChars().isEmpty() && getBurningFieldLevel() > 0) {
             decreaseBurningLevel();
 
-        } else if(getChars().size() <= 0 && getBurningFieldLevel() < GameConstants.BURNING_FIELD_MAX_LEVEL){
+        } else if(getChars().isEmpty() && getBurningFieldLevel() < GameConstants.BURNING_FIELD_MAX_LEVEL){
             increaseBurningLevel();
             showMessage = true;
         }
@@ -1607,7 +1601,7 @@ public class Field {
 
     public Mob spawnMobRespawnable(int id, int x, int y, boolean respawnable, long hp, int respawnTime) {
         Mob mob = spawnMob(id, x, y, respawnable, hp);
-        EventManager.addEvent(() -> spawnMobRespawnable(id, x, y, respawnable, hp, respawnTime), respawnTime * 1000); //milliseconds to seconds.
+        EventManager.addEvent(() -> spawnMobRespawnable(id, x, y, respawnable, hp, respawnTime), respawnTime * 1000L); //milliseconds to seconds.
         return mob;
     }
 }

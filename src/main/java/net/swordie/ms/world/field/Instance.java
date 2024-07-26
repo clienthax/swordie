@@ -5,7 +5,7 @@ import net.swordie.ms.client.party.Party;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.connection.packet.FieldPacket;
 import net.swordie.ms.handlers.EventManager;
-import net.swordie.ms.loaders.FieldData;
+import net.swordie.ms.loaders.Loaders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class Instance {
      * @param portalId the Portal's id to warp to
      */
     public void setup(int fieldId, int portalId) {
-        Field checkField = FieldData.getFieldCopyById(fieldId);
+        Field checkField = Loaders.getInstance().getFieldData().getFieldCopyById(fieldId);
         if (checkField == null) {
             throw new IllegalArgumentException("Invalid Field id " + fieldId);
         }
@@ -231,7 +231,7 @@ public class Instance {
         if (getFields().containsKey(fieldID)) {
             field = getFields().get(fieldID);
         } else {
-            field = FieldData.getFieldCopyById(fieldID);
+            field = Loaders.getInstance().getFieldData().getFieldCopyById(fieldID);
             getFields().put(field.getId(), field);
         }
         return field;
@@ -312,7 +312,7 @@ public class Instance {
             warpOutTimer.cancel(true);
         }
         warpOutTimer = EventManager.addEvent(this::clear, seconds, TimeUnit.SECONDS);
-        warpOutTimeout = System.currentTimeMillis() + seconds * 1000;
+        warpOutTimeout = System.currentTimeMillis() + seconds * 1000L;
         broadcast(FieldPacket.clock(ClockPacket.secondsClock(seconds)));
     }
     /**

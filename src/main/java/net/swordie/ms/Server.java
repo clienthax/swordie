@@ -9,6 +9,7 @@ import net.swordie.ms.connection.netty.ChannelHandler;
 import net.swordie.ms.connection.netty.ChatAcceptor;
 import net.swordie.ms.connection.netty.LoginAcceptor;
 import net.swordie.ms.constants.GameConstants;
+import net.swordie.ms.handlers.social.CommandHandler;
 import net.swordie.ms.loaders.*;
 import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.util.Loader;
@@ -43,6 +44,8 @@ public class Server extends Properties {
 	private final Set<Integer> users = new HashSet<>(); // just save the ids, no need to save the references
 	private CashShop cashShop;
 
+	private CommandHandler commandHandler = new CommandHandler();
+
 	public static Server getInstance() {
 		return server;
 	}
@@ -55,12 +58,14 @@ public class Server extends Properties {
 		return Util.findWithPred(getWorlds(), w -> w.getWorldId() == id);
 	}
 
-	private void init(String[] args) {
+	private void init() {
 
 		log.info("Starting server.");
 		long startNow = System.currentTimeMillis();
 		DatabaseManager.init();
-		log.info("Loaded Hibernate in " + (System.currentTimeMillis() - startNow) + "ms");
+        log.info("Loaded Hibernate in {}ms", System.currentTimeMillis() - startNow);
+
+		commandHandler.loadCommands();
 
 		try {
 			checkAndCreateDat();
@@ -68,12 +73,12 @@ public class Server extends Properties {
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		StringData.load();
-		FieldData.loadWorldMap();
+		Loaders.getInstance().getStringData().load();
+		Loaders.getInstance().getFieldData().loadWorldMap();
 		ChannelHandler.initHandlers(false);
 
-		FieldData.loadNPCFromSQL();
-		log.info("Finished loading custom NPCs in " + (System.currentTimeMillis() - startNow) + "ms");
+		Loaders.getInstance().getFieldData().loadNPCFromSQL();
+        log.info("Finished loading custom NPCs in {}ms", System.currentTimeMillis() - startNow);
 
 		MapleCrypto.initialize(ServerConstants.VERSION);
 		new Thread(new LoginAcceptor()).start();
@@ -81,9 +86,9 @@ public class Server extends Properties {
 		worldList.add(new World(ServerConfig.WORLD_ID, ServerConfig.SERVER_NAME, GameConstants.CHANNELS_PER_WORLD, ServerConfig.EVENT_MSG));
 		long startCashShop = System.currentTimeMillis();
 		initCashShop();
-		log.info("Loaded Cash Shop in " + (System.currentTimeMillis() - startCashShop) + "ms");
+        log.info("Loaded Cash Shop in {}ms", System.currentTimeMillis() - startCashShop);
 
-		MonsterCollectionData.loadFromSQL();
+		Loaders.getInstance().getMonsterCollectionData().loadFromSQL();
 
 		for (World world : getWorlds()) {
 			for (Channel channel : world.getChannels()) {
@@ -117,6 +122,7 @@ public class Server extends Properties {
 		}
 	}
 
+	// TODO Haxy: unfuck this..
 	public void loadWzData() throws IllegalAccessException, InvocationTargetException {
 		String datFolder = ServerConstants.DAT_DIR;
 		for (Class c : DataClasses.dataClasses) {
@@ -128,6 +134,9 @@ public class Server extends Properties {
 					File file = new File(datFolder, name + ".dat");
 					boolean exists = file.exists();
 					long start = System.currentTimeMillis();
+
+					log.info(String.format("Loading %s from %s", name, exists ? file.getName() : method.getName()));
+
 					method.invoke(c, file, exists);
 					long total = System.currentTimeMillis() - start;
 					if (exists) {
@@ -141,7 +150,7 @@ public class Server extends Properties {
 	}
 
 	public static void main(String[] args) {
-		getInstance().init(args);
+		getInstance().init();
 	}
 
 	public Session getNewDatabaseSession() {
@@ -164,14 +173,16 @@ public class Server extends Properties {
 
 	public void clearCache() {
 		ChannelHandler.initHandlers(true);
-		DropData.clear();
-		FieldData.clear();
-		ItemData.clear();
-		MobData.clear();
-		NpcData.clear();
-		QuestData.clear();
-		SkillData.clear();
-		ReactorData.clear();
+
+		Loaders.getInstance().getDropData().clear();
+		Loaders.getInstance().getFieldData().clear();
+		Loaders.getInstance().getItemData().clear();
+		Loaders.getInstance().getMobData().clear();
+		Loaders.getInstance().getNpcData().clear();
+		Loaders.getInstance().getQuestData().clear();
+		Loaders.getInstance().getSkillData().clear();
+		Loaders.getInstance().getReactorData().clear();
+
 		for (World world : getWorlds()) {
 			world.clearCache();
 		}
@@ -182,13 +193,13 @@ public class Server extends Properties {
 		try(Session session = DatabaseManager.getSession()) {
 			Transaction transaction = session.beginTransaction();
 
-			Query query = session.createQuery("FROM CashShopCategory");
+			Query<CashShopCategory> query = session.createQuery("FROM CashShopCategory", CashShopCategory.class);
 			List<CashShopCategory> categories = query.list();
 			categories.sort(Comparator.comparingInt(CashShopCategory::getIdx));
 			cashShop.setCategories(new ArrayList<>(categories));
 
-			query = session.createQuery("FROM CashShopItem");
-			List<CashShopItem> items = query.list();
+			Query<CashShopItem> query2 = session.createQuery("FROM CashShopItem", CashShopItem.class);
+			List<CashShopItem> items = query2.list();
 			items.forEach(item -> cashShop.addItem(item));
 
 			transaction.commit();
@@ -210,5 +221,9 @@ public class Server extends Properties {
 
 	public boolean isUserLoggedIn(User user) {
 		return users.contains(user.getId());
+	}
+
+	public CommandHandler getCommandHandler() {
+		return commandHandler;
 	}
 }

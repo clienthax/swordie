@@ -7,7 +7,7 @@ import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.enums.DropMotionType;
 import net.swordie.ms.enums.DropType;
 import net.swordie.ms.connection.packet.DropPool;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.life.Life;
@@ -116,7 +116,7 @@ public class Drop extends Life {
         Item item = getItem();
         ItemInfo ii = null;
         if (item != null) {
-            ii = ItemData.getItemInfoByID(item.getItemId());
+            ii = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId());
         }
         boolean canSpawn = isMoney()
                 || (item != null && ItemConstants.isEquip(item.getItemId()))

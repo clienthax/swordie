@@ -20,7 +20,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -84,7 +84,7 @@ public class Shade extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -103,7 +103,7 @@ public class Shade extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -128,7 +128,7 @@ public class Shade extends Job {
                 o1.rOption = skillID;
                 o1.tOption = si.getValue(time, slv);
                 tsm.putCharacterStatValue(SpiritGuard, o1);
-                spiritWardTimer = System.currentTimeMillis() + (si.getValue(time, slv) * 1000);
+                spiritWardTimer = System.currentTimeMillis() + (si.getValue(time, slv) * 1000L);
                 break;
             case MAPLE_WARRIOR_SH:
                 o1.nReason = skillID;
@@ -196,7 +196,7 @@ public class Shade extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -227,7 +227,7 @@ public class Shade extends Job {
                 }
                 break;
             case BOMB_PUNCH_FINAL:
-                SkillInfo bpi = SkillData.getSkillInfoById(BOMB_PUNCH);
+                SkillInfo bpi = Loaders.getInstance().getSkillData().getSkillInfoById(BOMB_PUNCH);
                 byte bombPunchslv = (byte) chr.getSkill(BOMB_PUNCH).getCurrentLevel();
                 if (Util.succeedProp(bpi.getValue(prop, bombPunchslv))) {
                     for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -291,11 +291,11 @@ public class Shade extends Job {
     private void createFoxSpiritForceAtom(int skillID) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStat(HiddenPossession)) {
-            SkillInfo si = SkillData.getSkillInfoById(FOX_SPIRITS);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(FOX_SPIRITS);
             Field field = chr.getField();
             Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
             List<Mob> mobs = chr.getField().getMobsInRect(rect);
-            if(mobs.size() <= 0) {
+            if(mobs.isEmpty()) {
                 return;
             }
             Mob mob = Util.getRandomFromCollection(mobs);
@@ -321,7 +321,7 @@ public class Shade extends Job {
 
     private void recreateFoxSpiritForceAtom(AttackInfo attackInfo) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(FOX_SPIRITS_ATOM);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(FOX_SPIRITS_ATOM);
         int anglenum = new Random().nextInt(360);
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -359,7 +359,7 @@ public class Shade extends Job {
             Option o1 = new Option();
             Option o2 = new Option();
             Option o3 = new Option();
-            SkillInfo si = SkillData.getSkillInfoById(WEAKEN);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(WEAKEN);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(si.getValue(prop, slv))) {
                     Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -388,7 +388,7 @@ public class Shade extends Job {
         Skill skill = chr.getSkill(DEATH_MARK);
         if (skill != null) {
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int healrate = si.getValue(x, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -421,7 +421,7 @@ public class Shade extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -432,7 +432,7 @@ public class Shade extends Job {
             Option o3 = new Option();
             switch (skillID) {
                 case SPIRIT_TRAP:
-                    SkillInfo fci = SkillData.getSkillInfoById(skillID);
+                    SkillInfo fci = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
                     AffectedArea aa = AffectedArea.getPassiveAA(chr, skillID, slv);
                     aa.setMobOrigin((byte) 0);
                     aa.setPosition(chr.getPosition());

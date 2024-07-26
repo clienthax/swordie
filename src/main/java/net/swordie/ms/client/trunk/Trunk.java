@@ -7,7 +7,7 @@ import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.enums.DBChar;
 import net.swordie.ms.enums.InvType;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.shop.cashshop.CashItemInfo;
 
@@ -65,7 +65,7 @@ public class Trunk {
         }
         for(int i = 1; i <= 5; i++) {
             InvType curInvType = InvType.getInvTypeByVal(i);
-            List<Item> items = getItems().stream().filter(it -> it.getInvType() == curInvType).collect(Collectors.toList());
+            List<Item> items = getItems().stream().filter(it -> it.getInvType() == curInvType).toList();
             outPacket.encodeByte(items.size());
             for(Item item : items) {
                 item.encode(outPacket);
@@ -105,7 +105,7 @@ public class Trunk {
         if(curItem == null || curItem.getInvType() == InvType.EQUIP) {
             Item newItem = ItemConstants.isEquip(item.getItemId())
                     ? ((Equip) item).deepCopy()
-                    : ItemData.getItemDeepCopy(item.getItemId());
+                    : Loaders.getInstance().getItemData().getItemDeepCopy(item.getItemId());
             newItem.setQuantity(quantity);
             getItems().add(newItem);
         } else {

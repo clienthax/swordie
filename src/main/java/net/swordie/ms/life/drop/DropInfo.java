@@ -3,7 +3,7 @@ package net.swordie.ms.life.drop;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.enums.BaseStat;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 
 import jakarta.persistence.*;
@@ -103,7 +103,7 @@ public class DropInfo {
     public boolean willDrop(int dropRate) {
         // Added 50x multiplier for the dropping chance if the item is a Quest item.
         int chance = getChance();
-        chance *= (100 + dropRate) / 100D;
+        chance *= (int) ((100 + dropRate) / 100D);
         return Util.succeedProp(chance, GameConstants.MAX_DROP_CHANCE);
     }
 
@@ -154,7 +154,7 @@ public class DropInfo {
 
     public String toNPCString(Char chr) {
         if (getItemID() != 0 && getItemID() > 0 && !isMoney()) {
-            if(ItemData.getItemDeepCopy(getItemID()) != null) {
+            if(Loaders.getInstance().getItemData().getItemDeepCopy(getItemID()) != null) {
                 return String.format("#L0##v%d# %.3f%% chance#l", getItemID(), (float)chr.getTotalStat(BaseStat.dropR) != 0 ? (float) (getChance() / 100D) * (chr.getTotalStat(BaseStat.dropR) + 100) / 100 : (float) (getChance() / 100D));
             } else return null;
         } else {

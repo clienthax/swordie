@@ -51,7 +51,7 @@ public class MobGen extends Life {
             field.broadcastPacket(MobPool.forceChase(mob.getObjectId(),false));
         }
 
-        setNextPossibleSpawnTime(System.currentTimeMillis() + (getMob().getMobTime() * 1000));
+        setNextPossibleSpawnTime(System.currentTimeMillis() + (getMob().getMobTime() * 1000L));
         setHasSpawned(true);
     }
 

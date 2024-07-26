@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.potential;
 
 import net.swordie.ms.client.character.skills.Skill;
 import net.swordie.ms.connection.OutPacket;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 
 import jakarta.persistence.*;
 import java.util.Objects;
@@ -96,7 +96,7 @@ public class CharacterPotential {
     }
 
     public Skill getSkill() {
-        Skill skill = SkillData.getSkillDeepCopyById(getSkillID());
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(getSkillID());
         skill.setCurrentLevel(getSlv());
         return skill;
     }

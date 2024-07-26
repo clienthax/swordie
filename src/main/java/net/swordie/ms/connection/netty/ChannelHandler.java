@@ -66,7 +66,7 @@ public class ChannelHandler extends SimpleChannelInboundHandler<InPacket> {
                 e.printStackTrace();
             }
         }
-        log.info("Initialized " + handlers.size() + " handlers in " + (System.currentTimeMillis() - start) + "ms.");
+        log.info("Initialized {} handlers in {}ms.", handlers.size(), System.currentTimeMillis() - start);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ChannelHandler extends SimpleChannelInboundHandler<InPacket> {
                     } else if (clazz == Char.class) {
                         method.invoke(this, chr, inPacket);
                     } else {
-                        log.error("Unhandled first param type of handler " + method.getName() + ", type = " + clazz);
+                        log.error("Unhandled first param type of handler {}, type = {}", method.getName(), clazz);
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();

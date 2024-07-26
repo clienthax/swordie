@@ -86,16 +86,13 @@ public class ClockPacket {
     public void encode(OutPacket outPacket) {
         outPacket.encodeByte(clockType.getVal());
         switch(clockType) {
-            case EventTimer:
+            case EventTimer, StopWatch, SecondsClock:
                 outPacket.encodeInt(arg1);
                 break;
             case HMSClock:
                 outPacket.encodeByte(arg1);
                 outPacket.encodeByte(arg2);
                 outPacket.encodeByte(arg3);
-                break;
-            case SecondsClock:
-                outPacket.encodeInt(arg1);
                 break;
             case FromDefault:
                 outPacket.encodeByte(arg1);
@@ -104,22 +101,11 @@ public class ClockPacket {
                 outPacket.encodeInt(arg1);
                 outPacket.encodeInt(arg2);
                 break;
-            case ShiftTimer:
-                outPacket.encodeByte(bool);
-                outPacket.encodeInt(arg1);
-                break;
-            case StopWatch:
-                outPacket.encodeInt(arg1);
-                break;
-            case PauseTimer:
+            case ShiftTimer, WithoutField, PauseTimer:
                 outPacket.encodeByte(bool);
                 outPacket.encodeInt(arg1);
                 break;
             case TimerInfoEx:
-                break;
-            case WithoutField:
-                outPacket.encodeByte(bool);
-                outPacket.encodeInt(arg1);
                 break;
         }
     }

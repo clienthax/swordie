@@ -23,7 +23,7 @@ import net.swordie.ms.life.Life;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -179,7 +179,7 @@ public class Demon extends Job {
             if (JobConstants.isDemonSlayer(chr.getJob())) {
                 for (int id : addedSkillsDS) {
                     if (!chr.hasSkill(id)) {
-                        Skill skill = SkillData.getSkillDeepCopyById(id);
+                        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                         skill.setCurrentLevel(skill.getMasterLevel());
                         chr.addSkill(skill);
                     }
@@ -190,7 +190,7 @@ public class Demon extends Job {
             } else if (JobConstants.isDemonAvenger(chr.getJob())) {
                 for (int id : addedSkillsDA) {
                     if (!chr.hasSkill(id)) {
-                        Skill skill = SkillData.getSkillDeepCopyById(id);
+                        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                         skill.setCurrentLevel(skill.getMasterLevel());
                         chr.addSkill(skill);
                     }
@@ -210,7 +210,7 @@ public class Demon extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -351,7 +351,7 @@ public class Demon extends Job {
 		if(tsm.hasStat(DiabolikRecovery)) {
             Skill skill = chr.getSkill(DIABOLIC_RECOVERY);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int recovery = si.getValue(x, slv);
             int duration = si.getValue(w, slv);
             chr.heal((int) (chr.getMaxHP() / ((double) 100 / recovery)));
@@ -378,7 +378,7 @@ public class Demon extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -391,7 +391,7 @@ public class Demon extends Job {
                 if(chr.hasSkill(MAX_FURY)) {
                     if(attackInfo.skillId == DEMON_LASH || attackInfo.skillId == DEMON_LASH_2 || attackInfo.skillId == DEMON_LASH_3 || attackInfo.skillId == DEMON_LASH_4) {
                         Skill maxfuryskill = chr.getSkill(MAX_FURY);
-                        SkillInfo mfsi = SkillData.getSkillInfoById(MAX_FURY);
+                        SkillInfo mfsi = Loaders.getInstance().getSkillData().getSkillInfoById(MAX_FURY);
                         byte skillLevel = (byte) maxfuryskill.getCurrentLevel();
                         int propz = mfsi.getValue(prop, skillLevel);
                         if (Util.succeedProp(propz)) {
@@ -614,13 +614,13 @@ public class Demon extends Job {
 
     private void createNetherShieldForceAtom() {
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById(NETHER_SHIELD);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(NETHER_SHIELD);
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> mobs = field.getMobsInRect(rect);
-        if(mobs.size() <= 0) {
+        if(mobs.isEmpty()) {
             return;
         }
         Mob mob = Util.getRandomFromCollection(mobs);
@@ -637,7 +637,7 @@ public class Demon extends Job {
 
     private void recreateNetherShieldForceAtom(AttackInfo attackInfo) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(NETHER_SHIELD);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(NETHER_SHIELD);
         int anglenum = new Random().nextInt(360);
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -682,7 +682,7 @@ public class Demon extends Job {
                 amount++;
             }
         }
-        amount = amount > getMaxExceed() ? getMaxExceed() : amount;
+        amount = Math.min(amount, getMaxExceed());
         lastExceedSkill = skillid;
         o.nOption = amount;
         o.rOption = EXCEED;
@@ -709,14 +709,14 @@ public class Demon extends Job {
         if(chr.hasSkill(LIFE_SAP)) {
             Skill skill = chr.getSkill(LIFE_SAP);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             int amounthealed = si.getValue(x, slv);
             if(chr.hasSkill(ADVANCED_LIFE_SAP)) {
-                amounthealed = SkillData.getSkillInfoById(ADVANCED_LIFE_SAP).getValue(x, chr.getSkill(ADVANCED_LIFE_SAP).getCurrentLevel());
+                amounthealed = Loaders.getInstance().getSkillData().getSkillInfoById(ADVANCED_LIFE_SAP).getValue(x, chr.getSkill(ADVANCED_LIFE_SAP).getCurrentLevel());
             }
             if(chr.hasSkill(PAIN_DAMPENER)) {
-                amounthealed -= SkillData.getSkillInfoById(PAIN_DAMPENER).getValue(x, chr.getSkill(PAIN_DAMPENER).getCurrentLevel());
+                amounthealed -= Loaders.getInstance().getSkillData().getSkillInfoById(PAIN_DAMPENER).getValue(x, chr.getSkill(PAIN_DAMPENER).getCurrentLevel());
             }
             int exceedamount = tsm.getOption(OverloadCount).nOption;
             int exceedpenalty = (int) Math.floor(exceedamount / 5);
@@ -734,7 +734,7 @@ public class Demon extends Job {
             if(tsm.getOptByCTSAndSkill(Regen, LEECH_AURA) != null) {
                 Skill skill = chr.getSkill(LEECH_AURA);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 int cd = si.getValue(y, slv) * 1000;
                 if(cd + leechAuraCD < System.currentTimeMillis()) {
                     for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -840,7 +840,7 @@ public class Demon extends Job {
         if(chr.hasSkill(INFERNAL_EXCEED)) {
             Skill skill = chr.getSkill(INFERNAL_EXCEED);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             if(Util.succeedProp(proc)) {
                 return INFERNAL_EXCEED;
@@ -860,7 +860,7 @@ public class Demon extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -884,7 +884,7 @@ public class Demon extends Job {
         }
         Skill skill = chr.getSkill(SkillConstants.getActualSkillIDfromSkillID(skillID));
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         int hpRCost = si.getValue(hpRCon, slv);
         if(hpRCost > 0) {
             int skillcost = (int) (chr.getMaxHP() / ((double) 100 / hpRCost));
@@ -899,7 +899,7 @@ public class Demon extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(skillId);
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
 
             switch (skillId) {
@@ -926,7 +926,7 @@ public class Demon extends Job {
             if(hitInfo.hpDamage != 0) {
                 Skill skill = chr.getSkill(VENGEANCE);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 int mobID = hitInfo.mobID;
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mobID);
                 if(mob == null) {
@@ -949,7 +949,7 @@ public class Demon extends Job {
             if(chr.hasSkill(POSSESSED_AEGIS)) {
                 Skill skill = chr.getSkill(POSSESSED_AEGIS);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 int propz = si.getValue(x, slv);
                 if(Util.succeedProp(propz)) {
                     int mobID = hitInfo.mobID;

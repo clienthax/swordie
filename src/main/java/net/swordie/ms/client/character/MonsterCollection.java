@@ -5,7 +5,7 @@ import net.swordie.ms.connection.packet.UserPacket;
 import net.swordie.ms.constants.MonsterCollectionGroup;
 import net.swordie.ms.constants.MonsterCollectionRegion;
 import net.swordie.ms.constants.MonsterCollectionSession;
-import net.swordie.ms.loaders.MonsterCollectionData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MonsterCollectionMobInfo;
 import net.swordie.ms.util.FileTime;
 
@@ -64,13 +64,13 @@ public class MonsterCollection {
     }
 
     public boolean hasMob(int templateID) {
-        MonsterCollectionMobInfo mcmi = MonsterCollectionData.getMobInfoByID(templateID);
+        MonsterCollectionMobInfo mcmi = Loaders.getInstance().getMonsterCollectionData().getMobInfoByID(templateID);
         return mcmi != null && collection.containsKey(mcmi.getRegion()) &&
                 collection.get(mcmi.getRegion()).hasMob(templateID, mcmi);
     }
 
     public void addMob(int templateID) {
-        MonsterCollectionMobInfo mcmi = MonsterCollectionData.getMobInfoByID(templateID);
+        MonsterCollectionMobInfo mcmi = Loaders.getInstance().getMonsterCollectionData().getMobInfoByID(templateID);
         if (mcmi == null) {
             return;
         }
@@ -97,7 +97,7 @@ public class MonsterCollection {
 
     public void addMobAndUpdateClient(int templateID, Char chr) {
         addMob(templateID);
-        MonsterCollectionMobInfo mcmi = MonsterCollectionData.getMobInfoByID(templateID);
+        MonsterCollectionMobInfo mcmi = Loaders.getInstance().getMonsterCollectionData().getMobInfoByID(templateID);
         if (mcmi == null) {
             return;
         }
@@ -149,7 +149,7 @@ public class MonsterCollection {
             }
             return complete;
         }
-        return group != null && group.getMobs().size() >= MonsterCollectionData.getRequiredMobs(region, session, groupID);
+        return group != null && group.getMobs().size() >= Loaders.getInstance().getMonsterCollectionData().getRequiredMobs(region, session, groupID);
     }
 
     public MonsterCollectionExploration getExploration(int region, int session, int group) {
@@ -168,7 +168,7 @@ public class MonsterCollection {
 
     public MonsterCollectionExploration createExploration(int region, int session, int group) {
         int collectionKey = region * 10000 + session * 100 + group;
-        int minutes = MonsterCollectionData.getExplorationMinutes(region, session, group);
+        int minutes = Loaders.getInstance().getMonsterCollectionData().getExplorationMinutes(region, session, group);
         FileTime ft = FileTime.fromDate(LocalDateTime.now().plusMinutes(minutes));
         MonsterCollectionExploration mce = new MonsterCollectionExploration(collectionKey, ft);
         mce.setMonsterKey(String.format("%d:%d:%d:0", region, session, group));
@@ -179,7 +179,7 @@ public class MonsterCollection {
     private int getFirstOpenSlot() {
         List<MonsterCollectionExploration> mces = getMonsterCollectionExplorations().stream()
                 .sorted(Comparator.comparingInt(MonsterCollectionExploration::getPosition))
-                .collect(Collectors.toList());
+                .toList();
         int i;
         for (i = 0; i < mces.size(); i++) {
             MonsterCollectionExploration mce = mces.get(i);

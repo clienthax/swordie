@@ -29,8 +29,7 @@ import net.swordie.ms.life.drop.DropInfo;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -180,7 +179,7 @@ public class Thief extends Beginner {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -206,7 +205,7 @@ public class Thief extends Beginner {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -381,7 +380,7 @@ public class Thief extends Beginner {
         Option o1 = new Option();
         Option o2 = new Option();
         Option o3 = new Option();
-        SkillInfo FlipTheCoinInfo = SkillData.getSkillInfoById(FLIP_THE_COIN);
+        SkillInfo FlipTheCoinInfo = Loaders.getInstance().getSkillData().getSkillInfoById(FLIP_THE_COIN);
         int amount = 1;
         if(tsm.hasStat(FlipTheCoin)) {
             amount = tsm.getOption(FlipTheCoin).nOption;
@@ -475,7 +474,7 @@ public class Thief extends Beginner {
     private void incrementShadowInstinct(int skillId, TemporaryStatManager tsm, Client c) {
         Option o = new Option();
         Option o1 = new Option();
-        SkillInfo InstinctInfo = SkillData.getSkillInfoById(SHADOWER_INSTINCT);
+        SkillInfo InstinctInfo = Loaders.getInstance().getSkillData().getSkillInfoById(SHADOWER_INSTINCT);
         Skill skill = chr.getSkill(SHADOWER_INSTINCT);
         byte slv = (byte) skill.getCurrentLevel();
         int amount = 1;
@@ -502,7 +501,7 @@ public class Thief extends Beginner {
             if(tsm.getOptByCTSAndSkill(IndiePAD, SHADOW_MELD) == null) {
                 Skill skill = chr.getSkill(SHADOW_MELD);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 
                 if(lastShadowMeld + 5000 < System.currentTimeMillis()) {
                     Option o1 = new Option();
@@ -537,7 +536,7 @@ public class Thief extends Beginner {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = SkillConstants.getActualSkillIDfromSkillID(skill.getSkillId());
         }
@@ -615,7 +614,7 @@ public class Thief extends Beginner {
                         if(mob.isBoss()) {
                             itemId = 2431850;
                         }
-                        Item item = ItemData.getItemDeepCopy(itemId);
+                        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(itemId);
                         Drop drop = new Drop(item.getItemId(), item);
                         field.drop(drop, mob.getPosition());
 
@@ -771,7 +770,7 @@ public class Thief extends Beginner {
                         chr.getPosition().getY() + 500)
         );
         List<Mob> mobs = field.getMobsInRect(rect);
-        if(mobs.size() <= 0) {
+        if(mobs.isEmpty()) {
             return;
         }
         Mob mob = Util.getRandomFromCollection(mobs);
@@ -795,7 +794,7 @@ public class Thief extends Beginner {
         Option o = new Option();
 
         Skill skill = chr.getSkill(EXPERT_THROWING_STAR_HANDLING);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         int hideIconSkillId = skill.getSkillId() + 100; // there's no Buff Icon
 
@@ -819,8 +818,8 @@ public class Thief extends Beginner {
             tsm.putCharacterStatValue(CriticalGrowing, o);
             tsm.sendSetStatPacket();
 
-            if(SkillData.getSkillInfoById(skillId) != null) {
-                chr.healMP(SkillData.getSkillInfoById(skillId).getValue(mpCon, slv));
+            if(Loaders.getInstance().getSkillData().getSkillInfoById(skillId) != null) {
+                chr.healMP(Loaders.getInstance().getSkillData().getSkillInfoById(skillId).getValue(mpCon, slv));
             }
 
             chr.getField().broadcastPacket(UserRemote.effect(chr.getId(), Effect.skillAffected(skill.getSkillId(), slv, 0)));
@@ -834,7 +833,7 @@ public class Thief extends Beginner {
         }
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = getMarkSkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         if(tsm.hasStat(NightLordMark)) {
@@ -856,7 +855,7 @@ public class Thief extends Beginner {
                     MobTemporaryStat mts = mob.getTemporaryStat();
 
                     List<Mob> lifes = chr.getField().getMobsInRect(rect);
-                    if(lifes.size() <= 0) {
+                    if(lifes.isEmpty()) {
                         return;
                     }
                     List<Mob> bossLifes = chr.getField().getBossMobsInRect(rect);
@@ -895,7 +894,7 @@ public class Thief extends Beginner {
     private int getAssassinsMarkStarCount() {
         if(getMarkSkill() != null) {
             Skill skill = getMarkSkill();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
 
             return si.getValue(bulletCount, slv);
@@ -919,7 +918,7 @@ public class Thief extends Beginner {
     private void setMarkonMob(AttackInfo attackInfo) {
         Skill skill = chr.getSkill(getCurMarkLv());
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(getCurMarkLv());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(getCurMarkLv());
         byte slv = (byte) skill.getCurrentLevel();
         int markprop = si.getValue(prop, slv);
         if(tsm.hasStat(NightLordMark)) {
@@ -953,7 +952,7 @@ public class Thief extends Beginner {
         if(chr.hasSkill(TOXIC_VENOM_NL)) {
             Skill skill = chr.getSkill(TOXIC_VENOM_NL);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if(Util.succeedProp(proc)) {
@@ -968,7 +967,7 @@ public class Thief extends Beginner {
         } else if(chr.hasSkill(VENOM_NL)) {
             Skill skill = chr.getSkill(VENOM_NL);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(proc)) {
@@ -986,7 +985,7 @@ public class Thief extends Beginner {
         if(chr.hasSkill(TOXIC_VENOM_SHAD)) {
             Skill skill = chr.getSkill(TOXIC_VENOM_SHAD);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if(Util.succeedProp(proc)) {
@@ -1001,7 +1000,7 @@ public class Thief extends Beginner {
         } else if(chr.hasSkill(VENOM_SHAD)) {
             Skill skill = chr.getSkill(VENOM_SHAD);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(proc)) {
@@ -1019,7 +1018,7 @@ public class Thief extends Beginner {
         if(chr.hasSkill(TOXIC_VENOM_DB)) {
             Skill skill = chr.getSkill(TOXIC_VENOM_DB);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if(Util.succeedProp(proc)) {
@@ -1034,7 +1033,7 @@ public class Thief extends Beginner {
         } else if(chr.hasSkill(VENOM_DB)) {
             Skill skill = chr.getSkill(VENOM_DB);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(proc)) {
@@ -1068,7 +1067,7 @@ public class Thief extends Beginner {
         if(chr.hasSkill(LIFE_DRAIN)) {
             Skill skill = chr.getSkill(LIFE_DRAIN);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             int amounthealed = si.getValue(x, slv);
             if(Util.succeedProp(proc)) {
@@ -1091,7 +1090,7 @@ public class Thief extends Beginner {
                     continue;
                 }
                 Skill skill = chr.getSkill(PICK_POCKET);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
                 Set<DropInfo> dropInfoSet = new HashSet<>();
                 for (int i = 0; i < slv; i++) {
@@ -1127,7 +1126,7 @@ public class Thief extends Beginner {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -1151,7 +1150,7 @@ public class Thief extends Beginner {
                     chr.getField().spawnAffectedArea(aa);
                     break;
                 case FRAILTY_CURSE:
-                    SkillInfo fci = SkillData.getSkillInfoById(skillID);
+                    SkillInfo fci = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
                     int lt1 = si.getValue(lt, slv);
                     int rb1 = si.getValue(rb, slv);
                     AffectedArea aa2 = AffectedArea.getPassiveAA(chr, skillID, slv);

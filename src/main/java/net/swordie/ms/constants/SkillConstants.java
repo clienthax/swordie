@@ -15,7 +15,7 @@ import net.swordie.ms.client.jobs.nova.AngelicBuster;
 import net.swordie.ms.client.jobs.resistance.Demon;
 import net.swordie.ms.client.jobs.resistance.Mechanic;
 import net.swordie.ms.enums.BeastTamerBeasts;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -387,7 +387,7 @@ public class SkillConstants {
                 result = 0;
                 break;
             default:
-                log.error("Unknown corresponding link skill for link skill id " + skillID);
+                log.error("Unknown corresponding link skill for link skill id {}", skillID);
         }
         return result;
     }
@@ -685,7 +685,6 @@ public class SkillConstants {
 
     public static int getStartPosBysmJobID(int smJobID) {
         int startPos = switch (smJobID) {
-            case 1 -> 0;
             case 2 -> 4;
             case 3 -> 8;
             case 4 -> 11;
@@ -795,12 +794,12 @@ public class SkillConstants {
     }
 
     public static boolean isPassiveSkill_NoPsdSkillsCheck(int skillId) {
-        SkillInfo si = SkillData.getSkillInfoById(skillId);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillId);
         return si != null && si.isPsd();
     }
 
     public static boolean isPassiveSkill(int skillId) {
-        SkillInfo si = SkillData.getSkillInfoById(skillId);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillId);
         return si != null && si.isPsd() && si.getPsdSkills().isEmpty();
     }
 
@@ -1045,15 +1044,10 @@ public class SkillConstants {
             // Angelic Blessing
             case 91 -> 2022764;
             // White Angelic Blessing
-            case 180 -> 2022823;
+            case 180, 80000155 -> 2022823;
             // Lightning God's Blessing
-            case 80000086 -> 2023189;
-            // White Angelic Blessing
-            case 80000155 -> 2022823;
-            // Lightning God's Blessing
-            case 80010065 -> 2023189;
+            case 80000086, 80010065, 80011150 -> 2023189;
             // Goddess' Guard
-            case 80011150 -> 1112932;
             default -> 0;
         };
     }

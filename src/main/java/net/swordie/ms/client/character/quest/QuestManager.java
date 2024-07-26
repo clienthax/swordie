@@ -12,7 +12,7 @@ import net.swordie.ms.connection.packet.UserRemote;
 import net.swordie.ms.connection.packet.WvsContext;
 import net.swordie.ms.enums.QuestStatus;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.QuestData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.QuestInfo;
 import net.swordie.ms.util.FileTime;
 
@@ -63,13 +63,11 @@ public class QuestManager {
     }
 
     public Set<Quest> getCompletedQuests() {
-        return getQuests().entrySet().stream().filter(entry -> entry.getValue().getStatus() == Completed).
-                map(Map.Entry::getValue).collect(Collectors.toSet());
+        return getQuests().values().stream().filter(quest -> quest.getStatus() == Completed).collect(Collectors.toSet());
     }
 
     public Set<Quest> getQuestsInProgress() {
-        return getQuests().entrySet().stream().filter(entry -> entry.getValue().getStatus() == Started).
-                map(Map.Entry::getValue).collect(Collectors.toSet());
+        return getQuests().values().stream().filter(quest -> quest.getStatus() == Started).collect(Collectors.toSet());
     }
 
     public int getSize() {
@@ -129,7 +127,7 @@ public class QuestManager {
             } else {
                 chr.chatMessage(Mob, "[Info] Accepted quest " + quest.getQRKey());
                 if(addRewardsFromWz) {
-                    QuestInfo qi = QuestData.getQuestInfoById(quest.getQRKey());
+                    QuestInfo qi = Loaders.getInstance().getQuestData().getQuestInfoById(quest.getQRKey());
                     if (qi != null) {
                         for (QuestReward qr : qi.getQuestRewards()) {
                             if ((qr instanceof QuestItemReward && ((QuestItemReward) qr).getStatus() == 0) || (qr instanceof QuestBuffItemReward && ((QuestBuffItemReward) qr).getStatus() == 0)) {
@@ -157,7 +155,7 @@ public class QuestManager {
      * @return Whether or not the Char can start the quest.
      */
     public boolean canStartQuest(int questID) {
-        QuestInfo qi = QuestData.getQuestInfoById(questID);
+        QuestInfo qi = Loaders.getInstance().getQuestData().getQuestInfoById(questID);
         if (qi == null) {
             return true;
         }
@@ -181,10 +179,10 @@ public class QuestManager {
      * @param questID The quest ID to finish.
      */
     public void completeQuest(int questID) {
-        QuestInfo questInfo = QuestData.getQuestInfoById(questID);
+        QuestInfo questInfo = Loaders.getInstance().getQuestData().getQuestInfoById(questID);
         Quest quest = getQuests().get(questID);
         if(quest == null) {
-            quest = QuestData.createQuestFromId(questID);
+            quest = Loaders.getInstance().getQuestData().createQuestFromId(questID);
             addQuest(quest);
         }
         quest.setStatus(QuestStatus.Completed);
@@ -252,7 +250,7 @@ public class QuestManager {
      * @param id the quest's id to add
      */
     public void addQuest(int id) {
-        Quest q = QuestData.createQuestFromId(id);
+        Quest q = Loaders.getInstance().getQuestData().createQuestFromId(id);
         if (q != null) {
             addQuest(q);
         }

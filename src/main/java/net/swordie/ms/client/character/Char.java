@@ -63,10 +63,7 @@ import net.swordie.ms.life.Merchant.MerchantItem;
 import net.swordie.ms.life.drop.Drop;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.pet.Pet;
-import net.swordie.ms.loaders.EtcData;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.*;
 import net.swordie.ms.loaders.containerclasses.AndroidInfo;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.scripts.ScriptInfo;
@@ -450,7 +447,7 @@ public class Char {
 		avatarLook.setHair(hair);
 		List<Integer> hairEquips = new ArrayList<>();
 		for (int itemId : items) {
-			Equip equip = ItemData.getEquipDeepCopyFromID(itemId, false);
+			Equip equip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(itemId, false);
 			if (equip != null && ItemConstants.isEquip(itemId)) {
 				hairEquips.add(itemId);
 				if ("Wp".equals(equip.getiSlot())) {
@@ -528,7 +525,7 @@ public class Char {
 		Transaction transaction = session.beginTransaction();
 		Query query = session.createQuery("FROM Char chr WHERE chr.avatarData.characterStat.name = :name");
 		query.setParameter("name", name);
-		List l = ((Query) query).list();
+		List l = query.list();
 		Char chr = null;
 		if (l != null && !l.isEmpty()) {
 			chr = (Char) l.get(0);
@@ -545,7 +542,7 @@ public class Char {
 				"WHERE chr.avatarData.characterStat.name = :name AND chr.avatarData.characterStat.worldIdForLog = :world");
 		query.setParameter("name", name);
 		query.setParameter("world", worldId);
-		List l = ((Query) query).list();
+		List l = query.list();
 		Char chr = null;
 		if (l != null && !l.isEmpty()) {
 			chr = (Char) l.get(0);
@@ -592,7 +589,7 @@ public class Char {
 			return;
 		}
 		Inventory inventory = getInventoryByType(type);
-		ItemInfo ii = ItemData.getItemInfoByID(item.getItemId());
+		ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId());
 		int quantity = item.getQuantity();
 		if (inventory != null) {
 			Item existingItem = inventory.getItemByItemIDAndStackable(item.getItemId());
@@ -1608,7 +1605,6 @@ public class Char {
             case ETC -> getEtcInventory();
             case INSTALL -> getInstallInventory();
             case CASH -> getCashInventory();
-            default -> null;
         };
 	}
 
@@ -1659,7 +1655,7 @@ public class Char {
 		}
 		getAvatarData().getCharacterStat().setJob(id);
 		setJobHandler(JobManager.getJobById((short) id, this));
-		List<Skill> skills = SkillData.getSkillsByJob((short) id);
+		List<Skill> skills = Loaders.getInstance().getSkillData().getSkillsByJob((short) id);
 		skills.forEach(skill -> addSkill(skill, true));
 		getClient().write(WvsContext.changeSkillRecordResult(skills, true, false, false, false));
 		notifyChanges();
@@ -1806,7 +1802,7 @@ public class Char {
 	 * @param skill The skill to add
 	 */
 	public void addToBaseStatCache(Skill skill) {
-		SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 		if(SkillConstants.isPassiveSkill(skill.getSkillId())) {
 			Map<BaseStat, Integer> stats = si.getBaseStatValues(this, skill.getCurrentLevel());
 			stats.forEach(this::addBaseStat);
@@ -1824,7 +1820,7 @@ public class Char {
 	 * @param skill The skill to remove
 	 */
 	public void removeFromBaseStatCache(Skill skill) {
-		SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 		Map<BaseStat, Integer> stats = si.getBaseStatValues(this, skill.getCurrentLevel());
 		stats.forEach(this::removeBaseStat);
 	}
@@ -1890,7 +1886,7 @@ public class Char {
 	 * @return The new Skill.
 	 */
 	private Skill createAndReturnSkill(int id) {
-		Skill skill = SkillData.getSkillDeepCopyById(id);
+		Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
 		addSkill(skill);
 		return skill;
 	}
@@ -2208,7 +2204,7 @@ public class Char {
 			getTemporaryStatManager().sendResetStatPacket();
 		}
         List<Skill> skills = new ArrayList<>();
-        for (ItemSkill itemSkill : ItemData.getEquipById(item.getItemId()).getItemSkills()) {
+        for (ItemSkill itemSkill : Loaders.getInstance().getItemData().getEquipById(item.getItemId()).getItemSkills()) {
             Skill skill = getSkill(itemSkill.getSkill());
             skill.setCurrentLevel(0);
             removeSkill(itemSkill.getSkill());
@@ -2277,8 +2273,8 @@ public class Char {
 			equip.addAttribute(EquipAttribute.NoNonCombatStatGain);
 		}
 		List<Skill> skills = new ArrayList<>();
-        for (ItemSkill itemSkill : ItemData.getEquipById(equip.getItemId()).getItemSkills()) {
-            Skill skill = SkillData.getSkillDeepCopyById(itemSkill.getSkill());
+        for (ItemSkill itemSkill : Loaders.getInstance().getItemData().getEquipById(equip.getItemId()).getItemSkills()) {
+            Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(itemSkill.getSkill());
             byte slv = itemSkill.getSlv();
             // support for Tower of Oz rings
             if (equip.getLevel() > 0) {
@@ -2749,7 +2745,7 @@ public class Char {
 
 	public void setDamageSkin(int itemID) {
 		setDamageSkin(new DamageSkinSaveData(ItemConstants.getDamageSkinIDByItemID(itemID), itemID, false,
-				StringData.getItemStringById(itemID)));
+				Loaders.getInstance().getStringData().getItemStringById(itemID)));
 	}
 
 	public void setDamageSkin(DamageSkinSaveData damageSkin) {
@@ -2770,7 +2766,7 @@ public class Char {
 
 	public void setPremiumDamageSkin(int itemID) {
 		setPremiumDamageSkin(new DamageSkinSaveData(ItemConstants.getDamageSkinIDByItemID(itemID), itemID, false,
-				StringData.getItemStringById(itemID)));
+				Loaders.getInstance().getStringData().getItemStringById(itemID)));
 	}
 
 	public void setPartyInvitable(boolean partyInvitable) {
@@ -2870,7 +2866,7 @@ public class Char {
 				ItemBuffs.giveItemBuffsFromItemID(this, tsm, itemID);
 			}
 			if (!ItemConstants.isEquip(itemID)) {
-				ItemInfo ii = ItemData.getItemInfoByID(itemID);
+				ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
 				isConsume = ii.getSpecStats().getOrDefault(SpecStat.consumeOnPickup, 0) != 0;
 				isRunOnPickUp = ii.getSpecStats().getOrDefault(SpecStat.runOnPickup, 0) != 0;
 			}
@@ -2880,7 +2876,7 @@ public class Char {
 				return true;
 			} else if (isRunOnPickUp) {
 				String script = String.valueOf(itemID);
-				ItemInfo ii = ItemData.getItemInfoByID(itemID);
+				ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
 				if (ii.getScript() != null && !"".equals(ii.getScript())) {
 					script = ii.getScript();
 				}
@@ -2994,7 +2990,7 @@ public class Char {
 	public void heal(int amount, boolean whilstDeath) {
 		int curHP = getHP();
 		int maxHP = getMaxHP();
-		int newHP = curHP + amount > maxHP ? maxHP : curHP + amount;
+		int newHP = Math.min(curHP + amount, maxHP);
 		Map<Stat, Object> stats = new HashMap<>();
 
 		if(whilstDeath || getHP() > 0) {
@@ -3019,7 +3015,7 @@ public class Char {
 	public void healMP(int amount) {
 		int curMP = getMP();
 		int maxMP = getMaxMP();
-		int newMP = curMP + amount > maxMP ? maxMP : curMP + amount;
+		int newMP = Math.min(curMP + amount, maxMP);
 		Map<Stat, Object> stats = new HashMap<>();
 		setStat(Stat.mp, newMP);
 		stats.put(Stat.mp, newMP);
@@ -3063,7 +3059,7 @@ public class Char {
 	 * @param quantity The amount to consume.
 	 */
 	public void consumeItem(int id, int quantity) {
-		Item checkItem = ItemData.getItemDeepCopy(id);
+		Item checkItem = Loaders.getInstance().getItemData().getItemDeepCopy(id);
 		if (checkItem != null) {
 			Item item = getInventoryByType(checkItem.getInvType()).getItemByItemID(id);
 			if (item != null) {
@@ -3083,7 +3079,7 @@ public class Char {
 	}
 
 	public boolean hasItemCount(int itemID, int count) {
-		Inventory inv = getInventoryByType(ItemData.getItemDeepCopy(itemID).getInvType());
+		Inventory inv = getInventoryByType(Loaders.getInstance().getItemData().getItemDeepCopy(itemID).getInvType());
 		return inv.getItems().stream()
 				.filter(i -> i.getItemId() == itemID)
 				.mapToInt(Item::getQuantity)
@@ -3444,7 +3440,7 @@ public class Char {
 
 	public void logout() {
 		punishLieDetectorEvasion();
-		log.info("Logging out " + getName());
+        log.info("Logging out {}", getName());
 		if (getField().getForcedReturn() != GameConstants.NO_MAP_ID) {
 			setFieldID(getField().getForcedReturn());
 		}
@@ -3569,7 +3565,7 @@ public class Char {
 		if (ItemConstants.isEquip(id)) {  //Equip
 			canHold = getEquipInventory().getSlots() > getEquipInventory().getItems().size();
 		} else {    //Item
-			ItemInfo ii = ItemData.getItemInfoByID(id);
+			ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(id);
 			Inventory inv = getInventoryByType(ii.getInvType());
 			Item curItem = inv.getItemByItemID(id);
 			canHold = (curItem != null && curItem.getQuantity() + 1 < ii.getSlotMax()) || inv.getSlots() > inv.getItems().size();
@@ -3578,11 +3574,11 @@ public class Char {
 	}
 
 	public boolean canHold(int id, int quantity) {
-		int slotMax = ItemData.getItemInfoByID(id).getSlotMax();
+		int slotMax = Loaders.getInstance().getItemData().getItemInfoByID(id).getSlotMax();
 		List<Item> items = new ArrayList<>();
 		for(int i = quantity; i > 0; i -= slotMax){
-			Item item = ItemData.getItemDeepCopy(id);
-			item.setQuantity(i > slotMax ? slotMax : i);
+			Item item = Loaders.getInstance().getItemData().getItemDeepCopy(id);
+			item.setQuantity(Math.min(i, slotMax));
 			items.add(item);
 		}
 		return canHold(items);
@@ -3730,7 +3726,7 @@ public class Char {
 		for (PetItem pi : getCashInventory().getItems()
 				.stream()
 				.filter(i -> i instanceof PetItem && ((PetItem) i).getActiveState() > 0)
-				.map(i -> (PetItem) i).collect(Collectors.toList())) {
+				.map(i -> (PetItem) i).toList()) {
 			Pet p = getPets().stream().filter(pet -> pet.getItem().equals(pi)).findAny().orElse(null);
 			if (p == null) {
 				// only create a new pet if the active state is > 0 (active), but isn't added to our own list yet
@@ -3764,10 +3760,10 @@ public class Char {
 	 * Initializes the equips' enchantment stats.
 	 */
 	public void initEquips() {
-		for (Equip e : getEquippedInventory().getItems().stream().map(e -> (Equip) e).collect(Collectors.toList())) {
+		for (Equip e : getEquippedInventory().getItems().stream().map(e -> (Equip) e).toList()) {
 			e.recalcEnchantmentStats();
 		}
-		for (Equip e : getEquipInventory().getItems().stream().map(e -> (Equip) e).collect(Collectors.toList())) {
+		for (Equip e : getEquipInventory().getItems().stream().map(e -> (Equip) e).toList()) {
 			e.recalcEnchantmentStats();
 		}
 	}
@@ -3835,7 +3831,7 @@ public class Char {
 		// Character potential
 		for (CharacterPotential cp : getPotentials()) {
 			Skill skill = cp.getSkill();
-			SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+			SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 			Map<BaseStat, Integer> stats = si.getBaseStatValues(this, skill.getCurrentLevel());
 			stat += stats.getOrDefault(baseStat, 0);
 		}
@@ -3964,7 +3960,7 @@ public class Char {
 			return false;
 		} else {
 			Skill skill = getSkill(skillID);
-			if (skill != null && SkillData.getSkillInfoById(skillID).hasCooltime() && !SkillConstants.isKeydownCDSkill(skillID)) {
+			if (skill != null && Loaders.getInstance().getSkillData().getSkillInfoById(skillID).hasCooltime() && !SkillConstants.isKeydownCDSkill(skillID)) {
 				setSkillCooldown(skillID, (byte) skill.getCurrentLevel());
 			}
 			return true;
@@ -3983,7 +3979,7 @@ public class Char {
 	 * @param slv     the current skill level
 	 */
 	public void setSkillCooldown(int skillID, byte slv) {
-		SkillInfo si = SkillData.getSkillInfoById(skillID);
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 		if (si != null) {
 			int cdInSec = si.getValue(SkillStat.cooltime, slv);
 			int cdInMillis = cdInSec > 0 ? cdInSec * 1000 : si.getValue(SkillStat.cooltimeMS, slv);
@@ -4063,7 +4059,7 @@ public class Char {
 	 * @param masterLevel  the master level of the skill
 	 */
 	public void addSkill(int skillID, int currentLevel, int masterLevel) {
-		Skill skill = SkillData.getSkillDeepCopyById(skillID);
+		Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(skillID);
 		if (skill == null && !SkillConstants.isMakingSkillRecipe(skillID)) {
 			log.error("No such skill found.");
 			return;
@@ -4218,13 +4214,13 @@ public class Char {
 
 	public void addItemToInventory(int id, int quantity) {
 		if (ItemConstants.isEquip(id)) {  //Equip
-			Equip equip = ItemData.getEquipDeepCopyFromID(id, false);
+			Equip equip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(id, false);
 			addItemToInventory(equip.getInvType(), equip, false);
 			getClient().write(WvsContext.inventoryOperation(true, false,
                     Add, (short) equip.getBagIndex(), (byte) -1, 0, equip));
 
 		} else {    //Item
-			Item item = ItemData.getItemDeepCopy(id);
+			Item item = Loaders.getInstance().getItemData().getItemDeepCopy(id);
 			item.setQuantity(quantity);
 			addItemToInventory(item);
 			getClient().write(WvsContext.inventoryOperation(true, false,
@@ -4504,7 +4500,7 @@ public class Char {
 	 */
 	public boolean applyMpCon(int skillID, byte slv) {
 		int curMp = getStat(Stat.mp);
-		SkillInfo si = SkillData.getSkillInfoById(skillID);
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 		if (si == null) {
 			return true;
 		}
@@ -4520,7 +4516,7 @@ public class Char {
 		if (getTemporaryStatManager().hasStat(NoBulletConsume) || JobConstants.isPhantom(getJob())) {
 			return true;
 		}
-		SkillInfo si = SkillData.getSkillInfoById(skillID);
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 		if (si == null) {
 			return true;
 		}
@@ -4599,7 +4595,7 @@ public class Char {
 	}
 
 	public int getMakingSkillLevel(int skillID) {
-		return (getSkillLevel(skillID) >> 24) <= 0 ? 0 : getSkillLevel(skillID) >> 24;
+		return Math.max((getSkillLevel(skillID) >> 24), 0);
 	}
 
 	public void setMakingSkillProficiency(int skillID, int proficiency) {
@@ -4612,7 +4608,7 @@ public class Char {
 	}
 
 	public int getMakingSkillProficiency(int skillID) {
-		return (getSkillLevel(skillID) & 0xFFFFFF) <= 0 ? 0 : getSkillLevel(skillID) & 0xFFFFFF;
+		return Math.max((getSkillLevel(skillID) & 0xFFFFFF), 0);
 	}
 
 	public void addMakingSkillProficiency(int skillID, int amount) {
@@ -4772,7 +4768,7 @@ public class Char {
 			Item android = getEquippedItemByBodyPart(BodyPart.Android);
 			if (heart != null && android != null && ((Equip) heart).getAndroidGrade() + 3 >= ((Equip) android).getAndroidGrade()) {
 				int androidId = ((Equip) android).getAndroid();
-				AndroidInfo androidInfo = EtcData.getAndroidInfoById(androidId);
+				AndroidInfo androidInfo = Loaders.getInstance().getEtcData().getAndroidInfoById(androidId);
 				if (getAndroid() != null) {
 					getField().removeLife(getAndroid());
 				}
@@ -4788,7 +4784,7 @@ public class Char {
 	public void useStatChangeItem(Item item, boolean consume) {
 		TemporaryStatManager tsm = getTemporaryStatManager();
 		int itemID = item.getItemId();
-		Map<SpecStat, Integer> specStats = ItemData.getItemInfoByID(itemID).getSpecStats();
+		Map<SpecStat, Integer> specStats = Loaders.getInstance().getItemData().getItemInfoByID(itemID).getSpecStats();
 		if (!specStats.isEmpty()) {
 			ItemBuffs.giveItemBuffsFromItemID(this, tsm, itemID);
 		} else {
@@ -4809,7 +4805,7 @@ public class Char {
 	public int getSpentActiveHyperSkillSp() {
 		int sp = 0;
 		for (Skill skill : getSkills()) {
-			SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+			SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 			if (si.getHyper() == 2) {
 				sp += skill.getCurrentLevel();
 			}
@@ -4820,7 +4816,7 @@ public class Char {
 	public int getSpentPassiveHyperSkillSp() {
 		int sp = 0;
 		for (Skill skill : getSkills()) {
-			SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+			SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 			if (si.getHyper() == 1) {
 				sp += skill.getCurrentLevel();
 			}
@@ -4949,7 +4945,7 @@ public class Char {
 		for (Map.Entry<Integer, Integer> entry : setIdToLevel.entrySet()) {
 			int setId = entry.getKey();
 			int setLevel = entry.getValue();
-			SetEffect setEffect = EtcData.getSetEffectInfoById(setId);
+			SetEffect setEffect = Loaders.getInstance().getEtcData().getSetEffectInfoById(setId);
 			for (int i = 1; i <= setLevel; i++) {
 				if (setEffect.getStatsByLevel(i) == null) {
 					continue;
@@ -4981,7 +4977,7 @@ public class Char {
 		for (Map.Entry<Integer, Integer> entry : setIdToLevel.entrySet()) {
 			int setId = entry.getKey();
 			int setLevel = entry.getValue();
-			SetEffect setEffect = EtcData.getSetEffectInfoById(setId);
+			SetEffect setEffect = Loaders.getInstance().getEtcData().getSetEffectInfoById(setId);
 			for (int i = 1; i <= setLevel; i++) {
 				if (setEffect.getStatsByLevel(i) == null) {
 					continue;
@@ -5011,7 +5007,7 @@ public class Char {
 		for (ItemOption option : options) {
 			int id = option.getId();
 			int level = option.getReqLevel();
-			ItemOption io = ItemData.getItemOptionById(id);
+			ItemOption io = Loaders.getInstance().getItemData().getItemOptionById(id);
 			if (io != null) {
 				Map<BaseStat, Double> valMap = io.getStatValuesByLevel(level);
 				amount += valMap.getOrDefault(baseStat, 0D);

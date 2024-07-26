@@ -21,7 +21,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -117,7 +117,7 @@ public class Mechanic extends Citizen {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -136,7 +136,7 @@ public class Mechanic extends Citizen {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         TemporaryStatBase tsb = tsm.getTSBByTSIndex(TSIndex.RideVehicle);
         Option o1 = new Option();
@@ -315,7 +315,7 @@ public class Mechanic extends Citizen {
     public void healFromSupportUnit(Summon summon) {
         Char summonOwner = summon.getChr();
         if (summonOwner.hasSkill(ENHANCED_SUPPORT_UNIT) || summonOwner.hasSkill(SUPPORT_UNIT_HEX)) {
-            SkillInfo si = SkillData.getSkillInfoById(SUPPORT_UNIT_HEX);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(SUPPORT_UNIT_HEX);
             byte slv = (byte) summonOwner.getSkill(SUPPORT_UNIT_HEX).getCurrentLevel();
             int healrate = si.getValue(hp, slv);
             c.getChr().heal((int) (c.getChr().getMaxHP() * ((double) healrate / 100)));
@@ -355,7 +355,7 @@ public class Mechanic extends Citizen {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -379,14 +379,14 @@ public class Mechanic extends Citizen {
 
     private void createHumanoidMechRocketForceAtom() { // Humanoid Rockets are spread around
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById((chr.hasSkill(ADV_HOMING_BEACON) ? ADV_HOMING_BEACON : HOMING_BEACON));
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById((chr.hasSkill(ADV_HOMING_BEACON) ? ADV_HOMING_BEACON : HOMING_BEACON));
         byte slv = (byte) getHomingBeaconSkill().getCurrentLevel();
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> mobs = field.getMobsInRect(rect);
-        if(mobs.size() <= 0) {
+        if(mobs.isEmpty()) {
             return;
         }
         for(int i = 0; i < getHomingBeaconBulletCount(); i++) {
@@ -405,13 +405,13 @@ public class Mechanic extends Citizen {
 
     private void createTankMechRocketForceAtom() { // Tank Rockets are focused on 1 enemy
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById((chr.hasSkill(ADV_HOMING_BEACON) ? ADV_HOMING_BEACON : HOMING_BEACON));
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById((chr.hasSkill(ADV_HOMING_BEACON) ? ADV_HOMING_BEACON : HOMING_BEACON));
         byte slv = (byte) getHomingBeaconSkill().getCurrentLevel();
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
-        if(field.getMobsInRect(rect).size() <= 0) {
+        if(field.getMobsInRect(rect).isEmpty()) {
             return;
         }
         Mob mob = Util.getRandomFromCollection(field.getMobsInRect(rect));
@@ -457,13 +457,13 @@ public class Mechanic extends Citizen {
         for(int skillId : homingBeacon) {
             if(chr.hasSkill(skillId)) {
                 Skill skill = chr.getSkill(skillId);
-                SkillInfo si = SkillData.getSkillInfoById(skillId);
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillId);
                 byte slv = (byte) skill.getCurrentLevel();
                 forceAtomCount += si.getValue(bulletCount, slv);
             }
         }
         if(tsm.getOptByCTSAndSkill(BombTime, FULL_SPREAD) != null) {
-            forceAtomCount += chr.hasSkill(FULL_SPREAD) ? SkillData.getSkillInfoById(FULL_SPREAD).getValue(x, chr.getSkill(FULL_SPREAD).getCurrentLevel()) : 0;
+            forceAtomCount += chr.hasSkill(FULL_SPREAD) ? Loaders.getInstance().getSkillData().getSkillInfoById(FULL_SPREAD).getValue(x, chr.getSkill(FULL_SPREAD).getCurrentLevel()) : 0;
         }
         return forceAtomCount;
     }
@@ -474,8 +474,8 @@ public class Mechanic extends Citizen {
             return;
         }
         Skill skill = chr.getSkill(skillId);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
-        SkillInfo suhInfo = SkillData.getSkillInfoById(SUPPORT_UNIT_HEX);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
+        SkillInfo suhInfo = Loaders.getInstance().getSkillData().getSkillInfoById(SUPPORT_UNIT_HEX);
         byte slv = (byte) skill.getCurrentLevel();
 
         Option o = new Option();
@@ -492,12 +492,6 @@ public class Mechanic extends Citizen {
         supportUnitTimer = EventManager.addEvent(() -> applySupportUnitDebuffOnMob(skillId), si.getValue(x, slv), TimeUnit.SECONDS);
     }
 
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
-
 
     // Skill related methods -------------------------------------------------------------------------------------------
 
@@ -509,7 +503,7 @@ public class Mechanic extends Citizen {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -528,8 +522,8 @@ public class Mechanic extends Citizen {
                     Field field = chr.getField();
                     int duration = si.getValue(time, slv);
                     if (chr.hasSkill(ROBOT_MASTERY)) {
-                        SkillInfo robotMastery = SkillData.getSkillInfoById(ROBOT_MASTERY);
-                        duration *= 1 + (double) (robotMastery.getValue(x, chr.getSkillLevel(ROBOT_MASTERY)) / 100);
+                        SkillInfo robotMastery = Loaders.getInstance().getSkillData().getSkillInfoById(ROBOT_MASTERY);
+                        duration *= (int) (1 + (double) (robotMastery.getValue(x, chr.getSkillLevel(ROBOT_MASTERY)) / 100));
                     }
                     OpenGate openGate = new OpenGate(chr, chr.getPosition(), chr.getParty(), gateId, duration);
                     if (gateId == 0) {
@@ -556,7 +550,7 @@ public class Mechanic extends Citizen {
                     summon.setMoveAbility(MoveAbility.Stop);
                     summon.setAssistType(AssistType.None);
                     if (chr.hasSkill(ROBOT_MASTERY)) {
-                        SkillInfo robotMastery = SkillData.getSkillInfoById(ROBOT_MASTERY);
+                        SkillInfo robotMastery = Loaders.getInstance().getSkillData().getSkillInfoById(ROBOT_MASTERY);
                         summon.setSummonTerm((int) (summon.getSummonTerm() * (double) (1 + (robotMastery.getValue(x, chr.getSkillLevel(ROBOT_MASTERY)) / 100))));
                     }
                     field.spawnAddSummon(summon);

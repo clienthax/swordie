@@ -6,7 +6,7 @@ import net.swordie.ms.client.character.Char;
 import net.swordie.ms.client.character.items.Item;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.connection.db.FileTimeConverter;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 
 import jakarta.persistence.*;
@@ -475,7 +475,7 @@ public class CashShopItem {
     public CashItemInfo toCashItemInfo(Account account, Char chr) {
         CashItemInfo cii = new CashItemInfo();
         cii.setAccountID(account.getId());
-        Item item = ItemData.getItemDeepCopy(getItemID());
+        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(getItemID());
         item.setQuantity((short) (getBundleQuantity() == 0 ? 1 : getBundleQuantity()));
         cii.setItem(item);
         cii.setCommodityID(getId());

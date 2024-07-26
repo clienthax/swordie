@@ -22,7 +22,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -103,7 +103,7 @@ public class Phantom extends Job {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -125,7 +125,7 @@ public class Phantom extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -222,7 +222,7 @@ public class Phantom extends Job {
     private void giveJudgmentDrawBuff(int skillId) {
 
         Skill skill = chr.getSkill(skillId);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
@@ -269,7 +269,7 @@ public class Phantom extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -306,7 +306,7 @@ public class Phantom extends Job {
 
     private void createCarteForceAtom(AttackInfo attackInfo) {
         if (chr.hasSkill(CARTE_BLANCHE)) {
-            SkillInfo si = SkillData.getSkillInfoById(CARTE_BLANCHE);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(CARTE_BLANCHE);
             int anglenum = new Random().nextInt(30) + 295;
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -343,7 +343,7 @@ public class Phantom extends Job {
 
     private void createCarteForceAtomByJudgmentDraw() {
         if (chr.hasSkill(CARTE_BLANCHE)) {
-            SkillInfo si = SkillData.getSkillInfoById(CARTE_BLANCHE);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(CARTE_BLANCHE);
             Rect rect = new Rect(
                     new Position(
                             chr.getPosition().getX() - 450,
@@ -353,7 +353,7 @@ public class Phantom extends Job {
                             chr.getPosition().getY() + 450)
             );
             List<Mob> mobs = chr.getField().getMobsInRect(rect);
-            if (mobs.size() <= 0) {
+            if (mobs.isEmpty()) {
                 chr.dispose();
                 return;
             }
@@ -390,7 +390,7 @@ public class Phantom extends Job {
             return;
         }
         Skill skill = chr.getSkill(JUDGMENT_DRAW_2);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if(tsm.hasStat(Judgement) && tsm.getOption(Judgement).nOption == 5) {
@@ -449,7 +449,7 @@ public class Phantom extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -489,7 +489,7 @@ public class Phantom extends Job {
         }
 
         Skill skill = chr.getSkill(VOL_DAME);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         Rect rect = new Rect(   //NPE when using the skill's rect
@@ -501,7 +501,7 @@ public class Phantom extends Job {
                         chr.getPosition().getY() + 250)
         );
         List<Mob> mobs = chr.getField().getMobsInRect(rect);
-        if(mobs.size() <= 0) {
+        if(mobs.isEmpty()) {
             return;
         }
         MobStat buffFromMobStat = MobStat.Mystery; //Needs to be initialised
@@ -516,7 +516,7 @@ public class Phantom extends Job {
         };
         for (Mob mob : mobs) {
             MobTemporaryStat mts = mob.getTemporaryStat();
-            List<MobStat> currentMobStats = Arrays.stream(mobStats).filter(mts::hasCurrentMobStat).collect(Collectors.toList());
+            List<MobStat> currentMobStats = Arrays.stream(mobStats).filter(mts::hasCurrentMobStat).toList();
             for (MobStat currentMobStat : currentMobStats) {
                 if (mts.hasCurrentMobStat(currentMobStat)) {
                     mts.removeMobStat(currentMobStat, true);
@@ -571,7 +571,7 @@ public class Phantom extends Job {
         }
         if (tsm.getOptByCTSAndSkill(CharacterTemporaryStat.EVA, VOL_DAME) != null) {
             Skill skill = chr.getSkill(VOL_DAME);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int dmgPerc = si.getValue(x, skill.getCurrentLevel());
             int dmg = hitInfo.hpDamage;
             hitInfo.hpDamage = dmg - (dmg * (dmgPerc / 100));
@@ -584,7 +584,7 @@ public class Phantom extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         Skill skill = chr.getSkill(FINAL_FEINT);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         chr.heal(chr.getMaxHP());

@@ -86,7 +86,7 @@ public class JobManager {
         for(Class<? extends Job> clazz : jobClasses) {
             Job job = null;
             try {
-                job = (Job) clazz.newInstance();
+                job = clazz.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -100,7 +100,7 @@ public class JobManager {
         for(Class<? extends Job> clazz : jobClasses) {
             Job job = null;
             try {
-                job = (Job) clazz.newInstance();
+                job = clazz.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -125,7 +125,7 @@ public class JobManager {
         Job job = null;
         for(Class<? extends Job> clazz : jobClasses) {
             try {
-                job = (Job) clazz.getConstructor(Char.class).newInstance(chr);
+                job = clazz.getConstructor(Char.class).newInstance(chr);
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }

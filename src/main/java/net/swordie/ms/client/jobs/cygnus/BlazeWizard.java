@@ -23,7 +23,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -124,7 +124,7 @@ public class BlazeWizard extends Noblesse {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -143,7 +143,7 @@ public class BlazeWizard extends Noblesse {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -181,7 +181,7 @@ public class BlazeWizard extends Noblesse {
                     break;
                 }
 
-                tsm.removeStatsBySkill(skillID == FIRES_OF_CREATION_FOX ? FIRES_OF_CREATION_LION : FIRES_OF_CREATION_LION);
+                tsm.removeStatsBySkill(FIRES_OF_CREATION_LION);
                 Field field = c.getChr().getField();
 
                 if (summonFox != null)
@@ -204,7 +204,7 @@ public class BlazeWizard extends Noblesse {
                 summon.setFlyMob(skillID == FIRES_OF_CREATION_FOX);
                 summon.setMoveAbility(MoveAbility.Walk);
                 // i have to specify the summon term as the _FOX/LION skills have the time set to 0, making the summon last forever!
-                summon.setSummonTerm(SkillData.getSkillInfoById(FIRES_OF_CREATION).getValue(time, slv));
+                summon.setSummonTerm(Loaders.getInstance().getSkillData().getSkillInfoById(FIRES_OF_CREATION).getValue(time, slv));
                 field.spawnSummon(summon);
 
                 if (skillID == FIRES_OF_CREATION_FOX) {
@@ -295,7 +295,7 @@ public class BlazeWizard extends Noblesse {
             Option o1 = new Option();
             Option o2 = new Option();
             Skill skill = chr.getSkill(FLAME_ELEMENT);
-            SkillInfo si = SkillData.getSkillInfoById(getFlameElement());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(getFlameElement());
             byte slv = (byte) chr.getSkill(getFlameElement()).getCurrentLevel();
             Summon summon;
             Field field;
@@ -352,7 +352,7 @@ public class BlazeWizard extends Noblesse {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -381,7 +381,7 @@ public class BlazeWizard extends Noblesse {
         Option o = new Option();
         if(tsm.hasStat(WizardIgnite)) {
             Skill skill = chr.getSkill(IGNITION);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(si.getValue(prop, slv))) {
@@ -423,12 +423,6 @@ public class BlazeWizard extends Noblesse {
 
     }
 
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
-
 
     // Skill related methods -------------------------------------------------------------------------------------------
 
@@ -439,7 +433,7 @@ public class BlazeWizard extends Noblesse {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -510,7 +504,7 @@ public class BlazeWizard extends Noblesse {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         Skill skill = chr.getSkill(PHOENIX_RUN);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         chr.heal(chr.getMaxHP() / 2); // 50%

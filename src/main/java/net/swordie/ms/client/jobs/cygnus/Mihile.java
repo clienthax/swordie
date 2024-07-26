@@ -22,7 +22,7 @@ import net.swordie.ms.life.Life;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -102,7 +102,7 @@ public class Mihile extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -229,7 +229,7 @@ public class Mihile extends Job {
         Option o = new Option();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo rgi = SkillData.getSkillInfoById(ROYAL_GUARD);
+        SkillInfo rgi = Loaders.getInstance().getSkillData().getSkillInfoById(ROYAL_GUARD);
         int amount = 1;
         if(tsm.hasStat(RoyalGuardState)) {
             amount = tsm.getOption(RoyalGuardState).xOption;
@@ -270,7 +270,7 @@ public class Mihile extends Job {
     private int getRoyalGuardAttPower(Char chr) {
         int pad = 0;
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(ROYAL_GUARD);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(ROYAL_GUARD);
         byte slv = (byte) si.getCurrentLevel();
         if(tsm.getOption(RoyalGuardState).xOption == 1) {
             pad = 10;
@@ -294,7 +294,7 @@ public class Mihile extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if(chr != null && chr.hasSkill(SOUL_LINK) && tsm.hasStat(MichaelSoulLink)) {
             Skill skill = chr.getSkill(SOUL_LINK);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
             if(!chr.isLeft()) {
@@ -341,7 +341,7 @@ public class Mihile extends Job {
                         }
                         if(chr.getSkill(ENDURING_SPIRIT) != null && tsm.hasStatBySkillId(ENDURING_SPIRIT) && !partyTSM.hasStatBySkillId(ENDURING_SPIRIT)) {
                             Skill enduringSpirit = chr.getSkill(ENDURING_SPIRIT);
-                            SkillInfo esInfo = SkillData.getSkillInfoById(enduringSpirit.getSkillId());
+                            SkillInfo esInfo = Loaders.getInstance().getSkillData().getSkillInfoById(enduringSpirit.getSkillId());
                             byte esLevel = (byte) enduringSpirit.getCurrentLevel();
 
                             // Enduring Spirit - DEF
@@ -389,7 +389,7 @@ public class Mihile extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (chr != null && chr.hasSkill(SOUL_LINK) && tsm.hasStat(MichaelSoulLink)) {
             Skill skill = chr.getSkill(SOUL_LINK);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             int delay = si.getValue(dot, slv);
             chr.heal((int) (chr.getMaxHP() / ((double) 100 / si.getValue(s, slv))));
@@ -411,7 +411,7 @@ public class Mihile extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -450,7 +450,7 @@ public class Mihile extends Job {
                 }
                 if(chr.hasSkill(RADIANT_CROSS_AA)) {
                     Field field = chr.getField();
-                    SkillInfo rca = SkillData.getSkillInfoById(RADIANT_CROSS_AA);
+                    SkillInfo rca = Loaders.getInstance().getSkillData().getSkillInfoById(RADIANT_CROSS_AA);
                     AffectedArea aa = AffectedArea.getAffectedArea(chr, attackInfo);
                     aa.setMobOrigin((byte) 0);
                     aa.setSkillID(RADIANT_CROSS_AA);
@@ -504,7 +504,7 @@ public class Mihile extends Job {
     public int getFinalAttackSkill() {
         Skill skill = getFinalAtkSkill();
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             int proc = si.getValue(prop, slv);
 
@@ -538,7 +538,7 @@ public class Mihile extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {

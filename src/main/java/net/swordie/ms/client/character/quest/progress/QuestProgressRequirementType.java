@@ -42,7 +42,6 @@ public enum QuestProgressRequirementType {
             case LEVEL -> (QuestProgressRequirement) new QuestProgressLevelRequirement(0).load(dis);
             case MOB -> (QuestProgressRequirement) new QuestProgressMobRequirement().load(dis);
             case MONEY -> (QuestProgressRequirement) new QuestProgressMoneyRequirement(0).load(dis);
-            default -> null;
         };
     }
 }

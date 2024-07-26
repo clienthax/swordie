@@ -22,8 +22,8 @@ import net.swordie.ms.enums.CharNameResult;
 import net.swordie.ms.enums.LoginType;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.handlers.header.OutHeader;
-import net.swordie.ms.loaders.ItemData;
 import net.swordie.ms.connection.db.DatabaseManager;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -253,7 +253,7 @@ public class LoginHandler {
         int face = items[0];
         int hair = items[1];
         CharNameResult code = null;
-        if (!ItemData.isStartingItems(items) || skin > ItemConstants.MAX_SKIN || skin < 0
+        if (!Loaders.getInstance().getItemData().isStartingItems(items) || skin > ItemConstants.MAX_SKIN || skin < 0
                 || face < ItemConstants.MIN_FACE || face > ItemConstants.MAX_FACE
                 || hair < ItemConstants.MIN_HAIR || hair > ItemConstants.MAX_HAIR) {
             c.getUser().getOffenseManager().addOffense("Tried to add items unavailable on char creation.");
@@ -286,19 +286,19 @@ public class LoginHandler {
         cs.setCharacterIdForLog(chr.getId());
         cs.setWorldIdForLog(acc.getWorldId());
         for (int i : chr.getAvatarData().getAvatarLook().getHairEquips()) {
-            Equip equip = ItemData.getEquipDeepCopyFromID(i, false);
+            Equip equip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(i, false);
             if (equip != null && equip.getItemId() >= 1000000) {
                 equip.setBagIndex(ItemConstants.getBodyPartFromItem(
                         equip.getItemId(), chr.getAvatarData().getAvatarLook().getGender()));
                 chr.addItemToInventory(EQUIPPED, equip, true);
             }
         }
-        Equip codex = ItemData.getEquipDeepCopyFromID(1172000, false);
+        Equip codex = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(1172000, false);
         codex.setInvType(EQUIPPED);
         codex.setBagIndex(BodyPart.MonsterBook.getVal());
         chr.addItemToInventory(EQUIPPED, codex, true);
         if (curSelectedRace == 15) { // Zero hack for adding 2nd weapon (removing it in hairequips for zero look)
-            Equip equip = ItemData.getEquipDeepCopyFromID(1562000, false);
+            Equip equip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(1562000, false);
             equip.setBagIndex(ItemConstants.getBodyPartFromItem(
                     equip.getItemId(), chr.getAvatarData().getAvatarLook().getGender()));
             chr.addItemToInventory(EQUIPPED, equip, true);
@@ -445,7 +445,7 @@ public class LoginHandler {
     @Handler(op = InHeader.EXCEPTION_LOG)
     public static void handleExceptionLog(Client c, InPacket inPacket) {
         String str = inPacket.decodeString();
-        log.error("Exception log: " + str);
+        log.error("Exception log: {}", str);
     }
 
     @Handler(op = InHeader.WVS_CRASH_CALLBACK)

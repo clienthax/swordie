@@ -23,7 +23,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -108,7 +108,7 @@ public class WindArcher extends Noblesse {
         if(isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -128,7 +128,7 @@ public class WindArcher extends Noblesse {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -329,7 +329,7 @@ public class WindArcher extends Noblesse {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -373,7 +373,7 @@ public class WindArcher extends Noblesse {
                 break;
             case SPIRALING_VORTEX:
                 List<MobAttackInfo> mai = attackInfo.mobAttackInfo;
-                if(attackInfo.mobAttackInfo.size() <= 0) {
+                if(attackInfo.mobAttackInfo.isEmpty()) {
                     return;
                 }
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(Util.getRandomFromCollection(mai).mobId);
@@ -389,7 +389,7 @@ public class WindArcher extends Noblesse {
     private void createTriflingWindForceAtom(AttackInfo attackInfo) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStat(TriflingWhimOnOff)) {
-            SkillInfo si = SkillData.getSkillInfoById(TRIFLING_WIND_I);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(TRIFLING_WIND_I);
             Random random = new Random();
             int firstImpact = random.nextInt(10) + 31; // 36
             int secondImpact = 6;
@@ -440,7 +440,7 @@ public class WindArcher extends Noblesse {
     private void createStormBringerForceAtom(AttackInfo attackInfo) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStat(StormBringer)) {
-            SkillInfo si = SkillData.getSkillInfoById(STORM_BRINGER);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(STORM_BRINGER);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
                 if (mob == null) {
@@ -481,7 +481,7 @@ public class WindArcher extends Noblesse {
     private int getTriflingWindProp() {
         Skill skill = getTriflingWindSkill();
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
 
             return si.getValue(prop, slv);
@@ -492,7 +492,7 @@ public class WindArcher extends Noblesse {
     private int getTriflingWindSubProp() {
         Skill skill = getTriflingWindSkill();
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
 
             return si.getValue(subProp, slv);
@@ -503,7 +503,7 @@ public class WindArcher extends Noblesse {
     private int getMaxTriffling() {
         Skill skill = getTriflingWindSkill();
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
 
             return si.getValue(x, slv);
@@ -528,14 +528,14 @@ public class WindArcher extends Noblesse {
         if(skill == null) {
             return;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         List<Mob> mobListWithTemplateId = chr.getField()
                 .getMobsInRect(summon.getPosition().getRectAround(si.getRects().get(0)))
                 .stream()
                 .filter(mob -> mob.getTemplateId() == mobTemplateId)
-                .collect(Collectors.toList());
+                .toList();
         for(Mob mob : mobListWithTemplateId) {
             MobTemporaryStat mts = mob.getTemporaryStat();
             Option o = new Option();
@@ -551,14 +551,14 @@ public class WindArcher extends Noblesse {
         if(skill == null) {
             return;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         List<Mob> mobListWithTemplateId = chr.getField()
                 .getMobsInRect(summon.getPosition().getRectAround(si.getRects().get(0)))
                 .stream()
                 .filter(mob -> mob.getTemplateId() == mobTemplateId)
-                .collect(Collectors.toList());
+                .toList();
         for(Mob mob : mobListWithTemplateId) {
             MobTemporaryStat mts = mob.getTemporaryStat();
             Option o = new Option();
@@ -568,12 +568,6 @@ public class WindArcher extends Noblesse {
             mts.addStatOptionsAndBroadcast(MobStat.PDR, o);
         }
     }
-
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
 
 
     // Skill related methods -------------------------------------------------------------------------------------------
@@ -585,7 +579,7 @@ public class WindArcher extends Noblesse {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -617,7 +611,7 @@ public class WindArcher extends Noblesse {
         if(chr.hasSkill(SECOND_WIND)) {
             if(hitInfo.hpDamage == 0 && hitInfo.mpDamage == 0) {
                 Skill skill = chr.getSkill(SECOND_WIND);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
                 o1.nOption = si.getValue(er, slv);
                 o1.rOption = skill.getSkillId();

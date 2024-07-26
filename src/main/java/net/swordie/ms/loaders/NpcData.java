@@ -18,25 +18,25 @@ import java.util.*;
  * Created on 2/19/2018.
  */
 public class NpcData implements DataCreator {
-	private static final Logger log = LogManager.getLogger(NpcData.class);
-	private static final boolean LOG_UNKS = false;
+	private final Logger log = LogManager.getLogger(NpcData.class);
+	private final boolean LOG_UNKS = false;
 
-	private static final Set<Npc> npcs = new HashSet<>();
-	private static final Map<Integer, NpcShopDlg> shops = new HashMap<>();
+	private final Set<Npc> npcs = new HashSet<>();
+	private final Map<Integer, NpcShopDlg> shops = new HashMap<>();
 
-	private static Map<Integer, NpcShopDlg> getShops() {
+	private Map<Integer, NpcShopDlg> getShops() {
 		return shops;
 	}
 
-	private static void addShop(int id, NpcShopDlg nsd) {
+	private void addShop(int id, NpcShopDlg nsd) {
 		getShops().put(id, nsd);
 	}
 
-	private static void loadNpcsFromWz() {
+	private void loadNpcsFromWz() {
 		String wzDir = String.format("%s/Npc.wz", ServerConstants.WZ_DIR);
 		File dir = new File(wzDir);
 		if (!dir.exists()) {
-			log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
 			return;
 		}
 
@@ -80,7 +80,7 @@ public class NpcData implements DataCreator {
 		}
 	}
 
-	public static void saveNpcsToDat(String dir) {
+	public void saveNpcsToDat(String dir) {
 		Util.makeDirIfAbsent(dir);
 		for (Npc npc : getBaseNpcs()) {
 			File file = new File(String.format("%s/%d.dat", dir, npc.getTemplateId()));
@@ -104,11 +104,11 @@ public class NpcData implements DataCreator {
 		}
 	}
 
-	private static Npc getNpc(int id) {
+	private Npc getNpc(int id) {
 		return getBaseNpcs().stream().filter(npc -> npc.getTemplateId() == id).findFirst().orElse(null);
 	}
 
-	public static Npc getNpcDeepCopyById(int id) {
+	public Npc getNpcDeepCopyById(int id) {
 		Npc res = getNpc(id);
 		if(res != null) {
 			res = res.deepCopy();
@@ -122,7 +122,7 @@ public class NpcData implements DataCreator {
 		return res;
 	}
 
-	private static Npc loadNpcFromDat(File file) {
+	private Npc loadNpcFromDat(File file) {
 		try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
 			Npc npc = new Npc(dis.readInt());
 			npc.setMove(dis.readBoolean());
@@ -142,8 +142,8 @@ public class NpcData implements DataCreator {
 		return null;
 	}
 
-	private static NpcShopDlg loadNpcShopDlgFromDB(int id) {
-		List<NpcShopItem> items = (List<NpcShopItem>) DatabaseManager.getObjListFromDB(NpcShopItem.class, "shopid", id);
+	private NpcShopDlg loadNpcShopDlgFromDB(int id) {
+		List<NpcShopItem> items = DatabaseManager.getObjListFromDB(NpcShopItem.class, "shopid", id);
 		if (items == null || items.isEmpty()) {
 			return null;
 		}
@@ -156,11 +156,11 @@ public class NpcData implements DataCreator {
 		return nsd;
 	}
 
-	public static NpcShopDlg getShopById(int id) {
+	public NpcShopDlg getShopById(int id) {
 		return getShops().getOrDefault(id, loadNpcShopDlgFromDB(id));
 	}
 
-	public static void generateDatFiles() {
+	public void generateDatFiles() {
 		log.info("Started generating npc data.");
 		long start = System.currentTimeMillis();
 		loadNpcsFromWz();
@@ -168,15 +168,11 @@ public class NpcData implements DataCreator {
 		log.info(String.format("Completed generating npc data in %dms.", System.currentTimeMillis() - start));
 	}
 
-	public static Set<Npc> getBaseNpcs() {
+	public Set<Npc> getBaseNpcs() {
 		return npcs;
 	}
 
-	public static void main(String[] args) {
-		generateDatFiles();
-	}
-
-	public static void clear() {
+	public void clear() {
 		getBaseNpcs().clear();
 		getShops().clear();
 	}

@@ -21,11 +21,11 @@ public class PlayerCommands {
 
     @Command(names = {"check", "dispose", "fix"}, requiredType = AccountType.Player)
     public static class Dispose extends PlayerCommand {
-        public static void execute(Char chr, String[] args) {
+        public void execute(Char chr, String[] args) {
             chr.dispose();
             Map<BaseStat, Integer> basicStats = chr.getTotalBasicStats();
             StringBuilder sb = new StringBuilder();
-            List<BaseStat> sortedList = Arrays.stream(BaseStat.values()).sorted(Comparator.comparing(Enum::toString)).collect(Collectors.toList());
+            List<BaseStat> sortedList = Arrays.stream(BaseStat.values()).sorted(Comparator.comparing(Enum::toString)).toList();
             for (BaseStat bs : sortedList) {
                 sb.append(String.format("%s = %d, ", bs, basicStats.getOrDefault(bs, 0)));
             }
@@ -42,14 +42,14 @@ public class PlayerCommands {
 
     @Command(names = {"event"}, requiredType = AccountType.Player)
     public static class JoinEvent extends PlayerCommand {
-        public static void execute(Char chr, String[] args) {
+        public void execute(Char chr, String[] args) {
             InGameEventManager.getInstance().joinPublicEvent(chr);
         }
     }
 
     @Command(names = {"roll"}, requiredType = AccountType.Player)
     public static class OneArmedBandit extends PlayerCommand {
-        public static void execute(Char chr, String[] args) {
+        public void execute(Char chr, String[] args) {
 
             String[] str = new String[]{
                     "Map/Effect.img/miro/frame",
@@ -66,7 +66,7 @@ public class PlayerCommands {
 
     @Command(names = {"sell"}, requiredType = AccountType.Player)
     public static class SellItem extends PlayerCommand {
-        public static void execute(Char chr, String[] args) {
+        public void execute(Char chr, String[] args) {
             ScriptManagerImpl smi = chr.getScriptManager();
             smi.startScript(0, "inv-seller", ScriptType.Npc);
         }

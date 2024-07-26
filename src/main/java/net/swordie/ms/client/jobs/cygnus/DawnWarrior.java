@@ -18,7 +18,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -92,7 +92,7 @@ public class DawnWarrior extends Noblesse {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -115,7 +115,7 @@ public class DawnWarrior extends Noblesse {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -138,7 +138,7 @@ public class DawnWarrior extends Noblesse {
                 tsm.putCharacterStatValue(Booster, o1);
                 break;
             case FALLING_MOON:
-                SkillInfo mosSI = SkillData.getSkillInfoById(MASTER_OF_THE_SWORD);
+                SkillInfo mosSI = Loaders.getInstance().getSkillData().getSkillInfoById(MASTER_OF_THE_SWORD);
                 if(tsm.getOption(PoseType).nOption != 1) {
                     tsm.removeStatsBySkill(RISING_SUN);
                     tsm.sendResetStatPacket();
@@ -157,7 +157,7 @@ public class DawnWarrior extends Noblesse {
                 tsm.putCharacterStatValue(BuckShot, o3);
                 break;
             case RISING_SUN:
-                mosSI = SkillData.getSkillInfoById(MASTER_OF_THE_SWORD);
+                mosSI = Loaders.getInstance().getSkillData().getSkillInfoById(MASTER_OF_THE_SWORD);
                 if(tsm.getOption(PoseType).nOption != 2) {
                     tsm.removeStatsBySkill(FALLING_MOON);
                     tsm.sendResetStatPacket();
@@ -229,7 +229,7 @@ public class DawnWarrior extends Noblesse {
         if(chr.hasSkill(WILL_OF_STEEL)) {
             Skill skill = chr.getSkill(WILL_OF_STEEL);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int interval = si.getValue(w, slv);
             int heal = (int) (chr.getMaxHP() / ((double) 100 / si.getValue(y, slv)));
 
@@ -255,7 +255,7 @@ public class DawnWarrior extends Noblesse {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -300,15 +300,15 @@ public class DawnWarrior extends Noblesse {
         Option o3 = new Option();
         Option o4 = new Option();
         Option o5 = new Option();
-        SkillInfo mosSI = SkillData.getSkillInfoById(MASTER_OF_THE_SWORD);
+        SkillInfo mosSI = Loaders.getInstance().getSkillData().getSkillInfoById(MASTER_OF_THE_SWORD);
         //Rising Sun Skill Info
             Skill skillRS = chr.getSkill(RISING_SUN);
             byte slvRS = (byte) skillRS.getCurrentLevel();
-            SkillInfo siRS = SkillData.getSkillInfoById(skillRS.getSkillId());
+            SkillInfo siRS = Loaders.getInstance().getSkillData().getSkillInfoById(skillRS.getSkillId());
         //Falling Moon Skill Info
             Skill skillFM = chr.getSkill(FALLING_MOON);
             byte slvFM = (byte) skillFM.getCurrentLevel();
-            SkillInfo siFM = SkillData.getSkillInfoById(skillFM.getSkillId());
+            SkillInfo siFM = Loaders.getInstance().getSkillData().getSkillInfoById(skillFM.getSkillId());
 
 
         if(tsm.hasStat(GlimmeringTime)) {
@@ -388,7 +388,7 @@ public class DawnWarrior extends Noblesse {
 
     private void applySoulElementOnMob(AttackInfo attackInfo, byte slv) {
         Option o1 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(SOUL_ELEMENT);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(SOUL_ELEMENT);
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(prop, slv))) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -406,12 +406,6 @@ public class DawnWarrior extends Noblesse {
         }
     }
 
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
-
 
     // Skill related methods -------------------------------------------------------------------------------------------
 
@@ -422,7 +416,7 @@ public class DawnWarrior extends Noblesse {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {

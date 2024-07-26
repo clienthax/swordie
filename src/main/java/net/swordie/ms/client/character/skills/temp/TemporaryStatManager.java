@@ -22,7 +22,7 @@ import net.swordie.ms.enums.LeaveType;
 import net.swordie.ms.enums.TSIndex;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.AffectedArea;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
 import org.apache.logging.log4j.LogManager;
@@ -93,7 +93,7 @@ public class TemporaryStatManager {
     public void putCharacterStatValue(CharacterTemporaryStat cts, Option option) {
         boolean indie = cts.isIndie();
         option.setTimeToMillis();
-        SkillInfo skillinfo = SkillData.getSkillInfoById(indie ? option.nReason : option.rOption);
+        SkillInfo skillinfo = Loaders.getInstance().getSkillData().getSkillInfoById(indie ? option.nReason : option.rOption);
         if(skillinfo != null && !skillinfo.isNotIncBuffDuration()) {
             int duration = (indie ? option.tTerm : option.tOption);
             long buffTimeR = getChr().getTotalStat(BaseStat.buffTimeR); // includes the 100% base
@@ -159,7 +159,7 @@ public class TemporaryStatManager {
                 addBaseStat(stats.getKey(), stats.getValue());
             }
             if (option.tTerm > 0) {
-                Tuple tuple = new Tuple(cts, option);
+                Tuple<CharacterTemporaryStat, Option> tuple = new Tuple<>(cts, option);
                 if (getIndieSchedules().containsKey(tuple)) {
                     getIndieSchedules().get(tuple).cancel(false);
                 }
@@ -227,7 +227,7 @@ public class TemporaryStatManager {
             }
         }
         sendResetStatPacket();
-        Tuple tuple = new Tuple(cts, option);
+        Tuple<CharacterTemporaryStat, Option> tuple = new Tuple<>(cts, option);
         if(!fromSchedule && getIndieSchedules().containsKey(tuple)) {
             getIndieSchedules().get(tuple).cancel(false);
         } else {
@@ -289,7 +289,7 @@ public class TemporaryStatManager {
         List<CharacterTemporaryStat> orderedAndFilteredCtsList = new ArrayList<>(getNewStats().keySet()).stream()
                 .filter(cts -> cts.getOrder() != -1)
                 .sorted(Comparator.comparingInt(CharacterTemporaryStat::getOrder))
-                .collect(Collectors.toList());
+                .toList();
         for (CharacterTemporaryStat cts : orderedAndFilteredCtsList) {
             if (cts.getOrder() != -1) {
                 Option o = getOption(cts);
@@ -539,7 +539,7 @@ public class TemporaryStatManager {
         List<CharacterTemporaryStat> orderedAndFilteredCtsList = new ArrayList<>(collection.keySet()).stream()
                 .filter(cts -> cts.getOrder() != -1)
                 .sorted(Comparator.comparingInt(CharacterTemporaryStat::getOrder))
-                .collect(Collectors.toList());
+                .toList();
         for (CharacterTemporaryStat cts : orderedAndFilteredCtsList) {
             if (cts.getRemoteOrder() != -1) {
                 Option o = getOption(cts);
@@ -663,7 +663,6 @@ public class TemporaryStatManager {
     public void encodeRemovedIndieTempStat(OutPacket outPacket) {
         Map<CharacterTemporaryStat, List<Option>> stats = getRemovedStats().entrySet().stream()
                 .filter(stat -> stat.getKey().isIndie())
-                .sorted(Comparator.comparingInt(stat -> stat.getKey().getVal()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         for(Map.Entry<CharacterTemporaryStat, List<Option>> stat : stats.entrySet()) {

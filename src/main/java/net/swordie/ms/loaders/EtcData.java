@@ -23,21 +23,21 @@ import java.util.Map;
 
 public class EtcData implements DataCreator {
 
-    private static final Logger log = LogManager.getLogger(EtcData.class);
-    private static final Map<Integer, Integer> familiarSkills = new HashMap<>();
-    private static final Map<Integer, SetEffect> setEffects = new HashMap<>();
-    private static final Map<Integer, Integer> characterCards = new HashMap<>();
-    private static final Map<Integer, AndroidInfo> androidInfo = new HashMap<>();
-    private static final Map<Integer, BossSoul> soulCollection = new HashMap<>();
+    private final Logger log = LogManager.getLogger(EtcData.class);
+    private final Map<Integer, Integer> familiarSkills = new HashMap<>();
+    private final Map<Integer, SetEffect> setEffects = new HashMap<>();
+    private final Map<Integer, Integer> characterCards = new HashMap<>();
+    private final Map<Integer, AndroidInfo> androidInfo = new HashMap<>();
+    private final Map<Integer, BossSoul> soulCollection = new HashMap<>();
 
-    private static final String SCROLL_STAT_ID = "1";
-    private static final String ITEM_OPTION_ID = "2";
+    private final String SCROLL_STAT_ID = "1";
+    private final String ITEM_OPTION_ID = "2";
 
-    public static void loadAndroidsFromWz() {
+    public void loadAndroidsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/Android";
         File dir = new File(wzDir);
         if (!dir.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -76,12 +76,10 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static void loadSetEffectsFromWz() {
-        //String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/SetItemInfo";
-        //Node root = XMLApi.getRoot(new File(wzDir));
+    public void loadSetEffectsFromWz() {
         File file = new File(String.format("%s/Etc.wz/SetItemInfo.img.xml", ServerConstants.WZ_DIR));
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -119,11 +117,11 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static void loadSoulCollectionFromWz() {
+    public void loadSoulCollectionFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz/SoulCollection.img.xml";
         File dir = new File(wzDir);
         if (!dir.exists()) {
-            log.error(dir + " does not exist.");
+            log.error("{} does not exist.", dir);
             return;
         }
 
@@ -174,9 +172,9 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static void saveSoulCollection(String dir) {
+    public void saveSoulCollection(String dir) {
         Util.makeDirIfAbsent(dir);
-        try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(new File(dir + "/" + "soulCollection" + ".dat")))) {
+        try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(dir + "/" + "soulCollection" + ".dat"))) {
             dataOutputStream.writeInt(soulCollection.size());
             for (Map.Entry<Integer, BossSoul> soulEntry : soulCollection.entrySet()) {
                 dataOutputStream.writeInt(soulEntry.getKey());
@@ -188,9 +186,9 @@ public class EtcData implements DataCreator {
         }
     }
 
-    private static void loadSoulCollectionFromFile(String dir) {
+    private void loadSoulCollectionFromFile(String dir) {
         Util.makeDirIfAbsent(dir);
-        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(new File(dir + "/" + "soulCollection" + ".dat")))) {
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(dir + "/" + "soulCollection" + ".dat"))) {
             int size = dataInputStream.readInt();
             for (int i = 0; i < size; i++) {
                 int itemId = dataInputStream.readInt();
@@ -204,10 +202,10 @@ public class EtcData implements DataCreator {
     }
 
 
-    public static void loadCharacterCardsFromWz() {
+    public void loadCharacterCardsFromWz() {
         File file = new File(String.format("%s/Etc.wz/CharacterCard.img.xml", ServerConstants.WZ_DIR));
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -223,10 +221,10 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static void saveCharacterCards(String dir) {
+    public void saveCharacterCards(String dir) {
         Util.makeDirIfAbsent(dir);
         try  {
-            DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(new File(dir + "/charactercards.dat")));
+            DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(dir + "/charactercards.dat"));
             dataOutputStream.writeInt(characterCards.size());
             for (Map.Entry<Integer, Integer> entry : characterCards.entrySet()) {
                 dataOutputStream.writeInt(entry.getKey());
@@ -238,10 +236,10 @@ public class EtcData implements DataCreator {
     }
 
 
-    public static void saveSetEffects(String dir) {
+    public void saveSetEffects(String dir) {
         Util.makeDirIfAbsent(dir);
         for (Map.Entry<Integer, SetEffect> entry : setEffects.entrySet()) {
-            try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(new File(dir + "/" + entry.getKey() + ".dat")))) {
+            try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(dir + "/" + entry.getKey() + ".dat"))) {
                 dataOutputStream.writeShort(entry.getValue().getEffectsToLevel().size()); //
                 for (Map.Entry<Integer, List<Object>> level : entry.getValue().getEffectsToLevel().entrySet()) {
                     dataOutputStream.writeInt(level.getKey()); //levels non consistent
@@ -264,7 +262,7 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static void loadCharacterCards(String dir) {
+    public void loadCharacterCards(String dir) {
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(dir))) {
             short size = dataInputStream.readShort();
             for (int i = 0; i < size; i++) {
@@ -277,14 +275,14 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static int getCharacterCardSkillByJob(int jobId) {
+    public int getCharacterCardSkillByJob(int jobId) {
         if (characterCards.isEmpty()) {
-            loadCharacterCards(String.format("%s/etc/%d.dat", ServerConstants.DAT_DIR, "charactercards"));
+            loadCharacterCards(String.format("%s/etc/%s.dat", ServerConstants.DAT_DIR, "charactercards"));
         }
         return characterCards.getOrDefault(jobId,0);
     }
 
-    public static SetEffect loadSetEffectByFile(String file) {
+    public SetEffect loadSetEffectByFile(String file) {
         SetEffect setEffect = new SetEffect();
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             short levelSize = dataInputStream.readShort();
@@ -310,14 +308,14 @@ public class EtcData implements DataCreator {
         return setEffect;
     }
 
-    public static SetEffect getSetEffectInfoById(int setID) {
+    public SetEffect getSetEffectInfoById(int setID) {
         if (setEffects.containsKey(setID)) {
             return setEffects.get(setID);
         }
         return loadSetEffectByFile(String.format("%s/etc/setEffects/%d.dat", ServerConstants.DAT_DIR, setID));
     }
 
-    public static void saveAndroidInfo(String dir) {
+    public void saveAndroidInfo(String dir) {
         Util.makeDirIfAbsent(dir);
         for (AndroidInfo ai : androidInfo.values()) {
             File file = new File(String.format("%s/%d.dat", dir, ai.getId()));
@@ -341,14 +339,14 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static AndroidInfo getAndroidInfoById(int androidId) {
+    public AndroidInfo getAndroidInfoById(int androidId) {
         if (androidInfo.containsKey(androidId)) {
             return androidInfo.get(androidId);
         }
         return loadAndroidInfoFromFile(String.format("%s/etc/android/%d.dat", ServerConstants.DAT_DIR, androidId));
     }
 
-    private static AndroidInfo loadAndroidInfoFromFile(String file) {
+    private AndroidInfo loadAndroidInfoFromFile(String file) {
         AndroidInfo ai = null;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
             ai = new AndroidInfo(dis.readInt());
@@ -371,7 +369,7 @@ public class EtcData implements DataCreator {
         return ai;
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating etc data.");
         Util.makeDirIfAbsent(ServerConstants.DAT_DIR + "/etc");
         long start = System.currentTimeMillis();
@@ -386,15 +384,11 @@ public class EtcData implements DataCreator {
         log.info(String.format("Completed generating etc data in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void clear() {
+    public void clear() {
         androidInfo.clear();
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    private static void loadFamiliarSkillsFromWz() {
+    private void loadFamiliarSkillsFromWz() {
         File file = new File(String.format("%s/Etc.wz/FamiliarInfo.img.xml", ServerConstants.WZ_DIR));
         Node root = XMLApi.getRoot(file);
         Node mainNode = XMLApi.getAllChildren(root).get(0);
@@ -412,9 +406,11 @@ public class EtcData implements DataCreator {
 
     @Saver(varName = "familiarSkills")
     private static void saveFamiliarSkills(File file) {
+        EtcData etcData = Loaders.getInstance().getEtcData();
+
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
-            dos.writeInt(familiarSkills.size());
-            for (Map.Entry<Integer, Integer> entry : familiarSkills.entrySet()) {
+            dos.writeInt(etcData.familiarSkills.size());
+            for (Map.Entry<Integer, Integer> entry : etcData.familiarSkills.entrySet()) {
                 dos.writeInt(entry.getKey()); // familiar ID
                 dos.writeInt(entry.getValue()); // skill ID
             }
@@ -425,16 +421,17 @@ public class EtcData implements DataCreator {
 
     @Loader(varName = "familiarSkills")
     public static void loadFamiliarSkills(File file, boolean exists) {
+        EtcData etcData = Loaders.getInstance().getEtcData();
         if (!exists) {
-            loadFamiliarSkillsFromWz();
-            saveFamiliarSkills(file);
+            etcData.loadFamiliarSkillsFromWz();
+            etcData.saveFamiliarSkills(file);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int gradeSkillSize = dis.readInt();
                 for (int j = 0; j < gradeSkillSize; j++) {
                     int familiarID = dis.readInt();
                     int skillID = dis.readInt();
-                    familiarSkills.put(familiarID, skillID);
+                    etcData.familiarSkills.put(familiarID, skillID);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -442,16 +439,16 @@ public class EtcData implements DataCreator {
         }
     }
 
-    public static int getSkillByFamiliarID(int familiarID) {
+    public int getSkillByFamiliarID(int familiarID) {
         return familiarSkills.get(familiarID);
     }
 
-    public static int getSkillBySoulItem(int soulItemId) {
+    public int getSkillBySoulItem(int soulItemId) {
         BossSoul bs = getBossSoulByItem(soulItemId);
         return bs != null ? bs.getSkillId() : 0;
     }
 
-    public static BossSoul getBossSoulByItem(int soulItemId) {
+    public BossSoul getBossSoulByItem(int soulItemId) {
         if (soulCollection.isEmpty()) {
             loadSoulCollectionFromFile(ServerConstants.DAT_DIR);
         }

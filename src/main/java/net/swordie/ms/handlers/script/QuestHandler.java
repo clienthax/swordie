@@ -12,8 +12,7 @@ import net.swordie.ms.enums.MedalReissueResultType;
 import net.swordie.ms.enums.QuestType;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.QuestData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.QuestInfo;
 import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.scripts.ScriptType;
@@ -65,7 +64,7 @@ public class QuestHandler {
             chr.chatMessage(String.format("Could not find quest %d.", questID));
             return;
         }
-        QuestInfo qi = QuestData.getQuestInfoById(questID);
+        QuestInfo qi = Loaders.getInstance().getQuestData().getQuestInfoById(questID);
         if (qi == null) {
             chr.chatMessage(String.format("Could not find quest info %d.", questID));
             return;
@@ -73,7 +72,7 @@ public class QuestHandler {
         switch (qt) {
             case QuestReq_AcceptQuest:
                 if (qm.canStartQuest(questID)) {
-                    qm.addQuest(QuestData.createQuestFromId(questID));
+                    qm.addQuest(Loaders.getInstance().getQuestData().createQuestFromId(questID));
                     success = true;
                 }
                 break;
@@ -139,13 +138,13 @@ public class QuestHandler {
             case 3 -> 100000;
             default -> 1000000;
         };
-        if (QuestData.getQuestInfoById(questId).getMedalItemId() != medalItemId || !(ItemConstants.isMedal(medalItemId))) {
+        if (Loaders.getInstance().getQuestData().getQuestInfoById(questId).getMedalItemId() != medalItemId || !(ItemConstants.isMedal(medalItemId))) {
             chr.getOffenseManager().addOffense(String.format("Character %d tried to reissue an item {%d} that isn't a medal or tried to reissue a medal from a quest {%d} that doesn't give the given medal", chr.getId(), medalItemId, questId));
 
         } else if (!sm.hasQuestCompleted(questId)) {
             chr.getOffenseManager().addOffense(String.format("Character %d tried to reissue a medal from a quest {%d} which they have not completed.", chr.getId(), questId));
 
-        } else if (ItemData.getItemDeepCopy(medalItemId) == null || QuestData.getQuestInfoById(questId) == null) {
+        } else if (Loaders.getInstance().getItemData().getItemDeepCopy(medalItemId) == null || Loaders.getInstance().getQuestData().getQuestInfoById(questId) == null) {
             chr.write(UserLocal.medalReissueResult(MedalReissueResultType.Unknown, medalItemId));
 
         } else if (chr.getMoney() < actualMesoCost) {
@@ -161,7 +160,7 @@ public class QuestHandler {
             count++;
             sm.setQRValue(QuestConstants.MEDAL_REISSUE_QUEST, "count=" + count);
             chr.deductMoney(actualMesoCost);
-            chr.addItemToInventory(QuestData.getQuestInfoById(questId).getMedalItemId(), 1);
+            chr.addItemToInventory(Loaders.getInstance().getQuestData().getQuestInfoById(questId).getMedalItemId(), 1);
             chr.write(UserLocal.medalReissueResult(MedalReissueResultType.Success, medalItemId));
         }
         chr.dispose();

@@ -2,7 +2,7 @@ package net.swordie.ms.world.shop;
 
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.ItemConstants;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class NpcShopDlg {
 
 	public void generateProjectiles() {
 		for (int i : ItemConstants.getRechargeablesList()) {
-			ItemInfo ii = ItemData.getItemInfoByID(i);
+			ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(i);
 			if (ii == null) {
 				// atm just 2070014 (2070014) that somewhy isn't found
 				continue;

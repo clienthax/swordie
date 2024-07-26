@@ -20,9 +20,7 @@ import net.swordie.ms.life.Life;
 import net.swordie.ms.life.movement.Movement;
 import net.swordie.ms.life.movement.MovementInfo;
 import net.swordie.ms.life.npc.Npc;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.NpcData;
-import net.swordie.ms.loaders.QuestData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.loaders.containerclasses.QuestInfo;
 import net.swordie.ms.scripts.ScriptType;
@@ -60,7 +58,7 @@ public class NpcHandler {
         }
         String script = npc.getScripts().get(0);
         if (script == null) {
-            NpcShopDlg nsd = NpcData.getShopById(templateID);
+            NpcShopDlg nsd = Loaders.getInstance().getNpcData().getShopById(templateID);
             if (nsd != null) {
                 chr.getScriptManager().stop(ScriptType.Npc); // reset contents before opening shop?
                 chr.setShop(nsd);
@@ -89,7 +87,7 @@ public class NpcHandler {
             return;
         }
         if (qm.hasQuestInProgress(questID)) {
-            QuestInfo qi = QuestData.getQuestInfoById(questID);
+            QuestInfo qi = Loaders.getInstance().getQuestData().getQuestInfoById(questID);
             String scriptName = qi.getSpeech().get(speech - 1);
             if (scriptName == null || scriptName.equalsIgnoreCase("")) {
                 chr.chatMessage("Could not find that speech - quest id " + questID + ", speech " + speech);
@@ -169,7 +167,7 @@ public class NpcHandler {
                         return;
                     }
                 } else {
-                    long cost = nsi.getPrice() * quantity;
+                    long cost = (long) nsi.getPrice() * quantity;
                     if (chr.getMoney() < cost) {
                         chr.write(ShopDlg.shopResult(new MsgShopResult(ShopResultType.NotEnoughMesosMsg)));
                         return;
@@ -181,7 +179,7 @@ public class NpcHandler {
                     amountBought += quantity;
                     chr.addItemBoughtAmount(nsi.getId(), amountBought);
                 }
-                Item item = ItemData.getItemDeepCopy(itemID);
+                Item item = Loaders.getInstance().getItemData().getItemDeepCopy(itemID);
                 item.setQuantity(quantity * itemQuantity);
                 chr.addItemToInventory(item);
                 chr.write(ShopDlg.shopResult(new MsgShopResult(ShopResultType.Success)));
@@ -193,7 +191,7 @@ public class NpcHandler {
                     chr.chatMessage(String.format("Was not able to find a rechargable item at position %d.", slot));
                     return;
                 }
-                ItemInfo ii = ItemData.getItemInfoByID(item.getItemId());
+                ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId());
                 long cost = ii.getSlotMax() - item.getQuantity();
                 if (chr.getMoney() < cost) {
                     chr.write(ShopDlg.shopResult(new MsgShopResult(ShopResultType.NotEnoughMesosMsg)));
@@ -231,7 +229,7 @@ public class NpcHandler {
                 if (ItemConstants.isEquip(itemID)) {
                     cost = ((Equip) item).getPrice();
                 } else {
-                    cost = ItemData.getItemInfoByID(itemID).getPrice() * quantity;
+                    cost = (long) Loaders.getInstance().getItemData().getItemInfoByID(itemID).getPrice() * quantity;
                 }
                 chr.consumeItem(itemID, quantity);
                 chr.addMoney(cost);
@@ -334,7 +332,7 @@ public class NpcHandler {
         final GachaponResult result = GachaponResult.getByVal(type);
 
         if (result == null) {
-            log.error("[Gachapon] Found unknown gachapon result " + type);
+            log.error("[Gachapon] Found unknown gachapon result {}", type);
             chr.write(GachaponDlg.gachResult(GachaponResult.ERROR));
             return;
         }
@@ -361,9 +359,9 @@ public class NpcHandler {
                     chr.write(GachaponDlg.gachResult(GachaponResult.ERROR));
                     return;
                 }
-                Equip equip = ItemData.getEquipDeepCopyFromID(reward, true);
+                Equip equip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(reward, true);
                 if (equip == null) {
-                    Item item = ItemData.getItemDeepCopy(reward, true);
+                    Item item = Loaders.getInstance().getItemData().getItemDeepCopy(reward, true);
                     if (item == null) {
                         chr.write(GachaponDlg.gachResult(GachaponResult.ERROR));
                         chr.chatMessage(ChatType.Mob, "Item is null" + reward);

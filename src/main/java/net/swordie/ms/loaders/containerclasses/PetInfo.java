@@ -3,7 +3,7 @@ package net.swordie.ms.loaders.containerclasses;
 import net.swordie.ms.client.character.items.PetItem;
 import net.swordie.ms.enums.InvType;
 import net.swordie.ms.life.pet.PetSkill;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.Loaders;
 
 /**
  * Created on 4/14/2018.
@@ -359,7 +359,7 @@ public class PetInfo {
         pi.setItemId(getItemID());
         pi.setInvType(getInvType());
         pi.setQuantity(1);
-        pi.setName(StringData.getItemStringById(getItemID()));
+        pi.setName(Loaders.getInstance().getStringData().getItemStringById(getItemID()));
         pi.setLevel((byte) 1);
         pi.setPetHue(-1);
         pi.addPetSkill(PetSkill.ITEM_PICKUP); // each pet has this now

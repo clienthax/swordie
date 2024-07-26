@@ -31,10 +31,7 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Reactor;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.movement.MovementInfo;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.MobData;
-import net.swordie.ms.loaders.MonsterCollectionData;
-import net.swordie.ms.loaders.ReactorData;
+import net.swordie.ms.loaders.*;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
@@ -248,8 +245,8 @@ public class UserHandler {
     public static void handleMonsterBookMobInfo(Char chr, InPacket inPacket) {
         inPacket.decodeInt(); // tick
         int cardID = inPacket.decodeInt();
-        ItemInfo ii = ItemData.getItemInfoByID(cardID);
-        Mob mob = MobData.getMobById(ii.getMobID());
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(cardID);
+        Mob mob = Loaders.getInstance().getMobData().getMobById(ii.getMobID());
         if (mob != null) {
             // TODO Figure out which packet to send
         }
@@ -326,7 +323,7 @@ public class UserHandler {
             long seconds = (((c.getChr().getRuneCooldown() + (GameConstants.RUNE_COOLDOWN_TIME * 60000)) - System.currentTimeMillis()) / 1000);
             chr.chatScriptMessage("You cannot use another Rune for " +
                     (minutes > 0 ?
-                            minutes + " minute" + (minutes > 1 ? "s" : "") + " and " + (seconds - (minutes * 60)) + " second" + ((seconds - (minutes * 60)) > 1 ? "s" : "") + "" :
+                            minutes + " minute" + (minutes > 1 ? "s" : "") + " and " + (seconds - (minutes * 60)) + " second" + ((seconds - (minutes * 60)) > 1 ? "s" : "") :
                             seconds + " second" + (seconds > 1 ? "s" : "")
                     ));
         }
@@ -387,8 +384,8 @@ public class UserHandler {
             case 0: // group
                 MonsterCollectionGroup mcs = mc.getGroup(region, session, group);
                 if (mcs != null && !mcs.isRewardClaimed() && mc.isComplete(region, session, group)) {
-                    Tuple<Integer, Integer> rewardInfo = MonsterCollectionData.getReward(region, session, group);
-                    Item item = ItemData.getItemDeepCopy(rewardInfo.getLeft());
+                    Tuple<Integer, Integer> rewardInfo = Loaders.getInstance().getMonsterCollectionData().getReward(region, session, group);
+                    Item item = Loaders.getInstance().getItemData().getItemDeepCopy(rewardInfo.getLeft());
                     item.setQuantity(rewardInfo.getRight());
                     chr.addItemToInventory(item);
                     mcs.setRewardClaimed(true);
@@ -410,7 +407,7 @@ public class UserHandler {
                 }
                 break;
             default:
-                log.warn("Unhandled MonsterCollectionCompleteRewardReq type " + reqType);
+                log.warn("Unhandled MonsterCollectionCompleteRewardReq type {}", reqType);
                 chr.write(WvsContext.monsterCollectionResult(MonsterCollectionResultType.TryAgainInAMoment, null, 0));
 
         }
@@ -536,7 +533,7 @@ public class UserHandler {
         if (type == null) {
             return;
         } else if (type == ReactorType.VEIN && chr.hasSkill(SkillConstants.MINING_SKILL) || type == ReactorType.HERB && chr.hasSkill(SkillConstants.HERBALISM_SKILL)) {
-            int reactorLevel = ReactorData.getReactorInfoByID(reactor.getTemplateId()).getLevel();
+            int reactorLevel = Loaders.getInstance().getReactorData().getReactorInfoByID(reactor.getTemplateId()).getLevel();
             int chrLevel = type == ReactorType.HERB ? chr.getMakingSkillLevel(SkillConstants.HERBALISM_SKILL) : chr.getMakingSkillLevel(SkillConstants.MINING_SKILL);
             int successChance = chrLevel >= reactorLevel ? 95 : 20;
             success = Util.succeedProp(successChance);

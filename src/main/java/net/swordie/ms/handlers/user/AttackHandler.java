@@ -24,7 +24,7 @@ import net.swordie.ms.handlers.header.OutHeader;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.world.event.InGameEvent;
 import net.swordie.ms.world.event.InGameEventManager;
@@ -59,7 +59,7 @@ public class AttackHandler {
             byte slv = attackInfo.slv;
             chr.dbgChatMsg("SkillID: " + skillID);
             Job sourceJobHandler = chr.getJobHandler();
-            SkillInfo si = SkillData.getSkillInfoById(skillID);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
             if (si != null && !si.getExtraSkillInfo().isEmpty()) {
                 chr.getField().broadcastPacket(FieldPacket.registerExtraSkill(chr.getPosition(), skillID, si.getExtraSkillInfo().keySet(), attackInfo.left));
             }
@@ -478,7 +478,7 @@ public class AttackHandler {
             if (header == InHeader.USER_MAGIC_ATTACK) {
                 mai.hpPerc = inPacket.decodeByte();
                 if (skillID == 80001835 || skillID == Kanna.SOUL_SHEAR) {
-                    mai.magicInfo = (short) inPacket.decodeByte();
+                    mai.magicInfo = inPacket.decodeByte();
                     ai.hits = (byte) mai.magicInfo;
                 } else {
                     mai.magicInfo = inPacket.decodeShort();

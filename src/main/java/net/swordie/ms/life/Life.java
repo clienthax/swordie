@@ -2,9 +2,8 @@ package net.swordie.ms.life;
 
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.life.npc.Npc;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
-import net.swordie.ms.loaders.MobData;
-import net.swordie.ms.loaders.NpcData;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.life.mob.Mob;
@@ -275,7 +274,7 @@ public class Life extends Observable {
         if (getLifeType().equalsIgnoreCase("m")) {
             mobGen = new MobGen(0);
             mobGen.setPosition(getHomePosition().deepCopy());
-            Mob mob = MobData.getMobDeepCopyById(getTemplateId());
+            Mob mob = Loaders.getInstance().getMobData().getMobDeepCopyById(getTemplateId());
             mob.setObjectId(getObjectId());
             mob.setLifeType(getLifeType());
             mob.setTemplateId(getTemplateId());
@@ -339,7 +338,7 @@ public class Life extends Observable {
     public Npc createNpcFromLife() {
         Npc npc = null;
         if("n".equalsIgnoreCase(getLifeType())) {
-            npc = NpcData.getNpcDeepCopyById(getTemplateId());
+            npc = Loaders.getInstance().getNpcData().getNpcDeepCopyById(getTemplateId());
             npc.setObjectId(getObjectId());
             npc.setLifeType(getLifeType());
             npc.setX(getX());

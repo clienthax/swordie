@@ -26,8 +26,7 @@ import net.swordie.ms.life.Life;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -124,7 +123,7 @@ public class AngelicBuster extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -141,7 +140,7 @@ public class AngelicBuster extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -242,7 +241,7 @@ public class AngelicBuster extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -269,7 +268,7 @@ public class AngelicBuster extends Job {
                 if(chr.hasSkill(AFFINITY_HEART_IV) && Util.succeedProp(getRechargeProc(attackInfo))) {
                     Skill ah4Skill = chr.getSkill(AFFINITY_HEART_IV);
                     byte ah4LV = (byte) ah4Skill.getCurrentLevel();
-                    SkillInfo ah4SI = SkillData.getSkillInfoById(ah4Skill.getSkillId());
+                    SkillInfo ah4SI = Loaders.getInstance().getSkillData().getSkillInfoById(ah4Skill.getSkillId());
                     if(Util.succeedProp(ah4SI.getValue(x, ah4LV))) {
                         rechargeABSkills();
                         affinityHeartIIIcounter = 0;
@@ -365,7 +364,7 @@ public class AngelicBuster extends Job {
     private void soulSeekerExpert(int skillID, byte slv, AttackInfo attackInfo) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStat(AngelicBursterSoulSeeker)) {
-            SkillInfo si = SkillData.getSkillInfoById(SOUL_SEEKER_EXPERT);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(SOUL_SEEKER_EXPERT);
             int anglenum;
             if (new Random().nextBoolean()) {
                 anglenum = 50;
@@ -401,15 +400,16 @@ public class AngelicBuster extends Job {
 
     private void createSoulSeekerForceAtom() {
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById(SOUL_SEEKER);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(SOUL_SEEKER);
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> lifes = field.getMobsInRect(rect);
-        if(lifes.size() <= 0) {
+        if(lifes.isEmpty()) {
             return;
         }
+
         List<Mob> bossLifes = field.getBossMobsInRect(rect);
         Life life = Util.getRandomFromCollection(lifes);
         if(!bossLifes.isEmpty()) {
@@ -428,7 +428,7 @@ public class AngelicBuster extends Job {
     }
 
     private void recreateSoulSeekerForceAtom(AttackInfo attackInfo) {
-        SkillInfo si = SkillData.getSkillInfoById(SOUL_SEEKER);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(SOUL_SEEKER);
         Skill skill = chr.getSkill(SOUL_SEEKER);
         byte slv = (byte) skill.getCurrentLevel();
         int anglenum = new Random().nextInt(360);
@@ -459,13 +459,13 @@ public class AngelicBuster extends Job {
             return 0;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo rechargeInfo = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo rechargeInfo = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         int rechargeproc = rechargeInfo.getValue(onActive, slv);
         if(rechargeproc == 0) {
             return rechargeproc;
         }
         if (chr.hasSkill(AFFINITY_HEART_I)) {
-            SkillInfo ah1 = SkillData.getSkillInfoById(AFFINITY_HEART_I);
+            SkillInfo ah1 = Loaders.getInstance().getSkillData().getSkillInfoById(AFFINITY_HEART_I);
             int extraRecharge = ah1.getValue(x, slv);
             rechargeproc += (extraRecharge - 10);
         }
@@ -501,7 +501,7 @@ public class AngelicBuster extends Job {
         }
         if(tsm.getOptByCTSAndSkill(IndieDamR, AFFINITY_HEART_IV) == null) {
             Skill skill = chr.getSkill(AFFINITY_HEART_IV);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             Option o = new Option();
             o.nValue = si.getValue(y, slv);
             o.nReason = skill.getSkillId();
@@ -559,7 +559,7 @@ public class AngelicBuster extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -607,7 +607,7 @@ public class AngelicBuster extends Job {
         cs.setHp(644);
         cs.setMaxHp(644);
         cs.setPosMap(400000000);
-        Item secondary = ItemData.getItemDeepCopy(1352601);
+        Item secondary = Loaders.getInstance().getItemData().getItemDeepCopy(1352601);
         secondary.setBagIndex(10);
         chr.getAvatarData().getAvatarLook().getHairEquips().add(secondary.getItemId());
         chr.setSpToCurrentJob(5);

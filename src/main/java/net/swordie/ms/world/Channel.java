@@ -6,7 +6,7 @@ import net.swordie.ms.client.Client;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.GameConstants;
-import net.swordie.ms.loaders.FieldData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.util.container.Tuple;
 import net.swordie.ms.world.field.AreaBossInfo;
@@ -116,7 +116,7 @@ public class Channel {
     }
 
     private Field createAndReturnNewField(int id) {
-        Field newField = FieldData.getFieldCopyById(id);
+        Field newField = Loaders.getInstance().getFieldData().getFieldCopyById(id);
         if (newField != null) {
             newField.setChannelField(true);
             newField.setChannel(getChannelId());
@@ -197,7 +197,7 @@ public class Channel {
         if (canSpawn) {
             c.chatMessage("Dark forces bring something out of the shadows.");
             areaBossSpawns.putIfAbsent(curChannelId, new HashMap<>());
-            areaBossSpawns.get(curChannelId).putIfAbsent(targetFieldId, System.currentTimeMillis() + bossInfo.getRespawnTimeMin() * 60 * 1000);
+            areaBossSpawns.get(curChannelId).putIfAbsent(targetFieldId, System.currentTimeMillis() + (long) bossInfo.getRespawnTimeMin() * 60 * 1000);
 
             // -1 means its handled elsewhere (scripted) so we don't need to spawn it
             if (bossInfo.getBossID() <= 0) {
@@ -219,7 +219,7 @@ public class Channel {
         }
 
         areaBossSpawns.putIfAbsent(curChannelId, new HashMap<>());
-        areaBossSpawns.get(curChannelId).putIfAbsent(targetFieldId, System.currentTimeMillis() + bossInfo.getRespawnTimeMin() * 60 * 1000);
+        areaBossSpawns.get(curChannelId).putIfAbsent(targetFieldId, System.currentTimeMillis() + (long) bossInfo.getRespawnTimeMin() * 60 * 1000);
     }
 
     public boolean canWarpAreaBoss(Char c, int targetFieldId, int curChannelId) {

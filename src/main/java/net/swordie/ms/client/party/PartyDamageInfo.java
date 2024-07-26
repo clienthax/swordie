@@ -49,7 +49,7 @@ public class PartyDamageInfo {
             long exp = (long) (totalExp * (0.2 * damageDone.getOrDefault(chr, 0D)
                                 + 0.8 * chr.getLevel() / chr.getParty().getAvgPartyLevel(chr)));
             double perc = (double) exp / totalExp;
-            exp *= expRate;
+            exp *= (long) expRate;
             ExpIncreaseInfo eii = new ExpIncreaseInfo();
             if (!damageDone.containsKey(chr)) {
                 eii.setIncEXP(Util.maxInt(exp));

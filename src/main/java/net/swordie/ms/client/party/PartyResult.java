@@ -25,7 +25,7 @@ public class PartyResult implements Encodable {
     public void encode(OutPacket outPacket) {
         outPacket.encodeByte(type.getVal());
         switch (type) {
-            case PartyRes_LoadParty_Done:
+            case PartyRes_LoadParty_Done, PartyRes_UserMigration:
                 outPacket.encodeInt(party.getId());
                 outPacket.encode(party);
                 break;
@@ -69,10 +69,6 @@ public class PartyResult implements Encodable {
                 outPacket.encodeInt(party.getId());
                 outPacket.encodeString(str); // sJoinerName
                 party.encode(outPacket);
-                break;
-            case PartyRes_UserMigration:
-                outPacket.encodeInt(party.getId());
-                outPacket.encode(party);
                 break;
             case PartyRes_ChangeLevelOrJob:
                 outPacket.encodeInt(chr.getId());

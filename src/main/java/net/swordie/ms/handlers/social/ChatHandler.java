@@ -13,7 +13,7 @@ import net.swordie.ms.enums.ChatUserType;
 import net.swordie.ms.enums.GroupMessageType;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -33,59 +33,25 @@ public class ChatHandler {
         inPacket.decodeInt(); // timestamp
         String msg = inPacket.decodeString();
 
-        if (msg.length() <= 0) {
+        if (msg.isEmpty()) {
             return;
         }
 
-        String command = msg.split(" ")[0].replace(String.valueOf(msg.charAt(0)), "");
-        Class[] commandClasses = null;
-
-        if (msg.startsWith(String.valueOf(ServerConfig.PLAYER_COMMAND))) {
-            commandClasses = PlayerCommands.class.getClasses();
-        } else if (msg.startsWith(String.valueOf(ServerConfig.ADMIN_COMMAND))) {
-            commandClasses = AdminCommands.class.getClasses();
-        }
+        boolean isCommand = msg.startsWith(String.valueOf(ServerConfig.PLAYER_COMMAND)) || msg.startsWith(String.valueOf(ServerConfig.ADMIN_COMMAND));
 
         // doesn't start with command prefix
-        if (commandClasses == null) {
+        if (!isCommand) {
             chr.getField().broadcastPacket(UserPacket.chat(chr.getId(), ChatUserType.User, msg, false, 0, c.getWorldId()));
             return;
         }
 
-        for (Class commandClass : commandClasses) {
-            Command cmd = (Command) commandClass.getAnnotation(Command.class);
-            for (String name : cmd.names()) {
-
-                if (!name.equalsIgnoreCase(command)) {
-                    continue;
-                }
-
-                if (chr.getUser().getAccountType().ordinal() < cmd.requiredType().ordinal()) {
-                    continue;
-                }
-
-                try {
-                    ICommand iCommand = switch (msg.charAt(0)) {
-                        case ServerConfig.PLAYER_COMMAND -> (PlayerCommand) commandClass.getConstructor().newInstance();
-                        case ServerConfig.ADMIN_COMMAND -> (AdminCommand) commandClass.getConstructor().newInstance();
-                        default -> null;
-
-                        // TODO replace this switch statement with something prettier
-                    };
-
-                    commandClass.getDeclaredMethod("execute", Char.class, String[].class)
-                            .invoke(iCommand, chr, msg.split(" "));
-
-                } catch (Exception e) {
-                    chr.chatMessage("Exception: " + e.getCause().toString());
-                    e.printStackTrace();
-                }
-                return;
-            }
+        boolean commandHandled = Server.getInstance().getCommandHandler().handleCommand(chr, msg);
+        if (commandHandled) {
+            return;
         }
 
         // only reaches this point if no matching command was found
-        chr.chatMessage(Expedition, "Unknown command \"" + command + "\"");
+        chr.chatMessage(Expedition, "Unknown command \"" + msg + "\"");
     }
 
     @Handler(op = InHeader.WHISPER)
@@ -106,7 +72,7 @@ public class ChatHandler {
                 if (channel != chr.getClient().getChannel()) {
                     chr.chatMessage("%s is in channel %s-%d.", dest.getName(), dest.getWorld().getName(), channel);
                 } else {
-                    String fieldString = StringData.getMapStringById(fieldId);
+                    String fieldString = Loaders.getInstance().getStringData().getMapStringById(fieldId);
                     if (fieldString == null) {
                         fieldString = "Unknown field.";
                     }
@@ -156,7 +122,7 @@ public class ChatHandler {
                 }
                 break;
             default:
-                log.error("Unhandled group message type " + type);
+                log.error("Unhandled group message type {}", type);
         }
     }
 

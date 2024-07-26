@@ -7,7 +7,7 @@ import net.swordie.ms.client.character.skills.info.SkillInfo;
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.connection.packet.BattleRecordMan;
 import net.swordie.ms.life.mob.skill.BurnedInfo;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.connection.packet.MobPool;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.util.Util;
@@ -550,7 +550,7 @@ public class MobTemporaryStat {
 
 	public void createAndAddBurnedInfo(Char chr, Skill skill) {
 		int charId = chr.getId();
-		SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 		int slv = skill.getCurrentLevel();
 		Tuple<Integer, Integer> timerKey = new Tuple<>(charId, skill.getSkillId());
 		BurnedInfo bi = getBurnBySkillAndOwner(skill.getSkillId(), chr.getId());

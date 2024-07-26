@@ -21,7 +21,7 @@ import net.swordie.ms.handlers.ClientSocket;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.npc.Npc;
-import net.swordie.ms.loaders.NpcData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.util.container.Tuple;
 import net.swordie.ms.world.event.InGameEventManager;
@@ -377,7 +377,7 @@ public class MigrationHandler {
             return;
         }
 
-        Npc npc = NpcData.getNpcDeepCopyById(templateID);
+        Npc npc = Loaders.getInstance().getNpcData().getNpcDeepCopyById(templateID);
         String script = npc.getScripts().get(0);
         if (script == null) {
             script = String.valueOf(npc.getTemplateId());
@@ -418,7 +418,7 @@ public class MigrationHandler {
             }
         } else {
             chr.dispose();
-            log.warn("Character {" + chrId + "} tried entering a Town Portal in field {" + field.getId() + "} which does not exist."); // Potential Hacking Log
+            log.warn("Character {{}} tried entering a Town Portal in field {{}} which does not exist.", chrId, field.getId()); // Potential Hacking Log
         }
     }
 

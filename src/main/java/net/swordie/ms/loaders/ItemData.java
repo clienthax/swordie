@@ -2,7 +2,6 @@ package net.swordie.ms.loaders;
 
 import net.swordie.ms.ServerConstants;
 import net.swordie.ms.client.character.items.*;
-import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.enums.*;
@@ -25,15 +24,15 @@ import static net.swordie.ms.enums.ScrollStat.*;
  * Created on 11/17/2017.
  */
 public class ItemData implements DataCreator {
-    public static Map<Integer, Equip> equips = new HashMap<>();
-    public static Map<Integer, ItemInfo> items = new HashMap<>();
-    public static Map<Integer, PetInfo> pets = new HashMap<>();
-    public static Map<Integer, ItemOption> itemOptions = new HashMap<>();
-    public static List<ItemOption> filteredItemOptions = new ArrayList<>();
-    public static Map<Integer, Integer> skillIdByItemId = new HashMap<>();
-    private static final Set<Integer> startingItems = new HashSet<>();
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
-    private static final boolean LOG_UNKS = false;
+    public Map<Integer, Equip> equips = new HashMap<>();
+    public Map<Integer, ItemInfo> items = new HashMap<>();
+    public Map<Integer, PetInfo> pets = new HashMap<>();
+    public Map<Integer, ItemOption> itemOptions = new HashMap<>();
+    public List<ItemOption> filteredItemOptions = new ArrayList<>();
+    public Map<Integer, Integer> skillIdByItemId = new HashMap<>();
+    private final Set<Integer> startingItems = new HashSet<>();
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final boolean LOG_UNKS = false;
 
 
     /**
@@ -44,7 +43,7 @@ public class ItemData implements DataCreator {
      * @return A deep copy of the default values of the corresponding Equip, or null if there is no equip with itemId
      * <code>itemId</code>.
      */
-    public static Equip getEquipDeepCopyFromID(int itemId, boolean randomizeStats) {
+    public Equip getEquipDeepCopyFromID(int itemId, boolean randomizeStats) {
         Equip e = getEquipById(itemId);
         Equip ret = e == null ? null : e.deepCopy();
         if (ret != null) {
@@ -75,11 +74,11 @@ public class ItemData implements DataCreator {
         return ret;
     }
 
-    public static Equip getEquipById(int itemId) {
+    public Equip getEquipById(int itemId) {
         return getEquips().getOrDefault(itemId, getEquipFromFile(itemId));
     }
 
-    private static Equip getEquipFromFile(int itemId) {
+    private Equip getEquipFromFile(int itemId) {
         String fieldDir = String.format("%s/equips/%d.dat", ServerConstants.DAT_DIR, itemId);
         File file = new File(fieldDir);
         if (!file.exists()) {
@@ -89,7 +88,7 @@ public class ItemData implements DataCreator {
         }
     }
 
-    private static Equip readEquipFromFile(File file) {
+    private Equip readEquipFromFile(File file) {
         Equip equip = null;
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             equip = new Equip();
@@ -169,8 +168,9 @@ public class ItemData implements DataCreator {
 
     @Saver(varName = "equips")
     public static void saveEquips(String dir) {
+        ItemData itemData = Loaders.getInstance().getItemData();
         Util.makeDirIfAbsent(dir);
-        for (Equip equip : getEquips().values()) {
+        for (Equip equip : itemData.getEquips().values()) {
             try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(dir + "/" + equip.getItemId() + ".dat"))) {
                 dataOutputStream.writeInt(equip.getItemId());
                 dataOutputStream.writeUTF(equip.getiSlot());
@@ -243,14 +243,14 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static void loadEquipsFromWz() {
+    public void loadEquipsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Character.wz";
         String[] subMaps = new String[]{"Accessory", "Android", "Cap", "Cape", "Coat", "Dragon", "Face", "Glove",
                 "Longcoat", "Mechanic", "Pants", "PetEquip", "Ring", "Shield", "Shoes", "Totem", "Weapon", "MonsterBook"};
         for (String subMap : subMaps) {
             File subDir = new File(String.format("%s/%s", wzDir, subMap));
             if (!subDir.exists()) {
-                log.error(wzDir + " does not exist.");
+                log.error("{} does not exist.", wzDir);
                 continue;
             }
 
@@ -457,7 +457,7 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static ItemInfo loadItemByFile(File file) {
+    public ItemInfo loadItemByFile(File file) {
         ItemInfo itemInfo = null;
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             itemInfo = new ItemInfo();
@@ -535,10 +535,10 @@ public class ItemData implements DataCreator {
 
     }
 
-    public static void saveItems(String dir) {
+    public void saveItems(String dir) {
         Util.makeDirIfAbsent(dir);
         for (ItemInfo ii : getItems().values()) {
-            try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(new File(dir + "/" + ii.getItemId() + ".dat")))) {
+            try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(dir + "/" + ii.getItemId() + ".dat"))) {
                 dataOutputStream.writeInt(ii.getItemId());
                 dataOutputStream.writeUTF(ii.getInvType().toString());
                 dataOutputStream.writeBoolean(ii.isCash());
@@ -605,7 +605,7 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static void savePets(String dir) {
+    public void savePets(String dir) {
         Util.makeDirIfAbsent(dir);
         for (PetInfo pi : getPets().values()) {
             File file = new File(String.format("%s/%d.dat", dir, pi.getItemID()));
@@ -654,11 +654,11 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static PetInfo getPetInfoByID(int id) {
+    public PetInfo getPetInfoByID(int id) {
         return getPets().getOrDefault(id, loadPetByID(id));
     }
 
-    public static PetInfo loadPetByID(int id) {
+    public PetInfo loadPetByID(int id) {
         File file = new File(String.format("%s/pets/%d.dat", ServerConstants.DAT_DIR, id));
         if (file.exists()) {
             return loadPetFromFile(file);
@@ -667,7 +667,7 @@ public class ItemData implements DataCreator {
         }
     }
 
-    private static PetInfo loadPetFromFile(File file) {
+    private PetInfo loadPetFromFile(File file) {
         PetInfo pi = null;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
             pi = new PetInfo();
@@ -716,11 +716,11 @@ public class ItemData implements DataCreator {
         return pi;
     }
 
-    public static void loadPetsFromWZ() {
+    public void loadPetsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
         File petDir = new File(String.format("%s/%s", wzDir, "Pet"));
         if (!petDir.exists()) {
-            log.error(petDir + " does not exist.");
+            log.error("{} does not exist.", petDir);
             return;
         }
 
@@ -813,10 +813,7 @@ public class ItemData implements DataCreator {
                     case "giantPet":
                         pi.setGiantPet(Integer.parseInt(value) != 0);
                         break;
-                    case "noMoveToLocker":
-                        pi.setAllowOverlappedSet(Integer.parseInt(value) != 0);
-                        break;
-                    case "allowOverlappedSet":
+                    case "noMoveToLocker", "allowOverlappedSet":
                         pi.setAllowOverlappedSet(Integer.parseInt(value) != 0);
                         break;
                     case "noRevive":
@@ -825,10 +822,7 @@ public class ItemData implements DataCreator {
                     case "noScroll":
                         pi.setNoScroll(Integer.parseInt(value) != 0);
                         break;
-                    case "autoBuff":
-                        pi.setAutoBuff(Integer.parseInt(value) != 0);
-                        break;
-                    case "multiPet":
+                    case "autoBuff", "multiPet":
                         pi.setAutoBuff(Integer.parseInt(value) != 0);
                         break;
                     case "autoReact":
@@ -872,14 +866,14 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static void loadItemsFromWZ() {
+    public void loadItemsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
 
         String[] subMaps = new String[]{"Cash", "Consume", "Etc", "Install", "Special"}; // not pet
         for (String subMap : subMaps) {
             File subDir = new File(String.format("%s/%s", wzDir, subMap));
             if (!subDir.exists()) {
-                log.error(subDir + " does not exist.");
+                log.error("{} does not exist.", subDir);
                 return;
             }
 
@@ -1376,7 +1370,7 @@ public class ItemData implements DataCreator {
                         if(ScrollStat.getScrollStatByString(ssName) != null) {
                             item.putScrollStat(ScrollStat.valueOf(ssName), ssVal);
                         } else {
-                            log.info("non-existent scroll stat " + ssName + " (#"+id+")");
+                            log.info("non-existent scroll stat {} (#{})", ssName, id);
                         }
                     }
                     Node spec = XMLApi.getFirstChildByNameBF(mainNode, "spec");
@@ -1446,7 +1440,7 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static void loadMountItemsFromFile() {
+    public void loadMountItemsFromFile() {
         File file = new File(String.format("%s/mountsFromItem.txt", ServerConstants.RESOURCES_DIR));
         try (Scanner scanner = new Scanner(new FileInputStream(file))) {
             while(scanner.hasNextLine()) {
@@ -1461,11 +1455,11 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static int getSkillIdByItemId(int itemId) {
+    public int getSkillIdByItemId(int itemId) {
         return skillIdByItemId.getOrDefault(itemId, 0);
     }
 
-    public static Item getDeepCopyByItemInfo(ItemInfo itemInfo) {
+    public Item getDeepCopyByItemInfo(ItemInfo itemInfo) {
         if (itemInfo == null) {
             return null;
         }
@@ -1478,11 +1472,11 @@ public class ItemData implements DataCreator {
         return res;
     }
 
-    public static Item getItemDeepCopy(int id) {
+    public Item getItemDeepCopy(int id) {
         return getItemDeepCopy(id, false);
     }
 
-    public static Item getItemDeepCopy(int id, boolean randomize) {
+    public Item getItemDeepCopy(int id, boolean randomize) {
         if (ItemConstants.isEquip(id)) {
             return getEquipDeepCopyFromID(id, randomize);
         } else if (ItemConstants.isPet(id)) {
@@ -1491,11 +1485,11 @@ public class ItemData implements DataCreator {
         return getDeepCopyByItemInfo(getItemInfoByID(id));
     }
 
-    private static PetItem getPetDeepCopyFromID(int id) {
+    private PetItem getPetDeepCopyFromID(int id) {
         return getPetInfoByID(id) == null ? null : getPetInfoByID(id).createPetItem();
     }
 
-    public static ItemInfo getItemInfoByID(int itemID) {
+    public ItemInfo getItemInfoByID(int itemID) {
         ItemInfo ii = getItems().getOrDefault(itemID, null);
         if (ii == null) {
             File file = new File(String.format("%s/items/%d.dat", ServerConstants.DAT_DIR, itemID));
@@ -1508,16 +1502,16 @@ public class ItemData implements DataCreator {
         return ii;
     }
 
-    public static Map<Integer, Equip> getEquips() {
+    public Map<Integer, Equip> getEquips() {
         return equips;
     }
 
-    public static void loadItemOptionsFromWZ() {
+    public void loadItemOptionsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Item.wz";
         String itemOptionDir = String.format("%s/ItemOption.img.xml", wzDir);
         File file = new File(itemOptionDir);
         if (!file.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -1763,19 +1757,19 @@ public class ItemData implements DataCreator {
         }
     }
 
-    public static Map<Integer, ItemOption> getItemOptions() {
+    public Map<Integer, ItemOption> getItemOptions() {
         return itemOptions;
     }
 
-    public static List<ItemOption> getFilteredItemOptions() {
+    public List<ItemOption> getFilteredItemOptions() {
         return filteredItemOptions;
     }
 
-    public static ItemOption getItemOptionById(int id) {
+    public ItemOption getItemOptionById(int id) {
         return itemOptions.getOrDefault(id, null);
     }
 
-    public static void saveItemOptions(String dir) {
+    public void saveItemOptions(String dir) {
         File file = new File(String.format("%s/itemOptions.dat", dir));
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
             dos.writeInt(getItemOptions().size());
@@ -1811,9 +1805,11 @@ public class ItemData implements DataCreator {
 
     @Loader(varName = "itemOptions")
     public static void loadItemOptions(File file, boolean exists) {
+        ItemData itemData = Loaders.getInstance().getItemData();
+
         if (!exists) {
-            loadItemOptionsFromWZ();
-            saveItemOptions(ServerConstants.DAT_DIR);
+            itemData.loadItemOptionsFromWZ();
+            itemData.saveItemOptions(ServerConstants.DAT_DIR);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int size = dis.readInt();
@@ -1840,15 +1836,15 @@ public class ItemData implements DataCreator {
                             io.addMiscValue(level, ItemOption.ItemOptionType.values()[dis.readInt()], dis.readInt());
                         }
                     }
-                    getItemOptions().put(io.getId(), io);
+                    itemData.getItemOptions().put(io.getId(), io);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            createFilteredOptions();
+            itemData.createFilteredOptions();
         }
     }
-    private static void createFilteredOptions(){
+    private void createFilteredOptions(){
         Collection<ItemOption> data = getItemOptions().values();
         filteredItemOptions = data.stream().filter(io ->
                 io.getId() % 1000 != 14 //Old Magic Def, now regular Def ; removed to not have duplicates
@@ -1894,7 +1890,7 @@ public class ItemData implements DataCreator {
         ).collect(Collectors.toList());
 
     }
-    private static void saveStartingItems(String dir) {
+    private void saveStartingItems(String dir) {
         File file = new File(String.format("%s/startingItems.dat", dir));
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
             dos.writeInt(startingItems.size());
@@ -1906,19 +1902,19 @@ public class ItemData implements DataCreator {
         }
     }
 
-    private static void loadStartingItemsFromWZ() {
+    private void loadStartingItemsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Etc.wz";
         String itemOptionDir = String.format("%s/MakeCharInfo.img.xml", wzDir);
         File file = new File(itemOptionDir);
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
         startingItems.addAll(searchForStartingItems(XMLApi.getRoot(file)));
     }
 
-    private static Set<Integer> searchForStartingItems(Node n) {
+    private Set<Integer> searchForStartingItems(Node n) {
         List<Node> subNodes = XMLApi.getAllChildren(n);
         for (Node node : subNodes) {
             String name = XMLApi.getNamedAttribute(node, "name");
@@ -1934,14 +1930,16 @@ public class ItemData implements DataCreator {
 
     @Loader(varName = "startingItems")
     public static void loadStartingItems(File file, boolean exists) {
+        ItemData itemData = Loaders.getInstance().getItemData();
+
         if (!exists) {
-            loadStartingItemsFromWZ();
-            saveStartingItems(ServerConstants.DAT_DIR);
+            itemData.loadStartingItemsFromWZ();
+            itemData.saveStartingItems(ServerConstants.DAT_DIR);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int size = dis.readInt();
                 for (int i = 0; i < size; i++) {
-                    startingItems.add(dis.readInt());
+                    itemData.startingItems.add(dis.readInt());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -1950,7 +1948,7 @@ public class ItemData implements DataCreator {
     }
 
     @SuppressWarnings("unused") // Reflection
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating item data.");
         long start = System.currentTimeMillis();
         loadEquipsFromWz();
@@ -1958,7 +1956,7 @@ public class ItemData implements DataCreator {
         loadItemsFromWZ();
         loadPetsFromWZ();
         loadItemOptionsFromWZ();
-        QuestData.linkItemData();
+        Loaders.getInstance().getQuestData().linkItemData();
         saveEquips(ServerConstants.DAT_DIR + "/equips");
         saveItems(ServerConstants.DAT_DIR + "/items");
         savePets(ServerConstants.DAT_DIR + "/pets");
@@ -1966,34 +1964,29 @@ public class ItemData implements DataCreator {
         log.info(String.format("Completed generating item data in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void main(String[] args) {
-        DatabaseManager.init();
-        generateDatFiles();
-    }
-
-    public static Map<Integer, ItemInfo> getItems() {
+    public Map<Integer, ItemInfo> getItems() {
         return items;
     }
 
-    public static void addItemInfo(ItemInfo ii) {
+    public void addItemInfo(ItemInfo ii) {
         getItems().put(ii.getItemId(), ii);
     }
 
-    private static Map<Integer, PetInfo> getPets() {
+    private Map<Integer, PetInfo> getPets() {
         return pets;
     }
 
-    public static void addPetInfo(PetInfo pi) {
+    public void addPetInfo(PetInfo pi) {
         getPets().put(pi.getItemID(), pi);
     }
 
-    public static void clear() {
+    public void clear() {
         getEquips().clear();
         getItems().clear();
         getItemOptions().clear();
     }
 
-    public static boolean isStartingItems(int[] items) {
+    public boolean isStartingItems(int[] items) {
         for (int item : items) {
             if (!isStartingItem(item)) {
                 return false;
@@ -2002,7 +1995,7 @@ public class ItemData implements DataCreator {
         return true;
     }
 
-    public static boolean isStartingItem(int item) {
+    public boolean isStartingItem(int item) {
         return startingItems.contains(item);
     }
 }

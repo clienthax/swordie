@@ -136,7 +136,7 @@ public class TownPortal {
 
     public void removeTownPortalInTownField() { // Normal 'TOWN_PORTAL_REMOVED' only removes the field TownPortals, not the town TownPortals
         Field townField = channel.getField(getTownFieldId());
-        if(townField.getChars().size() <= 0) {
+        if(townField.getChars().isEmpty()) {
             chr.write(WvsContext.townPortal(new TownPortal(chr, new Position(), new Position(),
                     999999999, 999999999, getSkillid(), 1)));
         } else {

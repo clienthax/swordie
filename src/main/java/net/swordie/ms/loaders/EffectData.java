@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class EffectData {
 
-    public static void getEffectsFromWzPath(Scene scene) {
+    public void getEffectsFromWzPath(Scene scene) {
         String xmlPath = scene.getXmlPath();
         String sceneName = scene.getSceneName();
         String sceneNumber = scene.getSceneNumber();

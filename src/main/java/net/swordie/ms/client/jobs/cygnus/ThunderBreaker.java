@@ -13,7 +13,7 @@ import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.enums.TSIndex;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
@@ -91,7 +91,7 @@ public class ThunderBreaker extends Noblesse {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -110,7 +110,7 @@ public class ThunderBreaker extends Noblesse {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -207,7 +207,7 @@ public class ThunderBreaker extends Noblesse {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -244,9 +244,8 @@ public class ThunderBreaker extends Noblesse {
 
     private void giveLinkMasteryBuff(int skillId, TemporaryStatManager tsm) {
         Option o = new Option();
-        SkillInfo linkInfo = SkillData.getSkillInfoById(LINK_MASTERY);
+        SkillInfo linkInfo = Loaders.getInstance().getSkillData().getSkillInfoById(LINK_MASTERY);
         if (lastAttackSkill == skillId) {
-            return;
         } else {
             lastAttackSkill = skillId;
             o.nOption = linkInfo.getValue(x, linkInfo.getCurrentLevel());
@@ -260,8 +259,8 @@ public class ThunderBreaker extends Noblesse {
     private void incrementLightningElemental(TemporaryStatManager tsm) {
         Option o = new Option();
         Skill skill = chr.getSkill(LIGHTNING_ELEMENTAL);
-        SkillInfo leInfo = SkillData.getSkillInfoById(skill.getSkillId());
-        SkillInfo pbInfo = SkillData.getSkillInfoById(PRIMAL_BOLT);
+        SkillInfo leInfo = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
+        SkillInfo pbInfo = Loaders.getInstance().getSkillData().getSkillInfoById(PRIMAL_BOLT);
         byte slv = (byte) skill.getCurrentLevel();
         int amount = 1;
         if(tsm.hasStat(IgnoreTargetDEF)) {
@@ -284,11 +283,11 @@ public class ThunderBreaker extends Noblesse {
         if (skill == null || arcChargeCDCount >= 5) {
             return;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         arcChargeCDCount++;
-        chr.reduceSkillCoolTime(ARC_CHARGER, (si.getValue(y, slv) * 1000));
+        chr.reduceSkillCoolTime(ARC_CHARGER, (si.getValue(y, slv) * 1000L));
         chr.chatMessage(arcChargeCDCount + "");
     }
 
@@ -305,7 +304,7 @@ public class ThunderBreaker extends Noblesse {
     private int getChargeProp() {
         Skill skill = getLightningChargeSkill();
         if(skill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             return si.getValue(prop, slv);
         }
@@ -322,12 +321,6 @@ public class ThunderBreaker extends Noblesse {
         return num;
     }
 
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
-
 
     // Skill related methods -------------------------------------------------------------------------------------------
 
@@ -338,7 +331,7 @@ public class ThunderBreaker extends Noblesse {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {

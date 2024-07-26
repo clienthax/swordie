@@ -26,7 +26,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -213,7 +213,7 @@ public class Pirate extends Beginner {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -233,7 +233,7 @@ public class Pirate extends Beginner {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
 
         Summon summon;
@@ -266,12 +266,12 @@ public class Pirate extends Beginner {
                 tsm.putCharacterStatValue(Booster, o1);
                 break;
             case TIME_LEAP:
-                long nextAvailableTime = System.currentTimeMillis() + (si.getValue(time, slv)*1000);
+                long nextAvailableTime = System.currentTimeMillis() + (si.getValue(time, slv)* 1000L);
                 chr.getScriptManager().createQuestWithQRValue(chr, GameConstants.TIME_LEAP_QR_KEY, String.valueOf(nextAvailableTime), false);
                 if (chr.getQuestManager().getQuestById(GameConstants.TIME_LEAP_QR_KEY).getQRValue() == null
                         || Long.parseLong(chr.getQuestManager().getQuestById(GameConstants.TIME_LEAP_QR_KEY).getQRValue()) < System.currentTimeMillis()) {
                     for (int skillId : chr.getSkillCoolTimes().keySet()) {
-                        if (!SkillData.getSkillInfoById(skillId).isNotCooltimeReset() && SkillData.getSkillInfoById(skillId).getHyper() == 0) {
+                        if (!Loaders.getInstance().getSkillData().getSkillInfoById(skillId).isNotCooltimeReset() && Loaders.getInstance().getSkillData().getSkillInfoById(skillId).getHyper() == 0) {
                             chr.resetSkillCoolTime(skillId);
                         }
                     }
@@ -560,7 +560,7 @@ public class Pirate extends Beginner {
                 tsm.putCharacterStatValue(BuckShot, o1);
                 break;
 
-            case ROLLING_RAINBOW: //Stationary, Attacks
+            case ROLLING_RAINBOW, TURRET_DEPLOYMENT: //Stationary, Attacks
                 summon = Summon.getSummonBy(c.getChr(), skillID, slv);
                 field = c.getChr().getField();
                 summon.setFlyMob(false);
@@ -589,14 +589,6 @@ public class Pirate extends Beginner {
                     summon.setMoveAbility(MoveAbility.Stop);
                     field.spawnSummon(summon);
                 }
-                break;
-            case TURRET_DEPLOYMENT: //Stationary, Attacks
-                summon = Summon.getSummonBy(c.getChr(), skillID, slv);
-                field = c.getChr().getField();
-                summon.setFlyMob(false);
-                summon.setMoveAction((byte) 0);
-                summon.setMoveAbility(MoveAbility.Stop);
-                field.spawnSummon(summon);
                 break;
             case ALL_ABOARD: //Moves, Attacks
                 tsm.removeStatsBySkill(AHOY_MATEYS);
@@ -647,7 +639,7 @@ public class Pirate extends Beginner {
         if(chr.hasSkill(AHOY_MATEYS)) {
             Skill skill = chr.getSkill(AHOY_MATEYS);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int random = Util.getRandomFromCollection(set);
             corsairSummonID = random;
             Summon summon = Summon.getSummonBy(chr, random, (byte) 1);
@@ -697,7 +689,7 @@ public class Pirate extends Beginner {
         Option o1 = new Option();
         Skill skill = chr.getSkill(POWER_UNITY);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         int amount = 1;
         if(tsm.hasStat(UnityOfPower)) {
             amount = tsm.getOption(UnityOfPower).nOption;
@@ -720,7 +712,7 @@ public class Pirate extends Beginner {
         if (tsm.hasStat(Stimulate)) {
             Skill skill = chr.getSkill(STIMULATING_CONVERSATION);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             updateViperEnergy(tsm.getOption(EnergyCharged).nOption + si.getValue(x, slv));
             stimulatingConversationTimer = EventManager.addEvent(this::incrementStimulatingConversation, 4, TimeUnit.SECONDS);
         }
@@ -732,7 +724,7 @@ public class Pirate extends Beginner {
         Option o = new Option();
         Skill skill = chr.getSkill(BARREL_ROULETTE);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         chr.write(UserPacket.effect(Effect.skillAffectedSelect(BARREL_ROULETTE, slv, roulette, false)));
         switch (roulette) {
             case 1: // Extra Attack (Final Attack)
@@ -767,7 +759,7 @@ public class Pirate extends Beginner {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -799,7 +791,7 @@ public class Pirate extends Beginner {
                 // Monkey Wave Ignore KeyDown Time
                 if(chr.hasSkill(MONKEY_WAVE)) {
                     Skill mwskill = chr.getSkill(MONKEY_WAVE);
-                    SkillInfo mwsi = SkillData.getSkillInfoById(MONKEY_WAVE);
+                    SkillInfo mwsi = Loaders.getInstance().getSkillData().getSkillInfoById(MONKEY_WAVE);
                     byte mwslv = (byte) mwskill.getCurrentLevel();
                     if (Util.succeedProp(mwsi.getValue(w, mwslv)) && !(tsm.getOption(KeyDownTimeIgnore).nOption > 0) && attackInfo.skillId != 5310008) {
                         o1.nOption = 1;
@@ -940,7 +932,7 @@ public class Pirate extends Beginner {
     private void activateQuickdraw(AttackInfo attackInfo, TemporaryStatManager tsm) {
         Option o = new Option();
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
-        SkillInfo quickdrawInfo = SkillData.getSkillInfoById(QUICKDRAW);
+        SkillInfo quickdrawInfo = Loaders.getInstance().getSkillData().getSkillInfoById(QUICKDRAW);
         if (tsm.getOption(QuickDraw).nOption == 2) {
             if(hasHitMobs) {
                 tsm.removeStatsBySkill(QUICKDRAW);
@@ -957,7 +949,7 @@ public class Pirate extends Beginner {
 
     private void applyStunMasteryOnMob(AttackInfo attackInfo) {
         Option o1 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(STUN_MASTERY);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(STUN_MASTERY);
         int slv = si.getCurrentLevel();
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(subProp, slv))) {
@@ -1000,7 +992,7 @@ public class Pirate extends Beginner {
     private int deductViperEnergyCost(int skillId) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         int energy = tsm.getOption(EnergyCharged).nOption;
-        SkillInfo si = SkillData.getSkillInfoById(skillId);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillId);
         energy = energy - si.getValue(forceCon, 1);
 
         return energy;
@@ -1009,7 +1001,7 @@ public class Pirate extends Beginner {
     private void updateViperEnergy(int energy) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         TemporaryStatBase tsb = tsm.getTSBByTSIndex(TSIndex.EnergyCharged);
-        tsb.setNOption(energy < 0 ? 0 : (energy > getMaximumEnergy() ? getMaximumEnergy() : energy));
+        tsb.setNOption(energy < 0 ? 0 : (Math.min(energy, getMaximumEnergy())));
         tsb.setROption(0);
         tsm.putCharacterStatValue(EnergyCharged, tsb.getOption());
         if(energy >= getMaximumEnergy()) {
@@ -1022,7 +1014,7 @@ public class Pirate extends Beginner {
 
     private int getEnergyIncrement() {
         Skill skill = getViperEnergySkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         return si.getValue(x, slv);
@@ -1030,7 +1022,7 @@ public class Pirate extends Beginner {
 
     private int getMaximumEnergy() {
         Skill skill = getViperEnergySkill();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         return si.getValue(z, slv);
@@ -1056,7 +1048,7 @@ public class Pirate extends Beginner {
             Option o = new Option();
             Skill skill = chr.getSkill(BARREL_ROULETTE);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             if(tsm.hasStat(Roulette)) {
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -1083,7 +1075,7 @@ public class Pirate extends Beginner {
     @Override
     public int getFinalAttackSkill() {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(BARREL_ROULETTE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(BARREL_ROULETTE);
         if(tsm.hasStat(Roulette) && tsm.getOption(Roulette).nOption == 1 && Util.succeedProp(si.getValue(z, chr.getSkill(BARREL_ROULETTE).getCurrentLevel()))) {
             return 5310008;
         }
@@ -1106,7 +1098,7 @@ public class Pirate extends Beginner {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
@@ -1153,7 +1145,7 @@ public class Pirate extends Beginner {
         if (skill == null) {
             return;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         Option o1 = new Option();
         Option o2 = new Option();

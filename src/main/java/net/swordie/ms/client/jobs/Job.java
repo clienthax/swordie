@@ -37,8 +37,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 
 import java.util.Arrays;
@@ -134,7 +133,7 @@ public abstract class Job {
 
 		if (c != null && chr.getId() != 0 && c.getWorld().isReboot()) {
 			if (!chr.hasSkill(REBOOT)) {
-				Skill skill = SkillData.getSkillDeepCopyById(REBOOT);
+				Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(REBOOT);
 				skill.setCurrentLevel(1);
 				chr.addSkill(skill);
 			}
@@ -144,20 +143,20 @@ public abstract class Job {
 	public void handleAttack(Client c, AttackInfo attackInfo) {
 		Char chr = c.getChr();
 		TemporaryStatManager tsm = chr.getTemporaryStatManager();
-		Skill skill = SkillData.getSkillDeepCopyById(attackInfo.skillId);
+		Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(attackInfo.skillId);
 		int skillID = 0;
 		SkillInfo si = null;
 		boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
 		byte slv = 0;
 		if (skill != null) {
-			si = SkillData.getSkillInfoById(skill.getSkillId());
+			si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 			slv = (byte) skill.getCurrentLevel();
 			skillID = skill.getSkillId();
 		}
 
 		// Recovery Rune  HP Recovery
 		if(tsm.getOptByCTSAndSkill(IgnoreMobDamR, RuneStone.LIBERATE_THE_RECOVERY_RUNE) != null) {
-			SkillInfo recoveryRuneInfo = SkillData.getSkillInfoById(RuneStone.LIBERATE_THE_RECOVERY_RUNE);
+			SkillInfo recoveryRuneInfo = Loaders.getInstance().getSkillData().getSkillInfoById(RuneStone.LIBERATE_THE_RECOVERY_RUNE);
 			byte recoveryRuneSLV = 1; //Hardcode Skill Level to 1
 			int healrate = recoveryRuneInfo.getValue(dotHealHPPerSecondR, recoveryRuneSLV);
 			int healing = chr.getMaxHP() / (100 / healrate);
@@ -186,7 +185,7 @@ public abstract class Job {
 				}
 
 				// Buff of the Rune
-				si = SkillData.getSkillInfoById(RuneStone.LIBERATE_THE_DESTRUCTIVE_RUNE_BUFF); //Buff Info
+				si = Loaders.getInstance().getSkillData().getSkillInfoById(RuneStone.LIBERATE_THE_DESTRUCTIVE_RUNE_BUFF); //Buff Info
 				slv = (byte) skill.getCurrentLevel();
 				o1.nReason = RuneStone.LIBERATE_THE_DESTRUCTIVE_RUNE_BUFF;
 				o1.nValue = si.getValue(indieDamR, slv); //50% DamR
@@ -202,10 +201,10 @@ public abstract class Job {
 	public void handleSkill(Client c, int skillID, byte slv, InPacket inPacket) {
 		TemporaryStatManager tsm = chr.getTemporaryStatManager();
 		Char chr = c.getChr();
-		Skill skill = SkillData.getSkillDeepCopyById(skillID);
+		Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(skillID);
 		SkillInfo si = null;
 		if(skill != null) {
-			si = SkillData.getSkillInfoById(skillID);
+			si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 		}
 		chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
 		Summon summon;
@@ -307,7 +306,7 @@ public abstract class Job {
 		if (skill == null) {
 			return -1;
 		}
-		SkillInfo si = SkillData.getSkillInfoById(skillId);
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillId);
 		byte slv = (byte) skill.getCurrentLevel();
 		int cdInSec = si.getValue(SkillStat.cooltime, slv);
 		int cdInMillis = cdInSec > 0 ? cdInSec * 1000 : si.getValue(SkillStat.cooltimeMS, slv);
@@ -342,7 +341,7 @@ public abstract class Job {
 
 	public void handleJoblessBuff(Client c, InPacket inPacket, int skillID, byte slv) {
 		Char chr = c.getChr();
-		SkillInfo si = SkillData.getSkillInfoById(skillID);
+		SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 		TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
 		Option o1 = new Option();
 		Option o2 = new Option();
@@ -521,23 +520,15 @@ public abstract class Job {
 		}
 		int curHP = chr.getStat(Stat.hp);
 		int newHP = curHP - hitInfo.hpDamage;
-		if (newHP <= 0) {
-			curHP = 0;
-		} else {
-			curHP = newHP;
-		}
+        curHP = Math.max(newHP, 0);
 		Map<Stat, Object> stats = new HashMap<>();
 		chr.setStat(Stat.hp, curHP);
 		stats.put(Stat.hp, curHP);
 
 		int curMP = chr.getStat(Stat.mp);
 		int newMP = curMP - hitInfo.mpDamage;
-		if (newMP < 0) {
-			// should not happen
-			curMP = 0;
-		} else {
-			curMP = newMP;
-		}
+        // should not happen
+        curMP = Math.max(newMP, 0);
 		chr.setStat(Stat.mp, curMP);
 		stats.put(Stat.mp, curMP);
 		c.write(WvsContext.statChanged(stats));
@@ -545,7 +536,7 @@ public abstract class Job {
 		if (chr.getParty() != null) {
 			chr.getParty().broadcast(UserRemote.receiveHP(chr), chr);
 		}
-		if (curHP <= 0) {
+		if (curHP == 0) {
 			// TODO Add more items for protecting exp and whatnot
 			c.write(UserLocal.openUIOnDead(true, chr.getBuffProtectorItem() != null,
 					false, false, false,
@@ -589,7 +580,7 @@ public abstract class Job {
 				if (mihileInParty != null) {
 					Char mihileChr = mihileInParty.getChr();
 					Skill skill = mihileChr.getSkill(SOUL_LINK);
-					SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+					SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 					byte slv = (byte) skill.getCurrentLevel();
 
 					int hpDmg = hitInfo.hpDamage;
@@ -613,7 +604,7 @@ public abstract class Job {
 				if (paladinInParty != null) {
 					Char paladinChr = paladinInParty.getChr();
 					Skill skill = paladinChr.getSkill(PARASHOCK_GUARD);
-					SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+					SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 					byte slv = (byte) skill.getCurrentLevel();
 
 					int dmgReductionR = si.getValue(y, slv);
@@ -627,7 +618,7 @@ public abstract class Job {
 	public abstract boolean isHandlerOfJob(short id);
 
 	public SkillInfo getInfo(int skillID) {
-		return SkillData.getSkillInfoById(skillID);
+		return Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 	}
 
 	protected Char getChar() {
@@ -698,7 +689,7 @@ public abstract class Job {
 		chr.healMP(chr.getMaxMP());
 
 		if (c.getWorld().isReboot()) {
-			Skill skill = SkillData.getSkillDeepCopyById(REBOOT2);
+			Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(REBOOT2);
 			skill.setCurrentLevel(level);
 			chr.addSkill(skill);
 		}
@@ -763,13 +754,13 @@ public abstract class Job {
 		characterStat.setMaxMp(5);
                 
 		characterStat.setPosMap(100000000);// should be handled for eah job not here
-		Item whitePot = ItemData.getItemDeepCopy(2000002);
+		Item whitePot = Loaders.getInstance().getItemData().getItemDeepCopy(2000002);
 		whitePot.setQuantity(100);
 		chr.addItemToInventory(whitePot);
-		Item manaPot = ItemData.getItemDeepCopy(2000006);
+		Item manaPot = Loaders.getInstance().getItemData().getItemDeepCopy(2000006);
 		manaPot.setQuantity(100);
 		chr.addItemToInventory(manaPot);
-		Item hyperTp = ItemData.getItemDeepCopy(5040004);
+		Item hyperTp = Loaders.getInstance().getItemData().getItemDeepCopy(5040004);
 		chr.addItemToInventory(hyperTp);
 
 	}

@@ -36,7 +36,7 @@ import net.swordie.ms.life.mob.skill.MobSkill;
 import net.swordie.ms.life.mob.skill.MobSkillID;
 import net.swordie.ms.life.mob.skill.MobSkillStat;
 import net.swordie.ms.life.movement.MovementInfo;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MobSkillInfo;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Randomizer;
@@ -112,7 +112,7 @@ public class MobHandler {
                 if (mobSkill == null) {
                     skillList = skillList.stream()
                             .filter(ms -> mob.hasSkillOffCooldown(ms.getSkillID(), ms.getLevel()))
-                            .collect(Collectors.toList());
+                            .toList();
                     if (!skillList.isEmpty()) {
                         mobSkill = skillList.get(Randomizer.nextInt(skillList.size()));
                     }
@@ -122,9 +122,9 @@ public class MobHandler {
                     didSkill = true;
                     skillID = mobSkill.getSkillID();
                     slv = mobSkill.getLevel();
-                    MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(skillID, slv);
+                    MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(skillID, slv);
                     long curTime = System.currentTimeMillis();
-                    long interval = msi.getSkillStatIntValue(MobSkillStat.interval) * 1000;
+                    long interval = msi.getSkillStatIntValue(MobSkillStat.interval) * 1000L;
                     long nextUseableTime = curTime + interval;
                     c.getChr().chatMessage(ChatType.Mob, String.format("Mob" + mob + " did skill with ID %d (%s), level = %d",
                             mobSkill.getSkillID(), MobSkillID.getMobSkillIDByVal(mobSkill.getSkillID()), mobSkill.getLevel()));
@@ -300,7 +300,7 @@ public class MobHandler {
                     }
                     break;
                 default:
-                    log.error("Unhandled mob zone stat for mob template id " + life.getTemplateId());
+                    log.error("Unhandled mob zone stat for mob template id {}", life.getTemplateId());
             }
             chr.getField().broadcastPacket(FieldPacket.changeMobZone(mobID, dataType));
         }
@@ -424,8 +424,8 @@ public class MobHandler {
                     if (mob == null) {
                         return;
                     }
-                    MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(131, 28);
-                    AffectedArea aa = AffectedArea.getMobAA(mob, (short) 131, (short) 28, SkillData.getMobSkillInfoByIdAndLevel(131, 28));
+                    MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(131, 28);
+                    AffectedArea aa = AffectedArea.getMobAA(mob, (short) 131, (short) 28, Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(131, 28));
                     Rect rect = new Rect(msi.getLt(), msi.getRb());
                     Position position = new Position(swordPosition.getX(), 16);
                     aa.setPosition(position);

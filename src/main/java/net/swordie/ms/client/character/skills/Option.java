@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.skills;
 
 import net.swordie.ms.client.character.skills.info.SkillInfo;
 import net.swordie.ms.life.Summon;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class Option {
     }
 
     public Option(int skillID, byte slv) {
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         rOption = skillID;
         tOption = si.getValue(SkillStat.time, slv);
         this.tStart = Util.getCurrentTime();

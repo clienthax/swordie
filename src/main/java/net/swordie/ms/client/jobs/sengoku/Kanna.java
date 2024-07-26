@@ -25,8 +25,7 @@ import net.swordie.ms.life.drop.Drop;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
@@ -97,7 +96,7 @@ public class Kanna extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Summon summon;
         Field field;
@@ -164,7 +163,7 @@ public class Kanna extends Job {
 
     public static void hakuFoxFire(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(FOXFIRE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(FOXFIRE);
         int slv = si.getCurrentLevel();
         Option o1 = new Option();
 
@@ -177,7 +176,7 @@ public class Kanna extends Job {
 
     public static void hakuHakuBlessing(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(HAKUS_BLESSING);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(HAKUS_BLESSING);
         int slv = si.getCurrentLevel();
         Option o1 = new Option();
 
@@ -191,7 +190,7 @@ public class Kanna extends Job {
 
     public static void hakuBreathUnseen(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(BREATH_UNSEEN);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(BREATH_UNSEEN);
         int slv = si.getCurrentLevel();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -221,7 +220,7 @@ public class Kanna extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -269,7 +268,7 @@ public class Kanna extends Job {
         }
         Field field = chr.getField();
         Skill skill = chr.getSkill(SOUL_SHEAR);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         int proc = si.getValue(prop, slv);
         for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -278,7 +277,7 @@ public class Kanna extends Job {
                 if (mob == null) {
                     continue;
                 }
-                Item item = ItemData.getItemDeepCopy(SOUL_SHEAR_BOMB_ITEM_ID);
+                Item item = Loaders.getInstance().getItemData().getItemDeepCopy(SOUL_SHEAR_BOMB_ITEM_ID);
                 Drop drop = new Drop(item.getItemId(), item);
                 field.drop(drop, mob.getPosition());
             }
@@ -310,7 +309,7 @@ public class Kanna extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {

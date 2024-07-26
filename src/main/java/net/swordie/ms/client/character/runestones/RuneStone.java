@@ -12,7 +12,7 @@ import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.enums.RuneType;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -139,11 +139,11 @@ public class RuneStone {
 
         // Common EXP buff
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        Skill skill = SkillData.getSkillDeepCopyById(runeBuffID);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(runeBuffID);
         int skillID = skill.getSkillId();
         skill.setCurrentLevel(1);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o1 = new Option();
         o1.nReason = skillID;
         o1.nValue = si.getValue(indieExp, slv); //200% EXP
@@ -155,11 +155,11 @@ public class RuneStone {
 
     private void applyRuneSwiftness(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        Skill skill = SkillData.getSkillDeepCopyById(LIBERATE_THE_SWIFT_RUNE);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(LIBERATE_THE_SWIFT_RUNE);
         int skillID = skill.getSkillId();
         skill.setCurrentLevel(1);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o1 = new Option();
         Option o2 = new Option();
         Option o3 = new Option();
@@ -188,11 +188,11 @@ public class RuneStone {
 
     private void applyRuneRecovery(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        Skill skill = SkillData.getSkillDeepCopyById(LIBERATE_THE_RECOVERY_RUNE);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(LIBERATE_THE_RECOVERY_RUNE);
         int skillID = skill.getSkillId();
         skill.setCurrentLevel(1);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o1 = new Option();
         Option o2 = new Option();
         Option o3 = new Option();
@@ -216,9 +216,9 @@ public class RuneStone {
     }
 
     private void applyRuneHordes(Char chr) {
-        Skill skill = SkillData.getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_HORDES);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_HORDES);
         byte slv = 1;
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 
         // Map Effect
         int duration = si.getValue(time, slv);
@@ -228,17 +228,17 @@ public class RuneStone {
 
     private void applyRuneThunder(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        Skill skill = SkillData.getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_THUNDER_2);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_THUNDER_2);
         int skillID = skill.getSkillId();
         skill.setCurrentLevel(1);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o1 = new Option();
 
         // RandAreaAttack Buff
         o1.nOption = 1;
         o1.rOption = skillID;
-        o1.tOption = SkillData.getSkillInfoById(80001756).getValue(time, slv);
+        o1.tOption = Loaders.getInstance().getSkillData().getSkillInfoById(80001756).getValue(time, slv);
         tsm.putCharacterStatValue(RandAreaAttack, o1);
         tsm.sendSetStatPacket();
 
@@ -262,11 +262,11 @@ public class RuneStone {
 
     private void applyRuneMight(Char chr) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        Skill skill = SkillData.getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_MIGHT_2);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(LIBERATE_THE_RUNE_OF_MIGHT_2);
         int skillID = skill.getSkillId();
         skill.setCurrentLevel(1);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         Option o1 = new Option();
         Option o2 = new Option();
         o1.nOption = si.getValue(x, slv);

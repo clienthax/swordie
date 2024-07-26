@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.scene;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.connection.packet.FieldPacket;
 import net.swordie.ms.handlers.EventManager;
-import net.swordie.ms.loaders.EffectData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.world.field.fieldeffect.FieldEffect;
 import org.apache.logging.log4j.LogManager;
@@ -38,7 +38,7 @@ public class Scene {
     }
 
     public void loadScene() {
-        EffectData.getEffectsFromWzPath(this);
+        Loaders.getInstance().getEffectData().getEffectsFromWzPath(this);
 
         effectInfos = effectInfos.stream().sorted(Comparator.comparingInt(EffectInfo::getZ)).collect(Collectors.toList());
     }
@@ -87,11 +87,7 @@ public class Scene {
                     }
                     break;
 
-                case playBGM:
-                    // TODO
-                    break;
-
-                case unknown:
+                case playBGM, unknown:
                     // TODO
                     break;
             }

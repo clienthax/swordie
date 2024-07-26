@@ -5,7 +5,7 @@ import net.swordie.ms.client.character.Char;
 import net.swordie.ms.client.character.items.Equip;
 import net.swordie.ms.connection.packet.QuickMoveInfo;
 import net.swordie.ms.enums.*;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -137,8 +137,8 @@ public class GameConstants {
     // START OF Party Quests
     public static final long PARTY_QUEST_GLOBAL_EXP = 30000000; // The minimum amount of Exp given from a PQ.
 
-    public static final long PARTY_QUEST_EXP_FORMULA(Char chr) {
-        return PARTY_QUEST_GLOBAL_EXP * (1+(chr.getParty().getPartyMembers().length*100 / chr.getParty().getAvgLevel()));
+    public static long PARTY_QUEST_EXP_FORMULA(Char chr) {
+        return PARTY_QUEST_GLOBAL_EXP * (1+(chr.getParty().getPartyMembers().length* 100L / chr.getParty().getAvgLevel()));
     } // Exp formula for giving Exp from Party Quests
 
     // Dojo
@@ -526,9 +526,9 @@ public class GameConstants {
         if (ItemConstants.isWeapon(equip.getItemId()) && !ItemConstants.isSecondary(equip.getItemId())) {
             if (chuc <= 14) {
                 if (es == EnchantStat.PAD) {
-                    stat += equip.getiPad() * 0.02;
+                    stat += (int) (equip.getiPad() * 0.02);
                 } else if (es == EnchantStat.MAD) {
-                    stat += equip.getiMad() * 0.02;
+                    stat += (int) (equip.getiMad() * 0.02);
                 }
             } else if (es == EnchantStat.PAD || es == EnchantStat.MAD) {
                 stat += chuc == 22 ? 13 : chuc == 23 ? 12 : chuc == 24 ? 11 : 0;
@@ -551,7 +551,7 @@ public class GameConstants {
     }
 
     public static int getEnchantmentValByChuc(Equip equip, EnchantStat es, short chuc, int curAmount) {
-        if (equip.isCash() || (ItemData.getEquipById(equip.getItemId()).getTuc() <= 0 && !ItemConstants.isTucIgnoreItem(equip.getItemId()))) {
+        if (equip.isCash() || (Loaders.getInstance().getItemData().getEquipById(equip.getItemId()).getTuc() <= 0 && !ItemConstants.isTucIgnoreItem(equip.getItemId()))) {
             return 0;
         }
         if (es == EnchantStat.PDD) {
@@ -633,10 +633,9 @@ public class GameConstants {
 
     public static BaseStat getSecStatByMainStat(BaseStat mainStat) {
         return switch (mainStat) {
-            case str -> BaseStat.dex;
+            case str, luk -> BaseStat.dex;
             case dex -> BaseStat.str;
             case inte -> BaseStat.luk;
-            case luk -> BaseStat.dex;
             default -> null;
         };
     }

@@ -351,7 +351,7 @@ public class RoomHandler {
                     return;
                 }
                 item = merchantItem.item;
-                long amount = merchantItem.bundles * item.getQuantity();
+                long amount = (long) merchantItem.bundles * item.getQuantity();
                 if (amount <= 0 || amount > 32767) {
                     return;
                 }

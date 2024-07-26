@@ -43,7 +43,7 @@ public final class PacketEncoder extends MessageToByteEncoder<Packet> {
 
         if (c != null) {
             if(!OutHeader.isSpamHeader(OutHeader.getOutHeaderByOp(outPacket.getHeader()))) {
-                log.debug("[Out]\t| " + outPacket);
+                log.debug("[Out]\t| {}", outPacket);
             }
             byte[] iv = c.getSendIV();
             byte[] head = MapleCrypto.getHeader(data.length, iv);
@@ -62,7 +62,7 @@ public final class PacketEncoder extends MessageToByteEncoder<Packet> {
             bb.writeBytes(data);
             
         } else {
-            log.debug("[PacketEncoder] | Plain sending " + outPacket);
+            log.debug("[PacketEncoder] | Plain sending {}", outPacket);
             bb.writeBytes(data);
         }
 //        outPacket.release();

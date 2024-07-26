@@ -20,10 +20,7 @@ import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.pet.PetSkill;
-import net.swordie.ms.loaders.FieldData;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.*;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.loaders.containerclasses.MakingSkillRecipe;
 import net.swordie.ms.scripts.ScriptType;
@@ -63,7 +60,7 @@ public class ItemHandler {
         inPacket.decodeInt(); //tick
         short slot = inPacket.decodeShort();
         int itemID = inPacket.decodeInt();
-        ItemInfo ii = ItemData.getItemInfoByID(itemID);
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
         Field toField;
 
         if (itemID != 2030000) {
@@ -136,7 +133,7 @@ public class ItemHandler {
             return;
 
         } else if (equip.getBonusGrade() > itemGradeMax.getVal()) {
-            String msg = String.format("Character %d tried to use %s cube (id %d) an equip with a potential greater than it is allowed to (id %d)", chr.getId(), StringData.getItemStringById(cubeId), cubeId, equip.getItemId());
+            String msg = String.format("Character %d tried to use %s cube (id %d) an equip with a potential greater than it is allowed to (id %d)", chr.getId(), Loaders.getInstance().getStringData().getItemStringById(cubeId), cubeId, equip.getItemId());
             chr.getOffenseManager().addOffense(msg);
             chr.dispose();
             return;
@@ -173,7 +170,7 @@ public class ItemHandler {
         short pos = inPacket.decodeShort();
         int itemID = inPacket.decodeInt();
         Item item = cashInv.getItemBySlot(pos);
-        ItemInfo itemInfo = ItemData.getItemInfoByID(itemID);
+        ItemInfo itemInfo = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
         if (item == null || item.getItemId() != itemID) {
             return;
         }
@@ -237,7 +234,7 @@ public class ItemHandler {
             if (medal != null) {
                 medalInt = (medal.getAnvilId() == 0 ? medal.getItemId() : medal.getAnvilId()); // Check for Anvilled medal
             }
-            String medalString = (medalInt == 0 ? "" : String.format("<%s> ", StringData.getItemStringById(medalInt)));
+            String medalString = (medalInt == 0 ? "" : String.format("<%s> ", Loaders.getInstance().getStringData().getItemStringById(medalInt)));
             switch (itemID) {
                 case ItemConstants.HYPER_TELEPORT_ROCK: // Hyper Teleport Rock
                     short type = inPacket.decodeShort();
@@ -245,7 +242,7 @@ public class ItemHandler {
                         int fieldId = inPacket.decodeInt();
                         Field field = chr.getOrCreateFieldByCurrentInstanceType(fieldId);
                         if (field == null || (field.getFieldLimit() & FieldOption.TeleportItemLimit.getVal()) > 0 ||
-                                !FieldData.getWorldMapFields().contains(fieldId)) {
+                                !Loaders.getInstance().getFieldData().getWorldMapFields().contains(fieldId)) {
                             chr.chatMessage("You may not warp to that map.");
                             chr.dispose();
                             return;
@@ -496,7 +493,7 @@ public class ItemHandler {
             return;
         }
         String script = String.valueOf(itemID);
-        ItemInfo ii = ItemData.getItemInfoByID(itemID);
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
         if (ii.getScript() != null && !"".equals(ii.getScript())) {
             script = ii.getScript();
         }
@@ -592,7 +589,7 @@ public class ItemHandler {
                 Equip oldEquip = equip.deepCopy();
                 int successProp = GameConstants.getEnchantmentSuccessRate(equip);
                 if (extraChanceFromMiniGame) {
-                    successProp *= 1.045;
+                    successProp *= (int) 1.045;
                 }
                 int destroyProp = safeGuard && equip.canSafeguardHyperUpgrade() ? 0 : GameConstants.getEnchantmentDestroyRate(equip);
                 if (equippedInv && destroyProp > 0 && chr.getEquipInventory().getEmptySlots() == 0) {
@@ -708,7 +705,7 @@ public class ItemHandler {
              case ShowUnknownFailResult:
              break;*/
             default:
-                log.debug("Unhandled Equipment Enchant Type: " + eeType);
+                log.debug("Unhandled Equipment Enchant Type: {}", eeType);
                 chr.write(FieldPacket.showUnknownEnchantFailResult((byte) 0));
                 break;
         }
@@ -721,7 +718,7 @@ public class ItemHandler {
         int itemID = inPacket.decodeInt();
         Char chr = c.getChr();
 
-        ItemInfo ii = ItemData.getItemInfoByID(itemID);
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
         if (ii == null || !chr.hasItem(itemID)) {
             chr.chatMessage("Could not find that item.");
             return;
@@ -834,7 +831,7 @@ public class ItemHandler {
             chr.dispose();
             return;
         }
-        int successProp = ItemData.getItemInfoByID(item.getItemId()).getScrollStats().get(ScrollStat.success);
+        int successProp = Loaders.getInstance().getItemData().getItemInfoByID(item.getItemId()).getScrollStats().get(ScrollStat.success);
         boolean success = Util.succeedProp(successProp);
         if (success) {
             equip.setSoulSocketId((short) (item.getItemId() % ItemConstants.SOUL_ENCHANTER_BASE_ID));
@@ -923,11 +920,11 @@ public class ItemHandler {
             return;
         }
         if (chr != null && chr.getHP() > 0 && ItemConstants.isRecipeOpenItem(itemID)) {
-            ItemInfo recipe = ItemData.getItemInfoByID(itemID);
+            ItemInfo recipe = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
             if (recipe != null) {
                 int recipeID = recipe.getSpecStats().getOrDefault(SpecStat.recipe, 0);
                 int reqSkillLevel = recipe.getSpecStats().getOrDefault(SpecStat.reqSkillLevel, 0);
-                MakingSkillRecipe msr = SkillData.getRecipeById(recipeID);
+                MakingSkillRecipe msr = Loaders.getInstance().getSkillData().getRecipeById(recipeID);
                 if (msr != null && msr.isNeedOpenItem()) {
                     if (chr.getSkillLevel(msr.getReqSkillID()) < reqSkillLevel || chr.getSkillLevel(recipeID) > 0) {
                         return;
@@ -951,7 +948,7 @@ public class ItemHandler {
         // TODO: verify hyper skill is of the character's class
         inPacket.decodeInt(); // tick
         int skillID = inPacket.decodeInt();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         if (si == null) {
             log.error(String.format("Character %d attempted assigning hyper SP to a skill with null skillinfo (%d).", chr.getId(), skillID));
             chr.dispose();
@@ -1044,7 +1041,7 @@ public class ItemHandler {
         }
 
         if (chr.getHP() > 0 && ItemConstants.isBridleItem(itemID)) {
-            ItemInfo bridle = ItemData.getItemInfoByID(itemID);
+            ItemInfo bridle = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
             if (mob.getTemplateId() == bridle.getMobID()) {
                 if (mob.getHp() < (mob.getMaxHp() * bridle.getMobHP() / 100)) { //success/failure hp check
                     if (chr.canHold(bridle.getCreateID())) { // check if we have space

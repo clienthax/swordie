@@ -110,7 +110,7 @@ public class OffenseManager {
     }
 
     private void addOffense(Offense offense) {
-        log.info("Added offense: " + offense);
+        log.info("Added offense: {}", offense);
         addPoints(offense.getType().getPoints());
         // TODO do something at certain point intervals (temp ban, mute, idk)
         getOffenses().add(offense);

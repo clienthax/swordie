@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.items;
 import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.enums.InvType;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 
 import jakarta.persistence.*;
@@ -45,7 +45,7 @@ public class Inventory {
         List<Item> items = new CopyOnWriteArrayList<>();
         for (Item item : getItems()) {
             if (item instanceof PetItem) {
-                items.add(ItemData.getItemDeepCopy(item.getItemId())); //item.deepCopy cannot be used on pets, still putting it in different if state because other items can have quantity
+                items.add(Loaders.getInstance().getItemData().getItemDeepCopy(item.getItemId())); //item.deepCopy cannot be used on pets, still putting it in different if state because other items can have quantity
             } else {
                 items.add(item.deepCopy());
             }
@@ -146,7 +146,7 @@ public class Inventory {
     }
 
     public Item getItemByItemIDAndStackable(int itemId) {
-        ItemInfo ii = ItemData.getItemInfoByID(itemId);
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemId);
         if (ii == null) {
             return getItemByItemID(itemId);
         }

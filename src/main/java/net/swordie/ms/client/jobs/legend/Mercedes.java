@@ -25,8 +25,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
@@ -104,7 +103,7 @@ public class Mercedes extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -121,7 +120,7 @@ public class Mercedes extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -240,7 +239,7 @@ public class Mercedes extends Job {
 
         field.spawnSummon(summon);
 
-        SkillInfo si = SkillData.getSkillInfoById(ELEMENTAL_KNIGHTS_BLUE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(ELEMENTAL_KNIGHTS_BLUE);
         byte slv = (byte) chr.getSkill(ELEMENTAL_KNIGHTS_BLUE).getCurrentLevel();
     }
 
@@ -258,7 +257,7 @@ public class Mercedes extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -270,7 +269,7 @@ public class Mercedes extends Job {
         Option o3 = new Option();
         switch (attackInfo.skillId) {
             case STUNNING_STRIKES:
-                SkillInfo stunningStrikes = SkillData.getSkillInfoById(STUNNING_STRIKES);
+                SkillInfo stunningStrikes = Loaders.getInstance().getSkillData().getSkillInfoById(STUNNING_STRIKES);
                 int proc = stunningStrikes.getValue(prop, slv);
                 for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if(Util.succeedProp(proc)) {
@@ -289,7 +288,7 @@ public class Mercedes extends Job {
                 }
                 break;
             case STAGGERING_STRIKES:
-                SkillInfo staggeringStrikes = SkillData.getSkillInfoById(STAGGERING_STRIKES);
+                SkillInfo staggeringStrikes = Loaders.getInstance().getSkillData().getSkillInfoById(STAGGERING_STRIKES);
                 int procc = staggeringStrikes.getValue(prop, slv);
                 for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if(Util.succeedProp(procc)) {
@@ -390,10 +389,10 @@ public class Mercedes extends Job {
         if (skill == null) {
             return;
         }
-        SkillInfo ignisRoarInfo = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo ignisRoarInfo = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         int amount = 1;
-        SkillInfo si = SkillData.getSkillInfoById(lastAttackSkill);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(lastAttackSkill);
         if(si != null && si.getAddAttackSkills().stream().noneMatch(aas -> aas == attackInfo.skillId)) {
             return;
         }
@@ -430,7 +429,7 @@ public class Mercedes extends Job {
     public int getFinalAttackSkill() {
         Skill faSkill = getFinalAtkSkill();
         if(faSkill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(faSkill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(faSkill.getSkillId());
             byte slv = (byte) faSkill.getCurrentLevel();
             int proc = si.getValue(prop, slv);
             if (Util.succeedProp(proc)) {
@@ -463,7 +462,7 @@ public class Mercedes extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -494,7 +493,7 @@ public class Mercedes extends Job {
     public void setCharCreationStats(Char chr) {
         super.setCharCreationStats(chr);
         chr.getAvatarData().getAvatarLook().setDrawElfEar(true);
-        Item item = ItemData.getItemDeepCopy(1352000); // Secondary
+        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(1352000); // Secondary
         item.setBagIndex(BodyPart.Shield.getVal());
         chr.getEquippedInventory().addItem(item);
         chr.getAvatarData().getCharacterStat().setPosMap(910150000);

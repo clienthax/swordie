@@ -54,7 +54,6 @@ import org.hibernate.boot.registry.BootstrapServiceRegistry;
 import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.SystemTime;
 import org.hibernate.cfg.Environment;
@@ -65,7 +64,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created on 12/12/2017.
@@ -233,17 +231,17 @@ public class DatabaseManager {
         cleanUpSessions();
     }
 
-    public static Object getObjFromDB(Class clazz, int id) {
+    public static <T> T getObjFromDB(Class<T> clazz, int id) {
         log.info(String.format("%s: Trying to get obj %s with id %d.", LocalDateTime.now(), clazz, id));
-        Object o = null;
+        T o = null;
         try(Session session = getSession()) {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
             // session.get doesn't work for Chars for whatever reason
-            Query query = session.createQuery(String.format("FROM %s WHERE id = :val", clazz.getName()));
+            Query<T> query = session.createQuery(String.format("FROM %s WHERE id = :val", clazz.getName()), clazz);
             query.setParameter("val", id);
-            List l = ((org.hibernate.query.Query) query).list();
+            List<T> l = query.list();
             if (l != null && !l.isEmpty()) {
                 o = l.get(0);
             }
@@ -252,54 +250,52 @@ public class DatabaseManager {
         return o;
     }
 
-    public static Object getObjFromDB(Class clazz, String name) {
+    public static <T> T getObjFromDB(Class<T> clazz, String name) {
         return getObjFromDB(clazz, "name", name);
     }
 
-    public static Object getObjFromDB(Class clazz, String columnName, Object value) {
+    public static <T> T getObjFromDB(Class<T> clazz, String columnName, Object value) {
         log.info(String.format("%s: Trying to get obj %s with value %s.", LocalDateTime.now(), clazz, value));
-        Object o = null;
+        T o = null;
         try (Session session = getSession()) {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
+            Query<T> query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName), clazz);
             query.setParameter("val", value);
-            List l = ((org.hibernate.query.Query) query).list();
+            List<T> l = query.list();
             if (l != null && !l.isEmpty()) {
                 o = l.get(0);
             }
             transaction.commit();
-            session.close();
         }
         return o;
     }
 
-    public static Object getObjListFromDB(Class clazz) {
-        List list;
+    public static <T> List<T> getObjListFromDB(Class<T> clazz) {
+        List<T> list;
         try (Session session = getSession()) {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            Query query = session.createQuery(String.format("FROM %s", clazz.getName()));
-            list = ((org.hibernate.query.Query) query).list();
+            Query<T> query = session.createQuery(String.format("FROM %s", clazz.getName()), clazz);
+            list = query.list();
             transaction.commit();
-            session.close();
         }
         return list;
     }
 
-    public static Object getObjListFromDB(Class clazz, String columnName, Object value) {
-        List list;
+    public static <T> List<T> getObjListFromDB(Class<T> clazz, String columnName, Object value) {
+        List<T> list;
         try (Session session = getSession()) {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            Query query = session.createQuery(String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName));
+            String hql = String.format("FROM %s WHERE %s = :val", clazz.getName(), columnName);
+            Query<T> query = session.createQuery(hql, clazz);
             query.setParameter("val", value);
-            list = ((org.hibernate.query.Query) query).list();
+            list = query.list();
             transaction.commit();
-            session.close();
         }
         return list;
     }

@@ -8,7 +8,7 @@ import net.swordie.ms.connection.packet.FieldPacket;
 import net.swordie.ms.constants.GameConstants;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.enums.*;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Util;
 
@@ -416,7 +416,7 @@ public class Equip extends Item {
 
     public void addAttribute(EquipAttribute ea) {
         short attr = getAttribute();
-        attr |= ea.getVal();
+        attr |= (short) ea.getVal();
         setAttribute(attr);
     }
 
@@ -486,7 +486,7 @@ public class Equip extends Item {
 
     public void addSpecialAttribute(EquipSpecialAttribute esa) {
         short attr = getSpecialAttribute();
-        attr |= esa.getVal();
+        attr |= (short) esa.getVal();
         setSpecialAttribute(attr);
     }
 
@@ -1166,9 +1166,9 @@ public class Equip extends Item {
             // Self made numbers for socket: 3 == empty (since 0 is already taken for STR+1, similar for 1/2)
             if (socket != 0) {
                 socketMask |= 1;
-                socketMask |= 1 << i + 1;
+                socketMask |= (short) (1 << i + 1);
                 if (socket != ItemConstants.EMPTY_SOCKET_ID) {
-                    socketMask |= 1 << (i + 4); // 3 sockets, look at the comment at socketMask.
+                    socketMask |= (short) (1 << (i + 4)); // 3 sockets, look at the comment at socketMask.
                 }
             }
         }
@@ -1408,7 +1408,6 @@ public class Equip extends Item {
             case cuttable -> getCuttable();
             case exGradeOption -> getExGradeOption();
             case hyperUpgrade -> getHyperUprade();
-            default -> 0;
         };
     }
 
@@ -1504,7 +1503,7 @@ public class Equip extends Item {
 
     public void addStat(EquipBaseStat stat, int amount) {
         int cur = (int) getBaseStat(stat);
-        int newStat = cur + amount >= 0 ? cur + amount : 0; // stat cannot be negative
+        int newStat = Math.max(cur + amount, 0); // stat cannot be negative
         setBaseStat(stat, newStat);
     }
 
@@ -1521,7 +1520,7 @@ public class Equip extends Item {
             return;
         }
         short attr = getAttribute();
-        attr ^= equipAttribute.getVal();
+        attr ^= (short) equipAttribute.getVal();
         setAttribute(attr);
     }
 
@@ -1530,7 +1529,7 @@ public class Equip extends Item {
             return;
         }
         short attr = getSpecialAttribute();
-        attr ^= equipSpecialAttribute.getVal();
+        attr ^= (short) equipSpecialAttribute.getVal();
         setSpecialAttribute(attr);
     }
 
@@ -1702,7 +1701,7 @@ public class Equip extends Item {
             int id = getSocket(i);
             if (id != 0 && id != ItemConstants.EMPTY_SOCKET_ID) {
                 int nebuliteId = ItemConstants.NEBILITE_BASE_ID + id;
-                Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(nebuliteId).getScrollStats();
+                Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(nebuliteId).getScrollStats();
                 amount += vals.getOrDefault(ss, 0);
             }
         }
@@ -1723,7 +1722,7 @@ public class Equip extends Item {
         for (int i = 0; i < getOptions().size() - 1; i++) { // last one is anvil => skipped
             int id = getOptions().get(i);
             int level = (getrLevel() + getiIncReq()) / 10;
-            ItemOption io = ItemData.getItemOptionById(id);
+            ItemOption io = Loaders.getInstance().getItemData().getItemOptionById(id);
             if (io != null) {
                 Map<BaseStat, Double> valMap = io.getStatValuesByLevel(level);
                 res += valMap.getOrDefault(baseStat, 0D);
@@ -1827,7 +1826,7 @@ public class Equip extends Item {
     }
 
     public void applyInnocenceScroll() {
-        Equip defaultEquip = ItemData.getEquipDeepCopyFromID(getItemId(), false);
+        Equip defaultEquip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(getItemId(), false);
         for (EquipBaseStat ebs : EquipBaseStat.values()) {
             if (ebs != EquipBaseStat.attribute && ebs != EquipBaseStat.growthEnchant && ebs != EquipBaseStat.psEnchant) {
                 setBaseStat(ebs, defaultEquip.getBaseStat(ebs));
@@ -1838,7 +1837,7 @@ public class Equip extends Item {
     }
 
     public boolean hasUsedSlots() {
-        Equip defaultEquip = ItemData.getEquipDeepCopyFromID(getItemId(), false);
+        Equip defaultEquip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(getItemId(), false);
         return defaultEquip.getTuc() != getTuc();
     }
 
@@ -1860,7 +1859,7 @@ public class Equip extends Item {
     public short getATTBonus(short tier) {
         if (ItemConstants.isWeapon(getItemId())) {
             final double[] multipliers = isBossReward() ? ItemConstants.WEAPON_FLAME_MULTIPLIER_BOSS_WEAPON : ItemConstants.WEAPON_FLAME_MULTIPLIER;
-            Equip baseEquip = ItemData.getEquipById(getItemId());
+            Equip baseEquip = Loaders.getInstance().getItemData().getEquipById(getItemId());
             int att = Math.max(baseEquip.getiPad(), baseEquip.getiMad());
             return (short) Math.ceil(att * (multipliers[tier - 1] * getFlameLevel()) / 100.0);
         } else {
@@ -2010,7 +2009,7 @@ public class Equip extends Item {
     }
 
     public void resetStats() {
-        Equip normalEquip = ItemData.getEquipDeepCopyFromID(getItemId(), false);
+        Equip normalEquip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(getItemId(), false);
         for (EquipBaseStat ebs : EquipBaseStat.values()) {
             setBaseStat(ebs, normalEquip.getBaseStat(ebs));
         }
@@ -2025,7 +2024,7 @@ public class Equip extends Item {
         }
         int scrollID = scroll.getItemId();
         boolean boom = false;
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(scrollID).getScrollStats();
         if (!vals.isEmpty()) {
             boolean recover = vals.getOrDefault(ScrollStat.recover, 0) != 0;
             if (getBaseStat(EquipBaseStat.tuc) <= 0 && !recover) {
@@ -2051,7 +2050,7 @@ public class Equip extends Item {
                     }
                 }
                 if (recover) {
-                    Equip fullTucEquip = ItemData.getEquipDeepCopyFromID(getItemId(), false);
+                    Equip fullTucEquip = Loaders.getInstance().getItemData().getEquipDeepCopyFromID(getItemId(), false);
                     int maxTuc = fullTucEquip.getTuc();
                     if (getTuc() + getCuc() < maxTuc) {
                         addStat(EquipBaseStat.tuc, 1);

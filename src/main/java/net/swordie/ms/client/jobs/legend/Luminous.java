@@ -23,7 +23,7 @@ import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 
 import java.util.Arrays;
@@ -101,7 +101,7 @@ public class Luminous extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -123,7 +123,7 @@ public class Luminous extends Job {
     // Buff related methods --------------------------------------------------------------------------------------------
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -166,7 +166,7 @@ public class Luminous extends Job {
                 o1.tOption = si.getValue(time, slv);
                 o1.mOption = 1;
                 tsm.putCharacterStatValue(StackBuff, o1);
-                darkCrescendoTimer = System.currentTimeMillis() + (si.getValue(time, slv) * 1000);
+                darkCrescendoTimer = System.currentTimeMillis() + (si.getValue(time, slv) * 1000L);
                 break;
             case ARCANE_PITCH:
                 o1.nOption = si.getValue(y, slv);
@@ -226,7 +226,7 @@ public class Luminous extends Job {
         if(chr.hasSkill(LUNAR_TIDE)) {
             Option o1 = new Option();
             Option o2 = new Option();
-            SkillInfo lti = SkillData.getSkillInfoById(LUNAR_TIDE);
+            SkillInfo lti = Loaders.getInstance().getSkillData().getSkillInfoById(LUNAR_TIDE);
             Skill skill = chr.getSkill(LUNAR_TIDE);
             byte slv = (byte) skill.getCurrentLevel();
             int maxMP = c.getChr().getStat(Stat.mmp);
@@ -318,7 +318,7 @@ public class Luminous extends Job {
 
     public int getMoreEquilibriumTime() {
         int eqTime = 20;
-        SkillInfo eqi = SkillData.getSkillInfoById(DARKNESS_MASTERY);
+        SkillInfo eqi = Loaders.getInstance().getSkillData().getSkillInfoById(DARKNESS_MASTERY);
         if(chr.hasSkill(DARKNESS_MASTERY)) {
             eqTime += eqi.getValue(time, eqi.getCurrentLevel());
             eqTime += 5;
@@ -340,7 +340,7 @@ public class Luminous extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -393,7 +393,7 @@ public class Luminous extends Job {
     private void incrementDarkCrescendo(TemporaryStatManager tsm) {
         Option o = new Option();
         Option o1 = new Option();
-        SkillInfo crescendoInfo = SkillData.getSkillInfoById(DARK_CRESCENDO);
+        SkillInfo crescendoInfo = Loaders.getInstance().getSkillData().getSkillInfoById(DARK_CRESCENDO);
         Skill skill = chr.getSkill(DARK_CRESCENDO);
         byte slv = (byte) skill.getCurrentLevel();
         int amount = 1;
@@ -417,7 +417,7 @@ public class Luminous extends Job {
         if (chr.hasSkill(DARK_CRESCENDO)) {
             skill = chr.getSkill(DARK_CRESCENDO);
         }
-        return skill == null ? 0 : SkillData.getSkillInfoById(DARK_CRESCENDO).getValue(prop, skill.getCurrentLevel());
+        return skill == null ? 0 : Loaders.getInstance().getSkillData().getSkillInfoById(DARK_CRESCENDO).getValue(prop, skill.getCurrentLevel());
     }
 
     private int getMaxDarkCrescendoStack() {
@@ -425,7 +425,7 @@ public class Luminous extends Job {
         if (chr.hasSkill(DARK_CRESCENDO)) {
             skill = chr.getSkill(DARK_CRESCENDO);
         }
-        return skill == null ? 0 : SkillData.getSkillInfoById(skill.getSkillId()).getValue(x, skill.getCurrentLevel());
+        return skill == null ? 0 : Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId()).getValue(x, skill.getCurrentLevel());
     }
 
     @Override
@@ -446,7 +446,7 @@ public class Luminous extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         LarknessManager lm = tsm.getLarknessManager();
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -463,7 +463,7 @@ public class Luminous extends Job {
                     lm.changeMode();
                     o1.nOption = 1;
                     o1.rOption = EQUILIBRIUM;
-//                    o1.tOption = SkillData.getSkillInfoById(EQUILIBRIUM).getValue(time, 1);
+//                    o1.tOption = Loaders.getInstance().getSkillData().getSkillInfoById(EQUILIBRIUM).getValue(time, 1);
                     tsm.putCharacterStatValue(Larkness, o1);
                     equilibriumTimer = EventManager.addEvent(this::changeMode, getMoreEquilibriumTime(), TimeUnit.SECONDS);
                     chr.resetSkillCoolTime(ENDER);
@@ -500,7 +500,7 @@ public class Luminous extends Job {
         } else {
             if (tsm.hasStat(BlessOfDarkness) && chr.hasSkill(BLACK_BLESSING) && hitInfo.hpDamage > 0) {
                 Skill skill = chr.getSkill(BLACK_BLESSING);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
                 changeBlackBlessingCount(c, false); // deduct orbs as player gets hit
                 int dmgAbsorbed = si.getValue(x, slv);
@@ -526,7 +526,7 @@ public class Luminous extends Job {
             return;
         }
         Skill skill = chr.getSkill(SHADOW_SHELL);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         Option o = new Option();
         if (tsm.hasStat(AntiMagicShell)) {

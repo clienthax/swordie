@@ -223,7 +223,7 @@ public class Merchant extends Life {
     }
 
     public void buyItem(Char customer, int itemPos, short quantity) {
-        long price = quantity * getItems().get(itemPos).price;
+        long price = (long) quantity * getItems().get(itemPos).price;
         MerchantItem itemToBuy = getItems().get(itemPos);
         Item itemCopy = itemToBuy.item.deepCopy();
         if (customer.getMoney() < price || !customer.getInventoryByType(itemCopy.getInvType()).canPickUp(itemCopy) || !canAddMoney(price)) { //customer does not have enough mesos or cannot hold item, merchant can't hold that much mesos

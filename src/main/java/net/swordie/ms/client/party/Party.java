@@ -162,7 +162,7 @@ public class Party implements Encodable {
     }
 
     public List<Char> getOnlineChars() {
-        return getOnlineMembers().stream().filter(pm -> pm.getChr() != null).map(PartyMember::getChr).collect(Collectors.toList());
+        return getOnlineMembers().stream().map(PartyMember::getChr).filter(chr -> chr != null).collect(Collectors.toList());
     }
 
     public List<PartyMember> getOnlineMembers() {

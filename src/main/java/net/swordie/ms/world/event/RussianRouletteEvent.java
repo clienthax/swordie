@@ -105,7 +105,7 @@ public class RussianRouletteEvent implements InGameEvent {
     }
 
     private void killCharsInRect() {
-        if (channelInstance.getField(EVENT_MAP).getChars().size() <= 0) {
+        if (channelInstance.getField(EVENT_MAP).getChars().isEmpty()) {
             endEvent();
         } else {
             int[] randDomain = SECTIONS[Util.getRandom(2)]; // holds two X values

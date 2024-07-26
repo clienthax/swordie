@@ -3,7 +3,7 @@ package net.swordie.ms.client.character.quest.reward;
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.client.character.items.Item;
 import net.swordie.ms.loaders.DatSerializable;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -38,7 +38,7 @@ public class QuestItemReward implements QuestReward{
 
     @Override
     public void giveReward(Char chr) {
-        Item item = ItemData.getItemDeepCopy(getId());
+        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(getId());
         item.setQuantity(getQuantity());
         if (getQuantity() < 0) {
             chr.consumeItem(item.getItemId(), -getQuantity());

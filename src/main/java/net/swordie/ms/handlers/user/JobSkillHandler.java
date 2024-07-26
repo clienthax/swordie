@@ -29,7 +29,7 @@ import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.FieldAttackObj;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -162,7 +162,7 @@ public class JobSkillHandler {
             currentFaos.stream()
                     .filter(fao -> fao.getOwnerID() == chr.getId() && fao.getTemplateId() == 1)
                     .findAny().ifPresent(field::removeLife);
-            SkillInfo si = SkillData.getSkillInfoById(skillID);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
             int slv = skill.getCurrentLevel();
             FieldAttackObj fao = new FieldAttackObj(1, chr.getId(), chr.getPosition().deepCopy(), flip);
             field.spawnLife(fao, chr);
@@ -181,7 +181,7 @@ public class JobSkillHandler {
         int skillID = inPacket.decodeInt();
         byte slv = inPacket.decodeByte();
         short dir = inPacket.decodeShort();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         int range = si.getValue(SkillStat.range, slv);
         ForceAtomEnum fae;
         skillID = switch (skillID) {
@@ -220,13 +220,13 @@ public class JobSkillHandler {
                 angle = 270;
                 firstImpact = 11;
                 secondImpact = 13;
-                range /= 1.5;
+                range /= (int) 1.5;
                 break;
             case 3: // down
                 angle = 90;
                 firstImpact = 11;
                 secondImpact = 13;
-                range /= 1.5;
+                range /= (int) 1.5;
                 break;
         }
         ForceAtomInfo fai = new ForceAtomInfo(1, fae.getInc(), firstImpact, secondImpact,
@@ -450,7 +450,7 @@ public class JobSkillHandler {
         Char chr = c.getChr();
         Char targetChr = c.getChr().getField().getCharByID(targetChrID);
 
-        Skill stolenSkill = SkillData.getSkillDeepCopyById(stealSkillID);
+        Skill stolenSkill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(stealSkillID);
         int stealSkillMaxLv = stolenSkill.getMasterLevel();
         int stealSkillCurLv = targetChr == null ? stealSkillMaxLv : targetChr.getSkill(stealSkillID).getCurrentLevel(); //TODO this is for testing,  needs to be:    targetChr.getSkillID(stealSkillID).getCurrentLevel();
 

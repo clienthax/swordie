@@ -6,7 +6,7 @@ import net.swordie.ms.client.character.skills.Option;
 import net.swordie.ms.client.character.skills.temp.TemporaryStatManager;
 import net.swordie.ms.enums.SpecStat;
 import net.swordie.ms.enums.Stat;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat
 
 public class ItemBuffs {
     public static void giveItemBuffsFromItemID(Char chr, TemporaryStatManager tsm, int itemID) {
-        Map<SpecStat, Integer> specStats = ItemData.getItemInfoByID(itemID).getSpecStats();
+        Map<SpecStat, Integer> specStats = Loaders.getInstance().getItemData().getItemInfoByID(itemID).getSpecStats();
         long time = specStats.getOrDefault(SpecStat.time, 0) / 1000;
         for (Map.Entry<SpecStat, Integer> entry : specStats.entrySet()) {
             SpecStat ss = entry.getKey();

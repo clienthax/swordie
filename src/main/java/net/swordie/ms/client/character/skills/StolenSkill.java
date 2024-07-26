@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.skills;
 
 import net.swordie.ms.client.character.Char;
 import net.swordie.ms.constants.SkillConstants;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 
 import jakarta.persistence.*;
 
@@ -64,7 +64,7 @@ public class StolenSkill {
 
 
     public static void setSkill(Char chr, int skillId, int position, byte currentLv) {
-        Skill skill = SkillData.getSkillDeepCopyById(skillId);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(skillId);
         skill.setCurrentLevel(currentLv);
         chr.addSkill(skill);
 
@@ -79,7 +79,7 @@ public class StolenSkill {
         }
         chr.removeStolenSkill(stolenSkill);
         if(chr.hasSkill(skillId)) {
-            Skill skill = SkillData.getSkillDeepCopyById(skillId);
+            Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(skillId);
             skill.setCurrentLevel(0);
             chr.addSkill(skill);
         }

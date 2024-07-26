@@ -20,14 +20,14 @@ import java.util.*;
  */
 public class SkillData implements DataCreator {
 
-    private static final Map<Integer, SkillInfo> skills = new HashMap<>();
-    private static final Map<Integer, Map<Integer, Integer>> eliteMobSkills = new HashMap<>();
-    private static final Map<Short, Map<Short, MobSkillInfo>> mobSkillInfos = new HashMap<>();
-    private static final Map<Integer, MakingSkillRecipe> makingSkillRecipes = new HashMap<>();
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
-    private static final boolean LOG_UNKS = false;
+    private final Map<Integer, SkillInfo> skills = new HashMap<>();
+    private final Map<Integer, Map<Integer, Integer>> eliteMobSkills = new HashMap<>();
+    private final Map<Short, Map<Short, MobSkillInfo>> mobSkillInfos = new HashMap<>();
+    private final Map<Integer, MakingSkillRecipe> makingSkillRecipes = new HashMap<>();
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final boolean LOG_UNKS = false;
 
-    public static void saveSkills(String dir) {
+    public void saveSkills(String dir) {
         Util.makeDirIfAbsent(dir);
         for (Map.Entry<Integer, SkillInfo> entry : skills.entrySet()) {
             SkillInfo si = entry.getValue();
@@ -89,7 +89,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    private static void loadSkillsOfJob(int job) {
+    private void loadSkillsOfJob(int job) {
         String dir = ServerConstants.DAT_DIR + "/skills";
         File folder = new File(dir);
         for (File f : folder.listFiles()) {
@@ -99,7 +99,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static void loadSkill(File file) {
+    public void loadSkill(File file) {
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             SkillInfo skillInfo = new SkillInfo();
             skillInfo.setSkillId(dataInputStream.readInt());
@@ -153,11 +153,11 @@ public class SkillData implements DataCreator {
         }
     }
 
-    private static void loadSkillsFromWz() {
+    private void loadSkillsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz";
         File dir = new File(wzDir);
         if (!dir.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -194,7 +194,7 @@ public class SkillData implements DataCreator {
                             skill.setSkillId(skillId);
                         } else {
                             if (LOG_UNKS) {
-                                log.warn(skillIdStr + " is not a number.");
+                                log.warn("{} is not a number.", skillIdStr);
                             }
                             continue;
                         }
@@ -279,7 +279,7 @@ public class SkillData implements DataCreator {
                                                 skill.addSkillStatInfo(skillStat, commonAttr.get("value"));
                                             } else if (!unkVals.contains(nodeName)) {
                                                 if (LOG_UNKS) {
-                                                    log.warn("Unknown SkillStat " + nodeName);
+                                                    log.warn("Unknown SkillStat {}", nodeName);
                                                 }
                                                 unkVals.add(nodeName);
                                             }
@@ -340,11 +340,11 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static Map<Integer, SkillInfo> getSkillInfos() {
+    public Map<Integer, SkillInfo> getSkillInfos() {
         return skills;
     }
 
-    public static SkillInfo getSkillInfoById(int skillId) {
+    public SkillInfo getSkillInfoById(int skillId) {
         if (!getSkillInfos().containsKey(skillId)) {
             File file = new File(String.format("%s/skills/%d.dat", ServerConstants.DAT_DIR, skillId));
             if (file.exists()) {
@@ -355,7 +355,7 @@ public class SkillData implements DataCreator {
 
     }
 
-    public static Skill getSkillDeepCopyById(int skillId) {
+    public Skill getSkillDeepCopyById(int skillId) {
         SkillInfo si = getSkillInfoById(skillId);
         if (si == null) {
             return null;
@@ -369,19 +369,15 @@ public class SkillData implements DataCreator {
         if (si.getMasterLevel() <= 0) {
             skill.setMasterLevel(skill.getMaxLevel());
         }
-        if (si.getFixLevel() > 0) {
-            skill.setCurrentLevel(si.getFixLevel());
-        } else {
-            skill.setCurrentLevel(0);
-        }
+        skill.setCurrentLevel(Math.max(si.getFixLevel(), 0));
         return skill;
     }
 
-    public static List<Skill> getSkillsByJob(short id) {
+    public List<Skill> getSkillsByJob(short id) {
         return getSkillsByJob(id, false);
     }
 
-    private static List<Skill> getSkillsByJob(short id, boolean rec) {
+    private List<Skill> getSkillsByJob(short id, boolean rec) {
         List<Skill> res = new ArrayList<>();
         getSkillInfos().forEach((key, si) -> {
             if (si.getRootId() == id && !si.isInvisible()) {
@@ -395,15 +391,15 @@ public class SkillData implements DataCreator {
         return res;
     }
 
-    public static Map<Short, Map<Short, MobSkillInfo>> getMobSkillInfos() {
+    public Map<Short, Map<Short, MobSkillInfo>> getMobSkillInfos() {
         return mobSkillInfos;
     }
 
-    public static Map<Integer, MakingSkillRecipe> getMakingSkillRecipes() {
+    public Map<Integer, MakingSkillRecipe> getMakingSkillRecipes() {
         return makingSkillRecipes;
     }
 
-    public static MakingSkillRecipe getRecipeById(int recipeID) {
+    public MakingSkillRecipe getRecipeById(int recipeID) {
         if (!getMakingSkillRecipes().containsKey(recipeID)) {
             File file = new File(String.format("%s/recipes/%d.dat", ServerConstants.DAT_DIR, recipeID));
             if (file.exists()) {
@@ -414,18 +410,18 @@ public class SkillData implements DataCreator {
 
     }
 
-    public static void addMobSkillInfo(MobSkillInfo msi) {
+    public void addMobSkillInfo(MobSkillInfo msi) {
         getMobSkillInfos().computeIfAbsent(msi.getId(), k -> new HashMap<>());
         Map<Short, MobSkillInfo> msiLevelMap = getMobSkillInfos().get(msi.getId());
         msiLevelMap.put(msi.getLevel(), msi);
         getMobSkillInfos().put(msi.getId(), msiLevelMap);
     }
 
-    private static void loadEliteMobSkillsFromWZ() {
+    private void loadEliteMobSkillsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz/EliteMobSkill.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -444,7 +440,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    private static void addEliteMobSkill(int grade, int skillID, int skillLevel) {
+    private void addEliteMobSkill(int grade, int skillID, int skillLevel) {
         if (!eliteMobSkills.containsKey(grade)) {
             eliteMobSkills.put(grade, new HashMap<>());
         }
@@ -453,12 +449,13 @@ public class SkillData implements DataCreator {
 
     @Saver(varName = "eliteMobSkills")
     private static void saveEliteMobSkills(File file) {
+        SkillData skillData = Loaders.getInstance().getSkillData();
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
-            dos.writeInt(eliteMobSkills.size());
-            for (Map.Entry<Integer, Map<Integer, Integer>> entry : eliteMobSkills.entrySet()) {
+            dos.writeInt(skillData.eliteMobSkills.size());
+            for (Map.Entry<Integer, Map<Integer, Integer>> entry : skillData.eliteMobSkills.entrySet()) {
                 dos.writeInt(entry.getKey()); // grade
                 dos.writeInt(entry.getValue().size());
-                for (Map.Entry<Integer, Integer> innerEntry : eliteMobSkills.get(entry.getKey()).entrySet()) {
+                for (Map.Entry<Integer, Integer> innerEntry : skillData.eliteMobSkills.get(entry.getKey()).entrySet()) {
                     dos.writeInt(innerEntry.getKey()); // skillID
                     dos.writeInt(innerEntry.getValue()); // skillLevel
                 }
@@ -470,9 +467,11 @@ public class SkillData implements DataCreator {
 
     @Loader(varName = "eliteMobSkills")
     public static void loadEliteMobSkills(File file, boolean exists) {
+        SkillData skillData = Loaders.getInstance().getSkillData();
+
         if (!exists) {
-            loadEliteMobSkillsFromWZ();
-            saveEliteMobSkills(file);
+            skillData.loadEliteMobSkillsFromWZ();
+            skillData.saveEliteMobSkills(file);
         } else {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
                 int gradeSize = dis.readInt();
@@ -482,7 +481,7 @@ public class SkillData implements DataCreator {
                     for (int j = 0; j < gradeSkillSize; j++) {
                         int skillID = dis.readInt();
                         int skillLevel = dis.readInt();
-                        addEliteMobSkill(grade, skillID, skillLevel);
+                        skillData.addEliteMobSkill(grade, skillID, skillLevel);
                     }
                 }
             } catch (IOException e) {
@@ -491,15 +490,15 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static Map<Integer, Integer> getEliteMobSkillsByGrade(int grade) {
+    public Map<Integer, Integer> getEliteMobSkillsByGrade(int grade) {
         return eliteMobSkills.getOrDefault(grade, null);
     }
 
-    public static void loadMobSkillsFromWz() {
+    public void loadMobSkillsFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Skill.wz/MobSkill.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -798,7 +797,7 @@ public class SkillData implements DataCreator {
 
     }
 
-    public static void saveMobSkillsToDat(String dir) {
+    public void saveMobSkillsToDat(String dir) {
         Util.makeDirIfAbsent(dir);
         for (Map.Entry<Short, Map<Short, MobSkillInfo>> entry : getMobSkillInfos().entrySet()) {
             short id = entry.getKey();
@@ -863,7 +862,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    private static MobSkillInfo loadMobSkillFromFile(File f) {
+    private MobSkillInfo loadMobSkillFromFile(File f) {
         MobSkillInfo msi = null;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
             msi = new MobSkillInfo();
@@ -910,7 +909,7 @@ public class SkillData implements DataCreator {
         return msi;
     }
 
-    private static MobSkillInfo getMobSkillInfoByIdAndLevel(short id, short level) {
+    private MobSkillInfo getMobSkillInfoByIdAndLevel(short id, short level) {
         Map<Short, MobSkillInfo> innerMap = getMobSkillInfos().get(id);
         if (innerMap == null || innerMap.get(level) == null) {
             return loadMobSkillInfoByIdAndLevel(id, level);
@@ -919,11 +918,11 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static MobSkillInfo getMobSkillInfoByIdAndLevel(int id, int level) {
+    public MobSkillInfo getMobSkillInfoByIdAndLevel(int id, int level) {
         return getMobSkillInfoByIdAndLevel((short) id, (short) level);
     }
 
-    private static MobSkillInfo loadMobSkillInfoByIdAndLevel(short id, short level) {
+    private MobSkillInfo loadMobSkillInfoByIdAndLevel(short id, short level) {
         File file = new File(String.format("%s/mobSkills/%d-%d.dat", ServerConstants.DAT_DIR, id, level));
         if (file.exists()) {
             return loadMobSkillFromFile(file);
@@ -933,13 +932,13 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static void loadMakingRecipeSkillsFromWz() {
+    public void loadMakingRecipeSkillsFromWz() {
         int[] recipes = {9200, 9201, 9202, 9203, 9204};
         for (Integer recipeCategory : recipes) {
             String wzDir = String.format(ServerConstants.WZ_DIR + "/Skill.wz/Recipe_%d.img.xml", recipeCategory);
             File file = new File(wzDir);
             if (!file.exists()) {
-                log.error(file + " does not exist.");
+                log.error("{} does not exist.", file);
                 return;
             }
 
@@ -973,7 +972,7 @@ public class SkillData implements DataCreator {
                                             break;
                                         default:
                                             if (LOG_UNKS) {
-                                                log.warn("Unknown target value " + targetName);
+                                                log.warn("Unknown target value {}", targetName);
                                             }
                                             break;
                                     }
@@ -1044,7 +1043,7 @@ public class SkillData implements DataCreator {
                                             break;
                                         default:
                                             if (LOG_UNKS) {
-                                                log.warn("Unknown ingredient value " + ingredientName);
+                                                log.warn("Unknown ingredient value {}", ingredientName);
                                             }
                                             break;
                                     }
@@ -1056,7 +1055,7 @@ public class SkillData implements DataCreator {
                             break;
                         default:
                             if (LOG_UNKS) {
-                                log.warn("Unknown recipe value " + name);
+                                log.warn("Unknown recipe value {}", name);
                             }
                             break;
                     }
@@ -1066,7 +1065,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static void saveMakingRecipeSkillsToDat(String dir) {
+    public void saveMakingRecipeSkillsToDat(String dir) {
         Util.makeDirIfAbsent(dir);
         for (MakingSkillRecipe msr : getMakingSkillRecipes().values()) {
             int recipeID = msr.getRecipeID();
@@ -1107,7 +1106,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static void loadRecipe(File file) {
+    public void loadRecipe(File file) {
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             MakingSkillRecipe msr = new MakingSkillRecipe();
             msr.setRecipeID(dataInputStream.readInt());
@@ -1146,7 +1145,7 @@ public class SkillData implements DataCreator {
         }
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating skill data.");
         long start = System.currentTimeMillis();
         loadSkillsFromWz();
@@ -1165,11 +1164,7 @@ public class SkillData implements DataCreator {
 
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    public static void clear() {
+    public void clear() {
         getMobSkillInfos().clear();
     }
 }

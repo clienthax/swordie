@@ -896,7 +896,7 @@ public class ScriptManagerImpl implements ScriptManager {
 			al.setSkin(look);
 			chr.setStatAndSendPacket(Stat.skin, look);
 		} else if (ItemConstants.MIN_FACE <= look && look < ItemConstants.MAX_FACE) {
-			if (StringData.getItemStringById(look) != null){
+			if (Loaders.getInstance().getStringData().getItemStringById(look) != null){
 				al.setFace(look);
 				chr.setStatAndSendPacket(Stat.face, look);
 			}
@@ -904,7 +904,7 @@ public class ScriptManagerImpl implements ScriptManager {
 				log.error(String.format("Tried changing a look with invalid id (%d)", look));
 			}
 		} else if (ItemConstants.MIN_HAIR <= look && look < ItemConstants.MAX_HAIR) {
-			if (StringData.getItemStringById(look) != null){
+			if (Loaders.getInstance().getStringData().getItemStringById(look) != null){
 				al.setHair(look);
 				chr.setStatAndSendPacket(Stat.hair, look);
 			}
@@ -934,7 +934,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	}
 
 	public int getSkillByItem(int itemId) {
-		ItemInfo itemInfo = ItemData.getItemInfoByID(itemId);
+		ItemInfo itemInfo = Loaders.getInstance().getItemData().getItemInfoByID(itemId);
 		return itemInfo.getSkillId();
 	}
 
@@ -1117,11 +1117,7 @@ public class ScriptManagerImpl implements ScriptManager {
 				}
 				instance.removeChar(chr);
 				chr.setDeathCount(-1);
-				if (forcedReturnPortal >= 0) {
-					chr.warp(forcedReturn, forcedReturnPortal, false);
-				} else {
-					chr.warp(forcedReturn, 0, false);
-				}
+                chr.warp(forcedReturn, Math.max(forcedReturnPortal, 0), false);
 				// if eligible members' size is 0, clear the instance
 				if (instance.getChars().isEmpty()) {
 					instance.clear();
@@ -1240,7 +1236,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	@Override
 	public int getAmountOfMobsInField(int fieldid) {
-		Field field = FieldData.getFieldById(fieldid);
+		Field field = Loaders.getInstance().getFieldData().getFieldById(fieldid);
 		return field.getMobs().size();
 	}
 
@@ -1334,7 +1330,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	public void dropItem(int itemId, int x, int y) {
 		Field field = chr.getField();
 		Drop drop = new Drop(field.getNewObjectID());
-		drop.setItem(ItemData.getItemDeepCopy(itemId));
+		drop.setItem(Loaders.getInstance().getItemData().getItemDeepCopy(itemId));
 		Position position = new Position(x, y);
 		drop.setPosition(position);
 		field.drop(drop, position, true);
@@ -1388,7 +1384,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	// NPC methods
 	@Override
 	public void spawnNpc(int npcId, int x, int y) {
-		Npc npc = NpcData.getNpcDeepCopyById(npcId);
+		Npc npc = Loaders.getInstance().getNpcData().getNpcDeepCopyById(npcId);
 		Position position = new Position(x, y);
 		npc.setPosition(position);
 		npc.setCy(y);
@@ -1413,7 +1409,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	@Override
 	public void openNpc(int npcId) {
-		Npc npc = NpcData.getNpcDeepCopyById(npcId);
+		Npc npc = Loaders.getInstance().getNpcData().getNpcDeepCopyById(npcId);
 		String script;
 		if(!npc.getScripts().isEmpty()) {
 			script = npc.getScripts().get(0);
@@ -1425,7 +1421,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	@Override
 	public void openShop(int shopID) {
-		NpcShopDlg nsd = NpcData.getShopById(shopID);
+		NpcShopDlg nsd = Loaders.getInstance().getNpcData().getShopById(shopID);
 		if (nsd != null) {
 			chr.setShop(nsd);
 			chr.write(ShopDlg.openShop(0, nsd));
@@ -1670,7 +1666,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	@Override
 	public void spawnReactor(int reactorId, int x, int y) {
 		Field field = chr.getField();
-		Reactor reactor = ReactorData.getReactorByID(reactorId);
+		Reactor reactor = Loaders.getInstance().getReactorData().getReactorByID(reactorId);
 		Position position = new Position(x, y);
 		reactor.setPosition(position);
 		field.addLife(reactor);
@@ -1678,7 +1674,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	public void spawnReactorInState(int reactorId, int x, int y, byte state) {
 		Field field = chr.getField();
-		Reactor reactor = ReactorData.getReactorByID(reactorId);
+		Reactor reactor = Loaders.getInstance().getReactorData().getReactorByID(reactorId);
 		reactor.setState(state);
 		Position position = new Position(x, y);
 		reactor.setPosition(position);
@@ -1911,7 +1907,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		if (!ItemConstants.isEquip(id)) {
 			giveItem(id);
 		}
-		Item equip = ItemData.getItemDeepCopy(id);
+		Item equip = Loaders.getInstance().getItemData().getItemDeepCopy(id);
 		if (equip == null) {
 			return;
 		}
@@ -1969,7 +1965,7 @@ public class ScriptManagerImpl implements ScriptManager {
 			}
 			return equip.getQuantity();
 		} else {
-			Item item2 = ItemData.getItemDeepCopy(id);
+			Item item2 = Loaders.getInstance().getItemData().getItemDeepCopy(id);
 			InvType invType = item2.getInvType();
 			Item item = chr.getInventoryByType(invType).getItemByItemID(id);
 			if (item == null) {
@@ -2013,7 +2009,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		QuestManager qm = chr.getQuestManager();
 		Quest quest = qm.getQuests().get(id);
 		if (quest == null) {
-			quest = QuestData.createQuestFromId(id);
+			quest = Loaders.getInstance().getQuestData().createQuestFromId(id);
 		}
 		quest.setCompletedTime(FileTime.currentTime());
 		quest.setStatus(QuestStatus.Completed);
@@ -2025,7 +2021,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	@Override
 	public void startQuestNoCheck(int id) {
 		QuestManager qm = chr.getQuestManager();
-		qm.addQuest(QuestData.createQuestFromId(id));
+		qm.addQuest(Loaders.getInstance().getQuestData().createQuestFromId(id));
 		chr.chatMessage(String.format("Quest %d started by startQuestNoCheck", id));
 	}
 
@@ -2033,7 +2029,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	public void startQuest(int id) {
 		QuestManager qm = chr.getQuestManager();
 		if (qm.canStartQuest(id)) {
-			qm.addQuest(QuestData.createQuestFromId(id));
+			qm.addQuest(Loaders.getInstance().getQuestData().createQuestFromId(id));
 		}
 	}
 
@@ -2448,7 +2444,7 @@ public class ScriptManagerImpl implements ScriptManager {
 
 	public void createClock(int hours, int minutes, int seconds) {
 		chr.write(FieldPacket.clock(ClockPacket.hmsClock((byte) hours, (byte) minutes, (byte) seconds)));
-		addEvent(EventManager.addEvent(this::removeClock, seconds + minutes * 60 + hours * 3600, TimeUnit.SECONDS));
+		addEvent(EventManager.addEvent(this::removeClock, seconds + minutes * 60L + hours * 3600L, TimeUnit.SECONDS));
 	}
 
 	public void createClockForMultiple(int seconds, int... fieldIDs) {
@@ -2747,7 +2743,7 @@ public class ScriptManagerImpl implements ScriptManager {
 			return;
 		}
 		int mobId = 9390600 + phase;
-		Mob gollux = MobData.getMobDeepCopyById(mobId);
+		Mob gollux = Loaders.getInstance().getMobData().getMobDeepCopyById(mobId);
 		int hpMultiplier = BossConstants.GOLLUX_HP_MULTIPLIERS[phase][getGolluxDifficulty().getVal()];
 		Mob mob = spawnMob(mobId, 0, 0, false, gollux.getHp() * (long) hpMultiplier);
 		blockGolluxAttacks();
@@ -2767,10 +2763,10 @@ public class ScriptManagerImpl implements ScriptManager {
 		Map<String, Object> golluxMaps = chr.getOrCreateFieldByCurrentInstanceType(BossConstants.GOLLUX_FIRST_MAP).getProperties();
 		ArrayList<Integer> blockedSkills = new ArrayList<>();
 		if ((int) golluxMaps.getOrDefault(String.valueOf(BossConstants.GOLLUX_RIGHT_SHOULDER), 0) == 2) {
-			blockedSkills.addAll(Arrays.stream(BossConstants.GOLLUX_RIGHT_HAND_SKILLS).boxed().collect(Collectors.toList()));
+			blockedSkills.addAll(Arrays.stream(BossConstants.GOLLUX_RIGHT_HAND_SKILLS).boxed().toList());
 		}
 		if ((int) golluxMaps.getOrDefault(String.valueOf(BossConstants.GOLLUX_LEFT_SHOULDER), 0) == 2) {
-			blockedSkills.addAll(Arrays.stream(BossConstants.GOLLUX_LEFT_HAND_SKILLS).boxed().collect(Collectors.toList()));
+			blockedSkills.addAll(Arrays.stream(BossConstants.GOLLUX_LEFT_HAND_SKILLS).boxed().toList());
 		}
 		if ((int) golluxMaps.getOrDefault(String.valueOf(BossConstants.GOLLUX_ABDOMEN), 0) == 2) {
 			blockedSkills.add(BossConstants.GOLLUX_BREATH_ATTACK);
@@ -2816,7 +2812,7 @@ public class ScriptManagerImpl implements ScriptManager {
 		long hp = BossConstants.LOTUS_HP_PHASE_DIFFICULTY[phase][difficulty];
 		Mob lotus = spawnMob(lotusId, 0, -16, false, hp);
 		if (phase == 0) {
-			MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(MobSkillID.LaserAttack.getVal(), 1);
+			MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(MobSkillID.LaserAttack.getVal(), 1);
 			MobSkill mobSkill = new MobSkill();
 			mobSkill.setLevel(5); //at this level there are 4 lasers and 100% damr
 			mobSkill.setSkillID(MobSkillID.LaserAttack.getVal());
@@ -2842,7 +2838,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	public void dropItem(int itemId, int itemQuantity, Mob deadMob) {
 		Field field = chr.getField();
 		Drop drop = new Drop(field.getNewObjectID());
-		drop.setItem(ItemData.getItemDeepCopy(itemId));
+		drop.setItem(Loaders.getInstance().getItemData().getItemDeepCopy(itemId));
 		if (ItemConstants.isEquip(itemId)) {
 			drop.getItem().setQuantity(itemQuantity);
 		}
@@ -2852,7 +2848,7 @@ public class ScriptManagerImpl implements ScriptManager {
 	public void dropItem(int itemId, int startPosX, int startPosY, int endPosX, int endPosY) {
 		Field field = chr.getField();
 		Drop drop = new Drop(field.getNewObjectID());
-		drop.setItem(ItemData.getItemDeepCopy(itemId));
+		drop.setItem(Loaders.getInstance().getItemData().getItemDeepCopy(itemId));
 		Position startPos = new Position(startPosX, startPosY);
 		Position endPos = new Position(endPosX, endPosY);
 		field.drop(drop, startPos, endPos, true);

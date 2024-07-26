@@ -96,7 +96,7 @@ public class GachaponConstants {
             return -1;
         }
         List<GachaponInfo.GachItem> rewards = gachapon.getRewards();
-        if (rewards == null || rewards.size() <= 0) {
+        if (rewards == null || rewards.isEmpty()) {
             return -1;
         }
         return rewards.get(Randomizer.nextInt(rewards.size())).getItemID();

@@ -23,8 +23,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -140,7 +139,7 @@ public class Kaiser extends Job {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -157,7 +156,7 @@ public class Kaiser extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -354,7 +353,7 @@ public class Kaiser extends Job {
                 o2.tTerm = si.getValue(time, slv);
                 tsm.putCharacterStatValue(IndiePAD, o2);
                 for (int skillId : chr.getSkillCoolTimes().keySet()) {
-                    if (!SkillData.getSkillInfoById(skillId).isNotCooltimeReset() && SkillData.getSkillInfoById(skillId).getHyper() == 0) {
+                    if (!Loaders.getInstance().getSkillData().getSkillInfoById(skillId).isNotCooltimeReset() && Loaders.getInstance().getSkillData().getSkillInfoById(skillId).getHyper() == 0) {
                         chr.resetSkillCoolTime(skillId);
                     }
                 }
@@ -397,7 +396,7 @@ public class Kaiser extends Job {
             if (chr.hasSkill(realignattack)) {
                 Skill skill = chr.getSkill(realignattack);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 zPadX += si.getValue(padX, slv);
                 zCr += si.getValue(cr, slv);
                 zBdR += si.getValue(bdR, slv);
@@ -433,7 +432,7 @@ public class Kaiser extends Job {
             if (chr.hasSkill(realigndefend)) {
                 Skill skill = chr.getSkill(realigndefend);
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 zDef += si.getValue(pddX, slv);
                 zAcc += si.getValue(accX, slv);
                 zMHPR += si.getValue(mhpR, slv);
@@ -482,7 +481,7 @@ public class Kaiser extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -494,7 +493,7 @@ public class Kaiser extends Job {
         Option o3 = new Option();
         switch (attackInfo.skillId) {
             case PIERCING_BLAZE:
-                SkillInfo pbi = SkillData.getSkillInfoById(PIERCING_BLAZE);
+                SkillInfo pbi = Loaders.getInstance().getSkillData().getSkillInfoById(PIERCING_BLAZE);
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if (Util.succeedProp(pbi.getValue(prop, slv))) {
                         Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -512,7 +511,7 @@ public class Kaiser extends Job {
                 }
                 break;
             case PIERCING_BLAZE_FINAL_FORM:
-                SkillInfo pbffi = SkillData.getSkillInfoById(PIERCING_BLAZE_FINAL_FORM);
+                SkillInfo pbffi = Loaders.getInstance().getSkillData().getSkillInfoById(PIERCING_BLAZE_FINAL_FORM);
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
                     if (mob == null) {
@@ -528,7 +527,7 @@ public class Kaiser extends Job {
                 }
                 break;
             case WING_BEAT:
-                SkillInfo wbi = SkillData.getSkillInfoById(WING_BEAT);
+                SkillInfo wbi = Loaders.getInstance().getSkillData().getSkillInfoById(WING_BEAT);
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if (Util.succeedProp(wbi.getValue(prop, slv))) {
                         Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -616,22 +615,7 @@ public class Kaiser extends Job {
                     mts.addStatOptionsAndBroadcast(MobStat.Speed, o1);
                 }
                 break;
-            case STONE_DRAGON:
-                for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
-                    if (Util.succeedProp(si.getValue(prop, slv))) {
-                        Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
-                        if (mob == null) {
-                            continue;
-                        }
-                        MobTemporaryStat mts = mob.getTemporaryStat();
-                        o1.nOption = 1;
-                        o1.rOption = skillID;
-                        o1.tOption = si.getValue(time, slv);
-                        mts.addStatOptionsAndBroadcast(MobStat.Speed, o1);
-                    }
-                }
-                break;
-            case STONE_DRAGON_FINAL_FORM:
+            case STONE_DRAGON, STONE_DRAGON_FINAL_FORM:
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if (Util.succeedProp(si.getValue(prop, slv))) {
                         Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -649,11 +633,10 @@ public class Kaiser extends Job {
 
             case INFERNO_BREATH:
             case INFERNO_BREATH_FINAL_FORM:
-                SkillInfo rca = SkillData.getSkillInfoById(INFERNO_BREATH);
+                SkillInfo rca = Loaders.getInstance().getSkillData().getSkillInfoById(INFERNO_BREATH);
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     if (chr.getField().getAffectedAreas().stream()
-                            .filter(aa -> aa.getSkillID() == INFERNO_BREATH && aa.getCharID() == chr.getId())
-                            .collect(Collectors.toList()).size() > 3) {
+                            .filter(aa -> aa.getSkillID() == INFERNO_BREATH && aa.getCharID() == chr.getId()).count() > 3) {
                         continue; // to limit the amount of AAs
                     }
 
@@ -685,7 +668,7 @@ public class Kaiser extends Job {
         Option o2 = new Option();
         Option o3 = new Option();
         Option o4 = new Option();
-        SkillInfo gaugeInfo = SkillData.getSkillInfoById(60000219);
+        SkillInfo gaugeInfo = Loaders.getInstance().getSkillData().getSkillInfoById(60000219);
         int amount = 1;
         int stage = 0;
         if (chr.hasSkill(60000219)) {
@@ -735,9 +718,9 @@ public class Kaiser extends Job {
 
     private int getKaiserGauge(Char chr) {
         int maxGauge = switch (chr.getJob()) {
-            case 6100 -> SkillData.getSkillInfoById(60000219).getValue(s, 1);
-            case 6110 -> SkillData.getSkillInfoById(60000219).getValue(u, 1);
-            case 6111, 6112 -> SkillData.getSkillInfoById(60000219).getValue(v, 1);
+            case 6100 -> Loaders.getInstance().getSkillData().getSkillInfoById(60000219).getValue(s, 1);
+            case 6110 -> Loaders.getInstance().getSkillData().getSkillInfoById(60000219).getValue(u, 1);
+            case 6111, 6112 -> Loaders.getInstance().getSkillData().getSkillInfoById(60000219).getValue(v, 1);
             default -> 0;
         };
         return maxGauge;
@@ -759,7 +742,7 @@ public class Kaiser extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -799,7 +782,7 @@ public class Kaiser extends Job {
         cs.setMp(213);
         cs.setMaxMp(213);
         cs.setPosMap(400000000);
-        Item secondary = ItemData.getItemDeepCopy(1352500);
+        Item secondary = Loaders.getInstance().getItemData().getItemDeepCopy(1352500);
         secondary.setBagIndex(10);
         chr.getAvatarData().getAvatarLook().getHairEquips().add(secondary.getItemId());
         chr.setSpToCurrentJob(5);

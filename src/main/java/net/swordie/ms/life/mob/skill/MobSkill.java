@@ -16,7 +16,7 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MobSkillInfo;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
@@ -290,7 +290,7 @@ public class MobSkill {
         MobTemporaryStat mts = mob.getTemporaryStat();
         short skill = (short) getSkillID();
         short slv = (short) getLevel();
-        MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(skill, slv);
+        MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(skill, slv);
         MobSkillID msID = MobSkillID.getMobSkillIDByVal(skill);
         Field field = mob.getField();
         Option o = new Option(skill);
@@ -376,10 +376,7 @@ public class MobSkill {
                     // Black Mage P2 mass skill
                 }
                 break;
-            case Dispel:
-
-                break;
-            case Attract:
+            case Dispel, Attract:
 
                 break;
             case AreaFire:
@@ -503,7 +500,7 @@ public class MobSkill {
             skill = (short) getDisease();
         }
         short level = (short) getLevel();
-        MobSkillInfo msi = SkillData.getMobSkillInfoByIdAndLevel(skill, level);
+        MobSkillInfo msi = Loaders.getInstance().getSkillData().getMobSkillInfoByIdAndLevel(skill, level);
         MobSkillID msID = MobSkillID.getMobSkillIDByVal(skill);
         Field field = chr.getField();
         Option o = new Option(skill);

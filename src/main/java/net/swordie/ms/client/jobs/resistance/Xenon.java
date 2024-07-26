@@ -24,7 +24,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -116,12 +116,12 @@ public class Xenon extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
             }
-            supplyProp = SkillData.getSkillInfoById(SUPPLY_SURPLUS).getValue(prop, 1);
+            supplyProp = Loaders.getInstance().getSkillData().getSkillInfoById(SUPPLY_SURPLUS).getValue(prop, 1);
 
             if(supplyTimer != null && !supplyTimer.isDone()) {
                 supplyTimer.cancel(true);
@@ -140,7 +140,7 @@ public class Xenon extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -265,7 +265,6 @@ public class Xenon extends Job {
             return;
         }
         if(tsm.hasStat(AmaranthGenerator)) {
-            return;
         } else {
             if (si == null) {
                 return;
@@ -319,7 +318,7 @@ public class Xenon extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -394,7 +393,7 @@ public class Xenon extends Job {
         }
         Skill skill = chr.getSkill(TRIANGULATION);
         int slv = skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(TRIANGULATION);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(TRIANGULATION);
         int proc = si.getValue(prop, slv);
         Option o1 = new Option();
         Option o = new Option();
@@ -428,13 +427,13 @@ public class Xenon extends Job {
     private void createPinPointSalvoForceAtom() {
         Field field = chr.getField();
 
-        SkillInfo si = SkillData.getSkillInfoById(PINPOINT_SALVO);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(PINPOINT_SALVO);
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> mobs = field.getMobsInRect(rect);
-        if(mobs.size() <= 0) {
+        if(mobs.isEmpty()) {
             return;
         }
         Mob mob = Util.getRandomFromCollection(mobs);
@@ -482,7 +481,7 @@ public class Xenon extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
@@ -554,7 +553,7 @@ public class Xenon extends Job {
         if(chr.hasSkill(HYBRID_DEFENSES)) {
             Skill skill = chr.getSkill(HYBRID_DEFENSES);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
 
             if (tsm.getOptByCTSAndSkill(StackBuff, HYBRID_DEFENSES) != null) {
                 if (hitInfo.hpDamage > 0) {
@@ -589,7 +588,7 @@ public class Xenon extends Job {
 
         Skill aegis = chr.getSkill(AEGIS_SYSTEM);
         if (tsm.hasStat(XenonAegisSystem) && aegis != null) {
-            SkillInfo si = SkillData.getSkillInfoById(AEGIS_SYSTEM);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(AEGIS_SYSTEM);
             byte slv = (byte) aegis.getCurrentLevel();
             if (Util.succeedProp(si.getValue(prop, slv))) {
                 int mobID = hitInfo.mobID;

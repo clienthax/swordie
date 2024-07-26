@@ -11,6 +11,7 @@ import net.swordie.ms.client.character.skills.temp.TemporaryStatManager;
 import net.swordie.ms.enums.AssistType;
 import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.Summon;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.client.jobs.Job;
 import net.swordie.ms.connection.InPacket;
@@ -18,7 +19,6 @@ import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.enums.MoveAbility;
-import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.handlers.EventManager;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -91,7 +91,7 @@ public class PinkBean extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Field field;
         Summon summon;
@@ -226,7 +226,7 @@ public class PinkBean extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -280,7 +280,7 @@ public class PinkBean extends Job {
         Field field;
         Summon summon;
         if(tsm.hasStat(PinkbeanMinibeenMove)) {
-            SkillInfo miniBeanInfo = SkillData.getSkillInfoById(GO_MINI_BEANS);
+            SkillInfo miniBeanInfo = Loaders.getInstance().getSkillData().getSkillInfoById(GO_MINI_BEANS);
             byte slv = (byte)miniBeanInfo.getCurrentLevel();
             int minibeanproc = 100;//   miniBeanInfo.getValue(z, miniBeanInfo.getCurrentLevel());
             for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -316,7 +316,7 @@ public class PinkBean extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -352,7 +352,7 @@ public class PinkBean extends Job {
                     break;
 
                 case INSTANT_GARDEN_BREEZY:
-                    SkillInfo isb = SkillData.getSkillInfoById(INSTANT_GARDEN_BREEZY);
+                    SkillInfo isb = Loaders.getInstance().getSkillData().getSkillInfoById(INSTANT_GARDEN_BREEZY);
                     AffectedArea aa = AffectedArea.getPassiveAA(chr, INSTANT_GARDEN_BREEZY, slv);
                     aa.setMobOrigin((byte) 0);
                     aa.setPosition(chr.getPosition());
@@ -366,7 +366,7 @@ public class PinkBean extends Job {
                     chr.getField().spawnAffectedArea(aa);
                     break;
                 case INSTANT_GARDEN_POSIE:
-                    SkillInfo isp = SkillData.getSkillInfoById(INSTANT_GARDEN_POSIE);
+                    SkillInfo isp = Loaders.getInstance().getSkillData().getSkillInfoById(INSTANT_GARDEN_POSIE);
                     AffectedArea aa2 = AffectedArea.getPassiveAA(chr, INSTANT_GARDEN_POSIE, slv);
                     aa2.setMobOrigin((byte) 0);
                     aa2.setPosition(chr.getPosition());

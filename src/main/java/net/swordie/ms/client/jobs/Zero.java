@@ -31,8 +31,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.QuestData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
 
@@ -173,7 +172,7 @@ public class Zero extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -196,7 +195,7 @@ public class Zero extends Job {
     // Buff related methods --------------------------------------------------------------------------------------------
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -308,7 +307,7 @@ public class Zero extends Job {
                 }
 
                 for (int skillId : chr.getSkillCoolTimes().keySet()) {
-                    if (!SkillData.getSkillInfoById(skillId).isNotCooltimeReset()) {
+                    if (!Loaders.getInstance().getSkillData().getSkillInfoById(skillId).isNotCooltimeReset()) {
                         chr.resetSkillCoolTime(skillId);
                     }
                 }
@@ -353,7 +352,7 @@ public class Zero extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -395,7 +394,7 @@ public class Zero extends Job {
                 break;
             case ADV_EARTH_BREAK_SHOCK_INIT:
                 slv = (byte) chr.getSkill(ADV_EARTH_BREAK).getCurrentLevel();
-                SkillInfo fci = SkillData.getSkillInfoById(ADV_EARTH_BREAK);
+                SkillInfo fci = Loaders.getInstance().getSkillData().getSkillInfoById(ADV_EARTH_BREAK);
                 AffectedArea aa = AffectedArea.getPassiveAA(chr, ADV_EARTH_BREAK, slv);
                 aa.setMobOrigin((byte) 0);
                 aa.setPosition(chr.getPosition());
@@ -415,7 +414,7 @@ public class Zero extends Job {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(DIVINE_LEER);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DIVINE_LEER);
         for (MobAttackInfo mai : ai.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(prop, slv))) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -433,7 +432,7 @@ public class Zero extends Job {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(CRITICAL_BIND);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(CRITICAL_BIND);
         for (MobAttackInfo mai : ai.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(prop, slv))) {
                 Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -461,7 +460,7 @@ public class Zero extends Job {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(ARMOR_SPLIT);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(ARMOR_SPLIT);
         int amount = 1;
         for (MobAttackInfo mai : ai.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(prop, slv))) {
@@ -491,7 +490,7 @@ public class Zero extends Job {
             TemporaryStatManager tsm = chr.getTemporaryStatManager();
             Option o = new Option();
             Option o1 = new Option();
-            SkillInfo si = SkillData.getSkillInfoById(DOUBLE_TIME_ALPHA);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DOUBLE_TIME_ALPHA);
             int amount = 1;
             if (tsm.hasStat(TimeFastABuff)) {
                 if (doubleTimePrevSkill == skillID) {
@@ -516,7 +515,7 @@ public class Zero extends Job {
             TemporaryStatManager tsm = chr.getTemporaryStatManager();
             Option o = new Option();
             Option o1 = new Option();
-            SkillInfo si = SkillData.getSkillInfoById(DOUBLE_TIME_BETA);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DOUBLE_TIME_BETA);
             int amount = 1;
             if (tsm.hasStat(TimeFastBBuff)) {
                 if (doubleTimePrevSkill == skillID) {
@@ -552,7 +551,7 @@ public class Zero extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -598,7 +597,7 @@ public class Zero extends Job {
             return;
         }
         byte slv = (byte) immuneBarrier.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(IMMUNE_BARRIER);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(IMMUNE_BARRIER);
         if(Util.succeedProp(si.getValue(prop, slv))) {
             Option o = new Option(IMMUNE_BARRIER, slv);
             int max = (int) (chr.getStat(Stat.mhp) * (si.getValue(x, slv) / 100D));
@@ -609,7 +608,7 @@ public class Zero extends Job {
         if(tsm.hasStat(ImmuneBarrier)) {
             Option o = tsm.getOption(ImmuneBarrier);
             int maxSoakDamage = o.nOption;
-            int newDamage = hitInfo.hpDamage - maxSoakDamage < 0 ? 0 : hitInfo.hpDamage - maxSoakDamage;
+            int newDamage = Math.max(hitInfo.hpDamage - maxSoakDamage, 0);
             o.nOption = maxSoakDamage - (hitInfo.hpDamage - newDamage); // update soak value
             hitInfo.hpDamage = newDamage;
             o.tOption = si.getValue(time, slv); //added duration
@@ -676,7 +675,7 @@ public class Zero extends Job {
             sp = 6; // double sp on levels ending in 3/6/9
             if (level == 110) {
                 chr.getQuestManager().completeQuest(QuestConstants.ZERO_WEAPON_WINDOW_QUEST); //enables weapon button
-                Quest q = QuestData.createQuestFromId(QuestConstants.ZERO_SET_QUEST);
+                Quest q = Loaders.getInstance().getQuestData().createQuestFromId(QuestConstants.ZERO_SET_QUEST);
                 q.setQrValue(String.valueOf(0));
                 chr.getQuestManager().addQuest(q);
             }

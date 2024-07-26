@@ -258,7 +258,7 @@ public class MakingSkillRecipe {
                             rate *= recommandedSkillLevel;
                         }
                         flag >>= 1;
-                        if (flag <= 0) {
+                        if (flag == 0) {
                             break;
                         }
                         recommandedSkillLevel *= recommandedSkillLevel;

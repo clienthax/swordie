@@ -27,8 +27,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.FieldData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -205,7 +204,7 @@ public class BeastTamer extends Job {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -243,7 +242,7 @@ public class BeastTamer extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -415,7 +414,7 @@ public class BeastTamer extends Job {
         if (!chr.hasSkill(MEOW_CARD) && !chr.hasSkill(MEOW_CARD_GOLD_SKILL)) {
             return;
         }
-        SkillInfo mc = SkillData.getSkillInfoById(MEOW_CARD);
+        SkillInfo mc = Loaders.getInstance().getSkillData().getSkillInfoById(MEOW_CARD);
         Option o1 = new Option();
         Option o2 = new Option();
         Option o3 = new Option();
@@ -496,7 +495,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(KITTY_BATTLE_SQUAD);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(KITTY_BATTLE_SQUAD);
         int slv = si.getCurrentLevel();
         o1.nReason = KITTY_BATTLE_SQUAD;
         o1.nValue = si.getValue(indiePad, slv);
@@ -510,7 +509,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(KITTY_TREATS);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(KITTY_TREATS);
         int slv = si.getCurrentLevel();
         o1.nReason = KITTY_TREATS;
         o1.nValue = si.getValue(indieMhp, slv);
@@ -527,7 +526,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(STICKY_PAWS);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(STICKY_PAWS);
         int slv = si.getCurrentLevel();
         o1.nOption = si.getValue(v, slv);
         o1.rOption = STICKY_PAWS;
@@ -539,7 +538,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(CAT_CLAWS);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(CAT_CLAWS);
         int slv = si.getCurrentLevel();
         o1.nOption = si.getValue(x, slv);
         o1.rOption = CAT_CLAWS;
@@ -554,7 +553,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(MOUSERS_INSIGHT);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(MOUSERS_INSIGHT);
         int slv = si.getCurrentLevel();
         o1.nOption = si.getValue(x, slv);
         o1.rOption = MOUSERS_INSIGHT;
@@ -566,7 +565,7 @@ public class BeastTamer extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(FRIENDS_OF_ARBY);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(FRIENDS_OF_ARBY);
         int slv = si.getCurrentLevel();
         if (tsm.getOptByCTSAndSkill(HolySymbol, Magician.HOLY_SYMBOL) == null) { // Only apply if player doesn't have Holy Symbol
             o1.nOption = si.getValue(x, slv);
@@ -578,7 +577,7 @@ public class BeastTamer extends Job {
 
     private Summon defensiveFormationSummon() {
         Skill skill = chr.getSkill(DEFENSIVE_FORMATION);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         defensiveFormation = Summon.getSummonBy(c.getChr(), DEFENSIVE_FORMATION, slv);
         defensiveFormation.setFlyMob(true);
@@ -600,7 +599,7 @@ public class BeastTamer extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -632,7 +631,7 @@ public class BeastTamer extends Job {
         Option o3 = new Option();
         switch (attackInfo.skillId) {
             case MAJESTIC_TRUMPET:
-                SkillInfo rca = SkillData.getSkillInfoById(skillID);
+                SkillInfo rca = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
                 AffectedArea aa = AffectedArea.getAffectedArea(chr, attackInfo);
                 aa.setMobOrigin((byte) 0);
                 aa.setSkillID(skillID);
@@ -645,7 +644,7 @@ public class BeastTamer extends Job {
                 break;
             case THUNDER_DASH:
             case ADV_THUNDER_DASH:
-                SkillInfo tdi = SkillData.getSkillInfoById(THUNDER_TRAIL);
+                SkillInfo tdi = Loaders.getInstance().getSkillData().getSkillInfoById(THUNDER_TRAIL);
                 AffectedArea aa2 = AffectedArea.getAffectedArea(chr, attackInfo);
                 aa2.setMobOrigin((byte) 0);
                 aa2.setSkillID(THUNDER_TRAIL);
@@ -662,7 +661,7 @@ public class BeastTamer extends Job {
                 chr.getField().spawnAffectedArea(aa2);
                 break;
             case PURR_ZONE: //TODO  isn't a AffectedArea, but a 'Special'
-                SkillInfo pz = SkillData.getSkillInfoById(PURR_ZONE);
+                SkillInfo pz = Loaders.getInstance().getSkillData().getSkillInfoById(PURR_ZONE);
                 AffectedArea aa3 = AffectedArea.getAffectedArea(chr, attackInfo);
                 aa3.setMobOrigin((byte) 0);
                 aa3.setSkillID(skillID);
@@ -699,7 +698,7 @@ public class BeastTamer extends Job {
             if (!chr.hasSkill(BRO_ATTACK)) {
                 return;
             }
-            SkillInfo si = SkillData.getSkillInfoById(BRO_ATTACK);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(BRO_ATTACK);
             byte slv = (byte) skill.getCurrentLevel();
             int summonProp = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
@@ -727,7 +726,7 @@ public class BeastTamer extends Job {
             return;
         }
         Skill skill = chr.getSkill(RAPTOR_TALONS);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
@@ -763,7 +762,7 @@ public class BeastTamer extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         if (isBuff(skillID)) {
             handleBuff(c, inPacket, skillID, slv);
@@ -776,7 +775,7 @@ public class BeastTamer extends Job {
                     chr.warp(toField);
                     break;
                 case EKA_EXPRESS: //TODO Eka Express Skill
-                    Field townField = FieldData.getFieldById(chr.getField().getReturnMap());
+                    Field townField = Loaders.getInstance().getFieldData().getFieldById(chr.getField().getReturnMap());
                     int x = townField.getPortalByName("tp").getX();
                     int y = townField.getPortalByName("tp").getY();
                     Position townPosition = new Position(x, y); // Grabs the Portal Co-ordinates for the TownPortalPoint

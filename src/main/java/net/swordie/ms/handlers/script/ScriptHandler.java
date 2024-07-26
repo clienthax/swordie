@@ -17,7 +17,7 @@ import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.Life;
 import net.swordie.ms.life.npc.NpcMessageType;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.scripts.ScriptManagerImpl;
 import net.swordie.ms.scripts.ScriptType;
 import net.swordie.ms.world.field.Field;
@@ -179,23 +179,23 @@ public class ScriptHandler {
 
         switch (tab) {
             case 0: // Chapter 1
-                itemMap.put(ItemData.getItemDeepCopy(3700031), 1);  // Apprentice Hunter
-                itemMap.put(ItemData.getItemDeepCopy(4310029), 10); // Crusader Coins  x10
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(3700031), 1);  // Apprentice Hunter
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4310029), 10); // Crusader Coins  x10
                 break;
             case 1: // Chapter 2
-                itemMap.put(ItemData.getItemDeepCopy(3700032), 1);  // Capable Hunter
-                itemMap.put(ItemData.getItemDeepCopy(4001832), 100);// Spell Traces  x100
-                itemMap.put(ItemData.getItemDeepCopy(4310029), 15); // Crusader Coins  x15
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(3700032), 1);  // Capable Hunter
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4001832), 100);// Spell Traces  x100
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4310029), 15); // Crusader Coins  x15
                 break;
             case 2: // Chapter 3
-                itemMap.put(ItemData.getItemDeepCopy(3700033), 1);  // Veteran Hunter
-                itemMap.put(ItemData.getItemDeepCopy(2430668), 1);  // Silent Crusade Mastery Book
-                itemMap.put(ItemData.getItemDeepCopy(4310029), 20); // Crusader Coins  x20
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(3700033), 1);  // Veteran Hunter
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(2430668), 1);  // Silent Crusade Mastery Book
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4310029), 20); // Crusader Coins  x20
                 break;
             case 3: // Chapter 4
-                itemMap.put(ItemData.getItemDeepCopy(3700034), 1);  // Superior Hunter
-                itemMap.put(ItemData.getItemDeepCopy(4001832), 500);// Spell Traces  x500
-                itemMap.put(ItemData.getItemDeepCopy(4310029), 30); // Crusader Coins  x30
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(3700034), 1);  // Superior Hunter
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4001832), 500);// Spell Traces  x500
+                itemMap.put(Loaders.getInstance().getItemData().getItemDeepCopy(4310029), 30); // Crusader Coins  x30
                 break;
         }
 

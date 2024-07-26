@@ -58,9 +58,7 @@ public class MetaProgramming {
                     }
                     line = line.replace("\t", "").replace("    ", "");
                     StringBuilder newLine = new StringBuilder();
-                    for (int i = 0; i < (fromRemoved ? tabs - 1 : tabs); i++) {
-                        newLine.append("    ");
-                    }
+                    newLine.append("    ".repeat(Math.max(0, (fromRemoved ? tabs - 1 : tabs))));
                     newLine.append(line);
                     newLine = new StringBuilder(newLine.toString().replace("sm.sendAskYesNo", "response = sm.sendAskYesNo"));
                     newLine = new StringBuilder(newLine.toString().replace("sm.sendAskAccept", "response = sm.sendAskAccept"));
@@ -114,7 +112,7 @@ public class MetaProgramming {
                             pos++;
                         }
                     }
-                    log.debug(name + "(" + String.format("0x%X", num) + ", " + pos + "),");
+                    log.debug("{}({}, {}),", name, String.format("0x%X", num), pos);
                     if (num == 0x1 || num == 0x100 || num == 0x10000 || num == 0x1000000) {
                         log.debug("");
                     }

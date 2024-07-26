@@ -23,7 +23,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -144,7 +144,7 @@ public class NightWalker extends Noblesse {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -163,7 +163,7 @@ public class NightWalker extends Noblesse {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -269,7 +269,7 @@ public class NightWalker extends Noblesse {
                     field.spawnSummon(summon);
                 }
                 if(chr.hasSkill(DARK_SERVANT)) {
-                    EventManager.addEvent(this::applyDarkServant, si.getValue(time, slv) * 1001, TimeUnit.MILLISECONDS);
+                    EventManager.addEvent(this::applyDarkServant, si.getValue(time, slv) * 1001L, TimeUnit.MILLISECONDS);
                 }
                 break;
             case DARK_OMEN:
@@ -290,7 +290,7 @@ public class NightWalker extends Noblesse {
     private void applyDarkServant() {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(DARK_SERVANT);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         Option o1 = new Option();
 
@@ -323,7 +323,7 @@ public class NightWalker extends Noblesse {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -352,7 +352,7 @@ public class NightWalker extends Noblesse {
                 }
             }
             if (attackInfo.skillId != DARK_OMEN && attackInfo.skillId != SHADOW_BAT_ATOM && chr.hasSkillOnCooldown(DARK_OMEN)) {
-                SkillInfo skillInfo = SkillData.getSkillInfoById(DARK_OMEN);
+                SkillInfo skillInfo = Loaders.getInstance().getSkillData().getSkillInfoById(DARK_OMEN);
                 chr.reduceSkillCoolTime(DARK_OMEN, skillInfo.getValue(y, slv));
             }
             // Handling Dark Elemental
@@ -374,7 +374,7 @@ public class NightWalker extends Noblesse {
                     MobTemporaryStat mts = mob.getTemporaryStat();
                     o1.nOption = 1;
                     o1.rOption = skill.getSkillId();
-                    o1.tOption = (si.getValue(time, slv) + attackInfo.mobAttackInfo.size() > 25 ? 25 : si.getValue(time, slv) + attackInfo.mobAttackInfo.size());
+                    o1.tOption = (Math.min(si.getValue(time, slv) + attackInfo.mobAttackInfo.size(), 25));
                     mts.addStatOptionsAndBroadcast(MobStat.Freeze, o1);
                 }
                 break;
@@ -446,7 +446,7 @@ public class NightWalker extends Noblesse {
     }
 
     private void createShadowBatForceAtom(AttackInfo attackInfo) {
-        SkillInfo si = SkillData.getSkillInfoById(getBatSkill().getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(getBatSkill().getSkillId());
         Mob mob = (Mob) chr.getField().getLifeByObjectID(Util.getRandomFromCollection(attackInfo.mobAttackInfo).mobId);
 
         if(mob == null) {
@@ -458,7 +458,7 @@ public class NightWalker extends Noblesse {
                             chr.getPosition().getX() + 500,
                             chr.getPosition().getY() + 500)
             );
-            if(chr.getField().getMobsInRect(rect).size() <= 0) {
+            if(chr.getField().getMobsInRect(rect).isEmpty()) {
                 return;
             }
             mob = Util.getRandomFromCollection(chr.getField().getMobsInRect(rect));
@@ -497,7 +497,7 @@ public class NightWalker extends Noblesse {
                             chr.getPosition().getY() + 500)
             );
             List<Mob> mobs = chr.getField().getMobsInRect(rect);
-            if (mobs.size() <= 0) {
+            if (mobs.isEmpty()) {
                 return;
             }
             Mob mob = Util.getRandomFromCollection(mobs);
@@ -528,7 +528,7 @@ public class NightWalker extends Noblesse {
             if(skill == null) {
                 continue;
             }
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             maxBats += si.getValue(y, slv);
         }
@@ -542,7 +542,7 @@ public class NightWalker extends Noblesse {
             if(skill == null) {
                 continue;
             }
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             batAttackProp += si.getValue(prop, slv);
         }
@@ -634,7 +634,7 @@ public class NightWalker extends Noblesse {
         for(int darkEleSkill : darkEleSkills) {
             if(chr.hasSkill(darkEleSkill)) {
                 Skill skill = chr.getSkill(darkEleSkill);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
                 maxStack += si.getValue(x, slv);
             }
@@ -657,7 +657,7 @@ public class NightWalker extends Noblesse {
         for(int darkEleSkill : darkEleSkills) {
             if(chr.hasSkill(darkEleSkill)) {
                 Skill skill = chr.getSkill(darkEleSkill);
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 byte slv = (byte) skill.getCurrentLevel();
                 proc += si.getValue(prop, slv);
             }
@@ -668,7 +668,7 @@ public class NightWalker extends Noblesse {
     private void incrementSiphonVitality(TemporaryStatManager tsm) {
         Option o = new Option();
         Option o1 = new Option();
-        SkillInfo siphonInfo = SkillData.getSkillInfoById(VITALITY_SIPHON);
+        SkillInfo siphonInfo = Loaders.getInstance().getSkillData().getSkillInfoById(VITALITY_SIPHON);
         Skill skill = chr.getSkill(VITALITY_SIPHON);
         byte slv = (byte) skill.getCurrentLevel();
         int amount = 1;
@@ -702,14 +702,8 @@ public class NightWalker extends Noblesse {
         if (chr.hasSkill(14120009)) {
             skill = chr.getSkill(14120009);
         }
-        return skill == null ? 0 : SkillData.getSkillInfoById(skill.getSkillId()).getValue(x, skill.getCurrentLevel());
+        return skill == null ? 0 : Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId()).getValue(x, skill.getCurrentLevel());
     }
-
-    @Override
-    public int getFinalAttackSkill() {
-        return 0;
-    }
-
 
 
     // Skill related methods -------------------------------------------------------------------------------------------
@@ -722,7 +716,7 @@ public class NightWalker extends Noblesse {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -761,7 +755,7 @@ public class NightWalker extends Noblesse {
 
     public static int getDarkOmenBatCount(Char chr) {
         if (chr.hasSkill(DARK_OMEN)) {
-            SkillInfo si = SkillData.getSkillInfoById(DARK_OMEN);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DARK_OMEN);
             return si.getValue(z, chr.getSkillLevel(DARK_OMEN));
         }
         return 0;

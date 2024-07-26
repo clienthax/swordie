@@ -17,13 +17,13 @@ import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.Dragon;
 import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.MobStat;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.client.jobs.Job;
 import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.enums.*;
-import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -116,7 +116,7 @@ public class Evan extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -146,7 +146,7 @@ public class Evan extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         TemporaryStatBase tsb = tsm.getTSBByTSIndex(TSIndex.RideVehicle);
         Summon summon;
@@ -262,7 +262,7 @@ public class Evan extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -300,7 +300,7 @@ public class Evan extends Job {
 
     public void givePartnersBuff(int skillID) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
-        SkillInfo si = SkillData.getSkillInfoById(PARTNERS);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(PARTNERS);
         Option o = new Option();
         Option o1 = new Option();
         if(tsm.getOptByCTSAndSkill(Stance, PARTNERS) == null) {
@@ -321,13 +321,13 @@ public class Evan extends Job {
 
     private void createMagicDebrisForceAtom() {
         Field field = chr.getField();
-        SkillInfo si = SkillData.getSkillInfoById(getDebrisSkill());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(getDebrisSkill());
         Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
         if(!chr.isLeft()) {
             rect = rect.moveRight();
         }
         List<Mob> lifes =  field.getMobsInRect(rect);
-        if(lifes.size() <= 0) {
+        if(lifes.isEmpty()) {
             return;
         }
         for(int i = 0; i<debrisCount; i++) {
@@ -362,7 +362,7 @@ public class Evan extends Job {
         if (skill == null) {
             return 0;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
         return si.getValue(x, slv);
     }
@@ -382,7 +382,7 @@ public class Evan extends Job {
     public int getFinalAttackSkill() {
         Skill faSkill = getFinalAtkSkill();
         if(faSkill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(faSkill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(faSkill.getSkillId());
             byte slv = (byte) faSkill.getCurrentLevel();
             int proc = si.getValue(prop, slv);
             if (Util.succeedProp(proc)) {
@@ -428,7 +428,7 @@ public class Evan extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -444,7 +444,7 @@ public class Evan extends Job {
                     chr.warp(toField);
                     break;
                 case RETURN_FLAME:
-                    SkillInfo rft = SkillData.getSkillInfoById(RETURN_FLAME_TILE);
+                    SkillInfo rft = Loaders.getInstance().getSkillData().getSkillInfoById(RETURN_FLAME_TILE);
                     AffectedArea aa = AffectedArea.getPassiveAA(chr, RETURN_FLAME_TILE, slv);
                     aa.setMobOrigin((byte) 0);
                     aa.setPosition(chr.getPosition());
@@ -452,7 +452,7 @@ public class Evan extends Job {
                     chr.getField().spawnAffectedArea(aa);
                     break;
                 case RETURN_FLASH:
-                    SkillInfo rflash = SkillData.getSkillInfoById(RETURN_FLASH);
+                    SkillInfo rflash = Loaders.getInstance().getSkillData().getSkillInfoById(RETURN_FLASH);
                     Rect rect = new Rect(       //Skill itself doesn't give a Rect
                             new Position(
                                     chr.getPosition().deepCopy().getX() - 300,
@@ -492,7 +492,7 @@ public class Evan extends Job {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (tsm.hasStat(MagicGuard)) {
             Skill skill = chr.getSkill(MAGIC_GUARD);
-            SkillInfo si = SkillData.getSkillInfoById(MAGIC_GUARD);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(MAGIC_GUARD);
             int dmgPerc = si.getValue(x, skill.getCurrentLevel());
             int dmg = hitInfo.hpDamage;
             int mpDmg = (int) (dmg * (dmgPerc / 100D));

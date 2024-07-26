@@ -4,10 +4,12 @@ import net.swordie.ms.ServerConfig;
 
 public abstract class PlayerCommand implements ICommand {
 
-    public PlayerCommand(){
+    public PlayerCommand() {
     }
 
     public static char getPrefix() {
         return ServerConfig.PLAYER_COMMAND;
     }
+
 }
+

@@ -25,29 +25,29 @@ import static net.swordie.ms.life.mob.MobStat.*;
  * Created on 12/30/2017.
  */
 public class MobData implements DataCreator {
-    private static final boolean LOG_UNKS = false;
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final boolean LOG_UNKS = false;
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
-    private static final Map<Integer, Mob> mobs = new HashMap<>();
+    private final Map<Integer, Mob> mobs = new HashMap<>();
 
-    public static Map<Integer, Mob> getMobs() {
+    public Map<Integer, Mob> getMobs() {
         return mobs;
     }
 
-    public static void addMob(Mob mob) {
+    public void addMob(Mob mob) {
         getMobs().put(mob.getTemplateId(), mob);
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating mob data.");
         long start = System.currentTimeMillis();
         loadMobsFromWz();
-        QuestData.linkMobData();
+        Loaders.getInstance().getQuestData().linkMobData();
         saveToFile(ServerConstants.DAT_DIR + "/mobs");
         log.info(String.format("Completed generating mob data in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static Mob getMobById(int id) {
+    public Mob getMobById(int id) {
         Mob mob = getMobs().get(id);
         if (mob == null) {
             mob = loadMobFromFile(id);
@@ -55,7 +55,7 @@ public class MobData implements DataCreator {
         return mob;
     }
 
-    public static Mob getMobDeepCopyById(int id) {
+    public Mob getMobDeepCopyById(int id) {
         Mob from = getMobById(id);
         Mob copy = null;
         if (from != null) {
@@ -64,7 +64,7 @@ public class MobData implements DataCreator {
         return copy;
     }
 
-    private static void saveToFile(String dir) {
+    private void saveToFile(String dir) {
         Util.makeDirIfAbsent(dir);
         for (Mob mob : getMobs().values()) {
             File file = new File(dir + "/" + mob.getTemplateId() + ".dat");
@@ -216,7 +216,7 @@ public class MobData implements DataCreator {
         }
     }
 
-    private static Mob loadMobFromFile(int id) {
+    private Mob loadMobFromFile(int id) {
         File file = new File(ServerConstants.DAT_DIR + "/mobs/" + id + ".dat");
         if (!file.exists()) {
             return null;
@@ -383,7 +383,7 @@ public class MobData implements DataCreator {
             mob.setMaxHp(fms.getMaxHP());
             mob.setMp(fms.getMaxMP());
             mob.setMaxMp(fms.getMaxMP());
-            mob.setDrops(DropData.getDropInfoByID(mob.getTemplateId()).stream().filter(dropInfo -> !dropInfo.getReactorDrop()).collect(Collectors.toSet()));
+            mob.setDrops(Loaders.getInstance().getDropData().getDropInfoByID(mob.getTemplateId()).stream().filter(dropInfo -> !dropInfo.getReactorDrop()).collect(Collectors.toSet()));
             mob.getDrops().add(new DropInfo(GameConstants.MAX_DROP_CHANCE,
                     GameConstants.MIN_MONEY_MULT * mob.getForcedMobStat().getLevel(),
                     GameConstants.MAX_MONEY_MULT * mob.getForcedMobStat().getLevel()
@@ -399,7 +399,7 @@ public class MobData implements DataCreator {
     }
 
 
-    public static void loadMobsFromWz() {
+    public void loadMobsFromWz() {
         String wzDir1 = ServerConstants.WZ_DIR + "/Mob.wz";
         String wzDir2 = ServerConstants.WZ_DIR + "/Mob2.wz";
         File dir1 = new File(wzDir1);
@@ -408,12 +408,12 @@ public class MobData implements DataCreator {
         File[] files2 = dir2.listFiles();
 
         if (!dir1.exists()) {
-            log.error(wzDir1 + " does not exist.");
+            log.error("{} does not exist.", wzDir1);
             return;
         }
 
         if (!dir2.exists()) {
-            log.error(wzDir2 + " does not exist.");
+            log.error("{} does not exist.", wzDir2);
             return;
         }
 
@@ -1028,11 +1028,7 @@ public class MobData implements DataCreator {
         }
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    public static void clear() {
+    public void clear() {
         getMobs().clear();
     }
 }

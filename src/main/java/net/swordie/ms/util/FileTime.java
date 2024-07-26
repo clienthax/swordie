@@ -127,7 +127,7 @@ public class FileTime implements Serializable {
 	 * @return formatted FileTime
 	 */
 	public FileTime toClientFormat() {
-		FileTime ft = fromLong((long) (toLong() - 116444736000000000L) * 100000L);
+		FileTime ft = fromLong((toLong() - 116444736000000000L) * 100000L);
 		ft.setConvertedForClient(true);
 		return ft;
 	}

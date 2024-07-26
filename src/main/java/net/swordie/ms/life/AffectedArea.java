@@ -24,7 +24,7 @@ import net.swordie.ms.life.mob.MobTemporaryStat;
 import net.swordie.ms.life.mob.boss.demian.sword.DemianFlyingSword;
 import net.swordie.ms.life.mob.boss.demian.sword.DemianFlyingSwordPath;
 import net.swordie.ms.life.mob.skill.MobSkillStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MobSkillInfo;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
@@ -214,7 +214,7 @@ public class AffectedArea extends Life {
         int skillID = getSkillID();
         Skill skill = chr.getSkill(getSkillID());
         byte slv = getSlv();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         MobTemporaryStat mts = mob.getTemporaryStat();
         Option o = new Option();
         Option o1 = new Option();
@@ -272,7 +272,7 @@ public class AffectedArea extends Life {
         tsm.addAffectedArea(this);
         int skillID = getSkillID();
         byte slv = getSlv();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         Option o = new Option();
         Option o1 = new Option();
         Option o2 = new Option();

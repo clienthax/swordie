@@ -16,7 +16,7 @@ import net.swordie.ms.enums.InventoryOperation;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.drop.Drop;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.world.field.Foothold;
@@ -79,7 +79,7 @@ public class InventoryHandler {
             } else {
                 // Part of the stack is dropped
                 fullDrop = false;
-                Item dropItem = ItemData.getItemDeepCopy(item.getItemId());
+                Item dropItem = Loaders.getInstance().getItemData().getItemDeepCopy(item.getItemId());
                 dropItem.setQuantity(quantity);
                 item.removeQuantity(quantity);
                 drop = new Drop(-1, dropItem);

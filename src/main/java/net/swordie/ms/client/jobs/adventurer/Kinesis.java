@@ -13,7 +13,7 @@ import net.swordie.ms.client.character.skills.info.MobAttackInfo;
 import net.swordie.ms.client.character.skills.info.SkillInfo;
 import net.swordie.ms.client.character.skills.temp.TemporaryStatManager;
 import net.swordie.ms.connection.packet.FieldPacket;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.world.field.Field;
 import net.swordie.ms.client.jobs.Job;
 import net.swordie.ms.life.mob.Mob;
@@ -22,7 +22,6 @@ import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.ForceAtomEnum;
 import net.swordie.ms.life.mob.MobStat;
-import net.swordie.ms.loaders.SkillData;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Util;
 
@@ -113,12 +112,12 @@ public class Kinesis extends Job {
     }
 
     public void addPP(int amount) {
-        pp = pp + amount > MAX_PP ? MAX_PP : pp + amount;
+        pp = Math.min(pp + amount, MAX_PP);
         sendPPPacket();
     }
 
     public void substractPP(int amount) {
-        pp = pp - amount < 0 ? 0 : pp - amount;
+        pp = Math.max(pp - amount, 0);
         sendPPPacket();
     }
 
@@ -136,7 +135,7 @@ public class Kinesis extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -157,7 +156,7 @@ public class Kinesis extends Job {
                 break;
             case PSYCHIC_ARMOR:
             case PSYCHIC_BULWARK:
-                int t = SkillData.getSkillInfoById(PSYCHIC_ARMOR).getValue(time, slv);
+                int t = Loaders.getInstance().getSkillData().getSkillInfoById(PSYCHIC_ARMOR).getValue(time, slv);
                 o1.nValue = si.getValue(indiePdd, slv);
                 o1.nReason = skillID;
                 o1.tStart = curTime;
@@ -241,7 +240,7 @@ public class Kinesis extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         byte slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = (byte) skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -280,7 +279,7 @@ public class Kinesis extends Job {
                         count++;
                     }
                 }
-                count = count > si.getValue(w, slv) ? si.getValue(w, slv) : count;
+                count = Math.min(count, si.getValue(w, slv));
                 o1.nValue = count * si.getValue(indiePMdR, slv);
                 o1.nReason = skillID;
                 o1.tStart = (int) System.currentTimeMillis();
@@ -312,7 +311,7 @@ public class Kinesis extends Job {
         if(Collections.singletonList(nonOrbSkills).contains(skillID)) {
             return;
         }
-        SkillInfo si = SkillData.getSkillInfoById(KINETIC_COMBO);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(KINETIC_COMBO);
         for(MobAttackInfo mai : attackInfo.mobAttackInfo) {
             if (Util.succeedProp(si.getValue(prop, slv))) {
                 int mobID = mai.mobId;
@@ -352,7 +351,7 @@ public class Kinesis extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         if (isBuff(skillID)) {
             handleBuff(c, inPacket, skillID, slv);
@@ -400,7 +399,7 @@ public class Kinesis extends Job {
         cs.setInt(49);
         cs.setHp(574);
         cs.setMaxHp(574);
-        Item item = ItemData.getItemDeepCopy(1353200); // Pawn Chess Piece
+        Item item = Loaders.getInstance().getItemData().getItemDeepCopy(1353200); // Pawn Chess Piece
         item.setBagIndex(BodyPart.Shield.getVal());
         chr.getEquippedInventory().addItem(item);
         chr.setSpToCurrentJob(5);

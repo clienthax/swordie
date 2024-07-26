@@ -75,7 +75,7 @@ public class InGameDirectionEvent implements Encodable {
                 outPacket.encodeInt(arg3); // nTimePos
                 outPacket.encodePositionInt(pos);
                 break;
-            case CameraReleaseFromUserPoint:
+            case CameraReleaseFromUserPoint, RemoveAdditionalEffect:
                 break;
             case VansheeMode:
                 outPacket.encodeByte(arg1); // bVanshee
@@ -99,8 +99,6 @@ public class InGameDirectionEvent implements Encodable {
                 for (int itemID : arr) {
                     outPacket.encodeInt(itemID);
                 }
-                break;
-            case RemoveAdditionalEffect:
                 break;
             case ForcedMove:
                 outPacket.encodeInt(arg1); // nDir

@@ -20,21 +20,21 @@ import java.util.stream.Collectors;
  */
 public class ReactorData implements DataCreator {
 
-    private static final boolean LOG_UNKS = false;
-    private static final Logger log = LogManager.getLogger(ReactorData.class);
-    private static final HashMap<Integer, ReactorInfo> reactorInfo = new HashMap<>();
+    private final boolean LOG_UNKS = false;
+    private final Logger log = LogManager.getLogger(ReactorData.class);
+    private final HashMap<Integer, ReactorInfo> reactorInfo = new HashMap<>();
 
-    private static void loadReactorsFromWZ() {
+    private void loadReactorsFromWZ() {
         String wzDir = ServerConstants.WZ_DIR + "/Reactor.wz";
         File dir = new File(wzDir);
         File[] files = dir.listFiles();
         if (!dir.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
         if (files != null && files.length == 0) {
-            log.error(wzDir + " is empty.");
+            log.error("{} is empty.", wzDir);
             return;
         }
 
@@ -124,7 +124,7 @@ public class ReactorData implements DataCreator {
         }
     }
 
-    private static void saveReactors(String dir) {
+    private void saveReactors(String dir) {
         Util.makeDirIfAbsent(dir);
         for (ReactorInfo ri : getReactorInfo().values()) {
             File file = new File(String.format("%s/%d.dat", dir, ri.getId()));
@@ -161,7 +161,7 @@ public class ReactorData implements DataCreator {
         }
     }
 
-    private static ReactorInfo loadReactorFromFile(File file) {
+    private ReactorInfo loadReactorFromFile(File file) {
         ReactorInfo ri = null;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
             ri = new ReactorInfo();
@@ -192,7 +192,7 @@ public class ReactorData implements DataCreator {
                 r.setBottom(dis.readShort());
                 ri.setRect(r);
             }
-            ri.setDrops(DropData.getDropInfoByID(ri.getId()).stream().filter(DropInfo::getReactorDrop).collect(Collectors.toSet()));
+            ri.setDrops(Loaders.getInstance().getDropData().getDropInfoByID(ri.getId()).stream().filter(DropInfo::getReactorDrop).collect(Collectors.toSet()));
             addReactorInfo(ri);
         } catch (IOException e) {
             e.printStackTrace();
@@ -200,18 +200,18 @@ public class ReactorData implements DataCreator {
         return ri;
     }
 
-    public static ReactorInfo getReactorInfoByID(int id) {
+    public ReactorInfo getReactorInfoByID(int id) {
         ReactorInfo ri = getReactorInfo().get(id);
         return ri == null ? loadReactorByID(id) : ri;
     }
 
-    public static Reactor getReactorByID(int id) {
+    public Reactor getReactorByID(int id) {
         Reactor r = new Reactor(id);
         r.init();
         return r;
     }
 
-    private static ReactorInfo loadReactorByID(int id) {
+    private ReactorInfo loadReactorByID(int id) {
         File file = new File(String.format("%s/reactors/%d.dat", ServerConstants.DAT_DIR, id));
         if(file.exists()) {
             return loadReactorFromFile(file);
@@ -220,15 +220,15 @@ public class ReactorData implements DataCreator {
         }
     }
 
-    private static HashMap<Integer, ReactorInfo> getReactorInfo() {
+    private HashMap<Integer, ReactorInfo> getReactorInfo() {
         return reactorInfo;
     }
 
-    private static void addReactorInfo(ReactorInfo ri) {
+    private void addReactorInfo(ReactorInfo ri) {
         getReactorInfo().put(ri.getId(), ri);
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating reactor data.");
         long start = System.currentTimeMillis();
         loadReactorsFromWZ();
@@ -236,11 +236,7 @@ public class ReactorData implements DataCreator {
         log.info(String.format("Completed generating reactor data in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    public static void clear() {
+    public void clear() {
         getReactorInfo().clear();
     }
 }

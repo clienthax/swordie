@@ -22,7 +22,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.field.Field;
@@ -165,7 +165,7 @@ public class Warrior extends Beginner {
         if (chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -182,7 +182,7 @@ public class Warrior extends Beginner {
     // Buff related methods --------------------------------------------------------------------------------------------
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -417,7 +417,7 @@ public class Warrior extends Beginner {
     public void spawnEvilEye(int skillID, byte slv) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o1 = new Option();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
 
         Field field;
         evilEye = Summon.getSummonBy(c.getChr(), skillID, slv);
@@ -453,7 +453,7 @@ public class Warrior extends Beginner {
         int added = 1;
         if (chr.hasSkill(ADVANCED_COMBO)) {
             int slv = chr.getSkillLevel(ADVANCED_COMBO);
-            SkillInfo si = SkillData.getSkillInfoById(ADVANCED_COMBO);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(ADVANCED_COMBO);
             if (slv > 0 && Util.succeedProp(si.getValue(prop, slv))) {
                 added = 2;
             }
@@ -489,7 +489,7 @@ public class Warrior extends Beginner {
         if (skill == null) {
             return 0;
         }
-        return SkillData.getSkillInfoById(skill.getSkillId()).getValue(prop, skill.getCurrentLevel());
+        return Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId()).getValue(prop, skill.getCurrentLevel());
     }
 
     public int getComboCount(Char c) {
@@ -515,7 +515,7 @@ public class Warrior extends Beginner {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (chr.hasSkill(PARASHOCK_GUARD) && tsm.getOptByCTSAndSkill(EVA, PARASHOCK_GUARD) != null) {
             Skill skill = chr.getSkill(PARASHOCK_GUARD);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             Rect rect = chr.getPosition().getRectAround(si.getRects().get(0));
             if (!chr.isLeft()) {
@@ -586,7 +586,7 @@ public class Warrior extends Beginner {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         if (chr.hasSkill(EVIL_EYE) && tsm.hasStatBySkillId(EVIL_EYE)) {
             Skill skill = chr.getSkill(EVIL_EYE);
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             byte slv = (byte) skill.getCurrentLevel();
             chr.heal(si.getValue(hp, slv));
         }
@@ -600,7 +600,7 @@ public class Warrior extends Beginner {
         Option o4 = new Option();
         Skill skill = chr.getSkill(HEX_OF_THE_EVIL_EYE);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         if (tsm.getOptByCTSAndSkill(EPDD, HEX_OF_THE_EVIL_EYE) == null) {
             o1.nOption = si.getValue(epad, slv);
             o1.rOption = skill.getSkillId();
@@ -641,7 +641,7 @@ public class Warrior extends Beginner {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -748,7 +748,7 @@ public class Warrior extends Beginner {
             case SHOUT_DOWN:
                 Skill orig = chr.getSkill(SHOUT);
                 slv = orig.getCurrentLevel();
-                si = SkillData.getSkillInfoById(SHOUT_DOWN);
+                si = Loaders.getInstance().getSkillData().getSkillInfoById(SHOUT_DOWN);
                 for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                     Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
                     if (mob == null) {
@@ -880,7 +880,7 @@ public class Warrior extends Beginner {
                 break;
             case BLAST:
                 int charges = tsm.getOption(ElementalCharge).mOption;
-                if (charges == SkillData.getSkillInfoById(ELEMENTAL_CHARGE).getValue(z, 1)) {
+                if (charges == Loaders.getInstance().getSkillData().getSkillInfoById(ELEMENTAL_CHARGE).getValue(z, 1)) {
                     if (tsm.getOptByCTSAndSkill(DamR, BLAST) == null) {
                         resetCharges(tsm);
                         int t = si.getValue(time, slv);
@@ -947,7 +947,7 @@ public class Warrior extends Beginner {
                 if (tsm.getOption(Beholder).ssOption > 0) //If can use EVIL_EYE_SHOCK
                 {
                     skill = chr.getSkill(EVIL_EYE_SHOCK);
-                    si = SkillData.getSkillInfoById(skill.getSkillId());
+                    si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                     slv = skill.getCurrentLevel();
 
                     if (Util.succeedProp(si.getValue(prop, slv))) {
@@ -976,7 +976,7 @@ public class Warrior extends Beginner {
         if (tsm.getOptByCTSAndSkill(IndiePAD, DARK_THIRST) != null) {
             Skill skill = chr.getSkill(DARK_THIRST);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int heal = si.getValue(x, slv);
             chr.heal((int) (chr.getMaxHP() / ((double) 100 / heal)));
         }
@@ -984,7 +984,7 @@ public class Warrior extends Beginner {
 
     private void giveChargeBuff(int skillId, TemporaryStatManager tsm) {
         Option o = new Option();
-        SkillInfo chargeInfo = SkillData.getSkillInfoById(1200014);
+        SkillInfo chargeInfo = Loaders.getInstance().getSkillData().getSkillInfoById(1200014);
         int amount = 1;
         if (tsm.hasStat(ElementalCharge)) {
             amount = tsm.getOption(ElementalCharge).mOption;
@@ -1016,7 +1016,7 @@ public class Warrior extends Beginner {
         if (chr.hasSkill(LORD_OF_DARKNESS)) {
             Skill skill = chr.getSkill(LORD_OF_DARKNESS);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             if (Util.succeedProp(proc)) {
                 int heal = si.getValue(x, slv);
@@ -1048,7 +1048,7 @@ public class Warrior extends Beginner {
     public int getFinalAttackSkill() {
         Skill faSkill = getFinalAtkSkill();
         if (faSkill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(faSkill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(faSkill.getSkillId());
             byte slv = (byte) faSkill.getCurrentLevel();
             int proc = si.getValue(prop, slv);
 
@@ -1079,7 +1079,7 @@ public class Warrior extends Beginner {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -1189,7 +1189,7 @@ public class Warrior extends Beginner {
         if (chr.hasSkill(HP_RECOVERY)) {
             Skill skill = chr.getSkill(HP_RECOVERY);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int recovery = si.getValue(x, slv);
             int amount = 10;
 
@@ -1203,7 +1203,7 @@ public class Warrior extends Beginner {
             o.nOption = amount;
             o.rOption = skill.getSkillId();
             o.tOption = si.getValue(time, slv);
-            int heal = (recovery + 10) - amount > 10 ? (recovery + 10) - amount : 10;
+            int heal = Math.max((recovery + 10) - amount, 10);
             chr.heal((int) (chr.getMaxHP() / ((double) 100 / heal)));
             tsm.putCharacterStatValue(Restoration, o);
             tsm.sendSetStatPacket();
@@ -1231,7 +1231,7 @@ public class Warrior extends Beginner {
         //Paladin - Divine Shield
         if (chr.hasSkill(DIVINE_SHIELD)) {
             Skill skill = chr.getSkill(DIVINE_SHIELD);
-            SkillInfo si = SkillData.getSkillInfoById(DIVINE_SHIELD);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(DIVINE_SHIELD);
             int slv = skill.getCurrentLevel();
             int shieldprop = 50;//      si.getValue(SkillStat.prop, slv);       //TODO should be prop in WzFiles, but it's actually 0
             Option o1 = new Option();
@@ -1245,7 +1245,7 @@ public class Warrior extends Beginner {
                     divShieldAmount = 0;
                 }
             } else {
-                if (lastDivineShieldHit + (divShieldCoolDown * 1000) < System.currentTimeMillis()) {
+                if (lastDivineShieldHit + (divShieldCoolDown * 1000L) < System.currentTimeMillis()) {
                     if (Util.succeedProp(shieldprop)) {
                         lastDivineShieldHit = System.currentTimeMillis();
                         o1.nOption = 1;
@@ -1265,7 +1265,7 @@ public class Warrior extends Beginner {
 
         //Hero - Combo Synergy
         if (chr.hasSkill(1110013)) {
-            SkillInfo csi = SkillData.getSkillInfoById(1110013);
+            SkillInfo csi = Loaders.getInstance().getSkillData().getSkillInfoById(1110013);
             int slv = csi.getCurrentLevel();
             int comboprop = 30; //csi.getValue(subProp, slv);
             if (Util.succeedProp(comboprop)) {
@@ -1283,7 +1283,7 @@ public class Warrior extends Beginner {
                     Option o = new Option();
                     Skill skill = chr.getSkill(1210001);
                     byte slv = (byte) skill.getCurrentLevel();
-                    SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                    SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                     int proc = si.getValue(subProp, slv);
                     if (Util.succeedProp(proc) && !mob.isBoss()) {
                         MobTemporaryStat mts = mob.getTemporaryStat();
@@ -1300,7 +1300,7 @@ public class Warrior extends Beginner {
         if (chr.hasSkill(1320011)) {
             Skill skill = chr.getSkill(1320011);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             int cd = 1000 * si.getValue(cooltime, slv);
             int heal = si.getValue(x, slv);
@@ -1331,7 +1331,7 @@ public class Warrior extends Beginner {
         }
 
         Skill skill = chr.getSkill(FINAL_PACT_INFO);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         if (isFinalPactAvailable(chr)) {
@@ -1358,7 +1358,7 @@ public class Warrior extends Beginner {
             chr.getField().broadcastPacket(UserRemote.effect(chr.getId(), Effect.showFinalPactEffect(FINAL_PACT, (byte) 1, 0, true)));
 
             lastFinalPact = System.currentTimeMillis();
-            finishFinalPact = System.currentTimeMillis() + (si.getValue(time, slv) * 1000);
+            finishFinalPact = System.currentTimeMillis() + (si.getValue(time, slv) * 1000L);
             chr.write(UserLocal.skillCooltimeSetM(1321013, 0));
         }
     }
@@ -1368,9 +1368,9 @@ public class Warrior extends Beginner {
         if (skill == null) {
             return false;
         }
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
-        return lastFinalPact + (si.getValue(cooltime, slv) * 1000) < System.currentTimeMillis();
+        return lastFinalPact + (si.getValue(cooltime, slv) * 1000L) < System.currentTimeMillis();
     }
 
     private void lowerFinalPactKillCount() {

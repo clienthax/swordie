@@ -79,7 +79,7 @@ public class PinkZakumEvent implements InGameEvent {
         }
 
         Field field = channelInstance.getField(689013000);
-        if (field.getChars().size() <= 0) {
+        if (field.getChars().isEmpty()) {
             endEvent();
             return;
         }
@@ -176,8 +176,8 @@ public class PinkZakumEvent implements InGameEvent {
                     ? BATTLE_MAP
                     : LOBBY_MAP;
 
-            c.write(FieldPacket.clock(ClockPacket.secondsClock((int) getTimeLeft())));
-            sendNotice(map, message, (int) getTimeLeft());
+            c.write(FieldPacket.clock(ClockPacket.secondsClock(getTimeLeft())));
+            sendNotice(map, message, getTimeLeft());
         }
     }
 

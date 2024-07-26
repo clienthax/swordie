@@ -45,7 +45,6 @@ public enum EnchantStat implements Comparable<EnchantStat> {
             case EVA -> EquipBaseStat.iEVA;
             case JUMP -> EquipBaseStat.iJump;
             case SPEED -> EquipBaseStat.iSpeed;
-            default -> null;
         };
     }
 

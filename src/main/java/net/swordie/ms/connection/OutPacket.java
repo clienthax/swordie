@@ -308,10 +308,6 @@ public class OutPacket extends Packet {
         encodeInt(time);
     }
 
-    public void release() {
-
-    }
-
     public void encodeFT(LocalDateTime localDateTime) {
         encodeFT(FileTime.fromDate(localDateTime));
     }

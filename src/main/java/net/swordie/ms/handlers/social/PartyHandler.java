@@ -137,7 +137,7 @@ public class PartyHandler {
                 Party party = leader.getParty();
                 if (!party.isFull()) {
                     party.addPartyMember(chr);
-                    for (Char onChar : party.getOnlineMembers().stream().map(PartyMember::getChr).collect(Collectors.toList())) {
+                    for (Char onChar : party.getOnlineMembers().stream().map(PartyMember::getChr).toList()) {
                         onChar.write(WvsContext.partyResult(PartyResult.joinParty(party, chr.getName())));
                         chr.write(UserRemote.receiveHP(onChar));
                     }
@@ -159,7 +159,7 @@ public class PartyHandler {
                     party.getPartyLeader().getChr().chatMessage(SystemNotice, String.format("%s is already in a party.", applier.getName()));
                 } else if (!party.isFull()) {
                     party.addPartyMember(applier);
-                    for (Char onChar : party.getOnlineMembers().stream().map(PartyMember::getChr).collect(Collectors.toList())) {
+                    for (Char onChar : party.getOnlineMembers().stream().map(PartyMember::getChr).toList()) {
                         onChar.write(WvsContext.partyResult(PartyResult.joinParty(party, applier.getName())));
                     }
                 } else {

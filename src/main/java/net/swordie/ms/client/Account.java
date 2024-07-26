@@ -9,7 +9,7 @@ import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.life.Merchant.EmployeeTrunk;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Util;
 
 import jakarta.persistence.*;
@@ -153,7 +153,7 @@ public class Account {
 
     public void addDamageSkinByItemID(int itemID) {
         addDamageSkin(new DamageSkinSaveData(ItemConstants.getDamageSkinIDByItemID(itemID), itemID, false,
-                StringData.getItemStringById(itemID)));
+                Loaders.getInstance().getStringData().getItemStringById(itemID)));
     }
 
     public DamageSkinSaveData getDamageSkinByItemID(int itemID) {

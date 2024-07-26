@@ -13,7 +13,7 @@ import net.swordie.ms.enums.InstanceTableType;
 import net.swordie.ms.enums.Stat;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MakingSkillRecipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,7 +38,7 @@ public class UserStatHandler {
             return;
         }
         // seperate skill/current skills for adding stuff to the base cache if everything is succesful
-        Skill skill = SkillData.getSkillDeepCopyById(skillID);
+        Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(skillID);
         Skill curSkill = chr.getSkill(skillID);
         byte jobLevel = (byte) JobConstants.getJobLevel((short) skill.getRootId());
         if (JobConstants.isZero((short) skill.getRootId())) {
@@ -73,7 +73,7 @@ public class UserStatHandler {
                     // some beginner skills have no max level, default is 3
                     max = 3;
                 }
-                int newLevel = curLevel + amount > max ? max : curLevel + amount;
+                int newLevel = Math.min(curLevel + amount, max);
                 skill.setCurrentLevel(newLevel);
             }
         } else if (JobConstants.isExtendSpJob(chr.getJob())) {
@@ -82,7 +82,7 @@ public class UserStatHandler {
             if (currentSp >= amount) {
                 int curLevel = curSkill == null ? 0 : curSkill.getCurrentLevel();
                 int max = curSkill == null ? skill.getMaxLevel() : curSkill.getMaxLevel();
-                int newLevel = curLevel + amount > max ? max : curLevel + amount;
+                int newLevel = Math.min(curLevel + amount, max);
                 skill.setCurrentLevel(newLevel);
                 esp.setSpToJobLevel(jobLevel, currentSp - amount);
                 stats = new HashMap<>();
@@ -98,7 +98,7 @@ public class UserStatHandler {
             if (currentSp >= amount) {
                 int curLevel = curSkill == null ? 0 : curSkill.getCurrentLevel();
                 int max = curSkill == null ? skill.getMaxLevel() : curSkill.getMaxLevel();
-                int newLevel = curLevel + amount > max ? max : curLevel + amount;
+                int newLevel = Math.min(curLevel + amount, max);
                 skill.setCurrentLevel(newLevel);
                 chr.getAvatarData().getCharacterStat().setSp(currentSp - amount);
                 stats = new HashMap<>();

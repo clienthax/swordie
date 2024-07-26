@@ -51,7 +51,6 @@ public enum QuestStartRequirementType {
             case MARRIAGE -> (QuestStartRequirement) new QuestStartMarriageRequirement().load(dis);
             case MAX_LEVEL -> (QuestStartRequirement) new QuestStartMaxLevelRequirement().load(dis);
             case MIN_STAT -> (QuestStartRequirement) new QuestStartMinStatRequirement().load(dis);
-            default -> null;
         };
     }
 }

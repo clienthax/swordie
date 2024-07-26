@@ -683,9 +683,9 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
 
     public static CharacterTemporaryStat getByBitPos(int parseInt) {
         return
-                Arrays.asList(values()).stream()
+                Arrays.stream(values())
                         .filter(characterTemporaryStat -> characterTemporaryStat.getBitPos() == parseInt)
-                        .collect(Collectors.toList()).get(0);
+                        .toList().get(0);
     }
 
     public boolean isEncodeInt() {
@@ -771,7 +771,7 @@ public enum CharacterTemporaryStat implements Comparator<CharacterTemporaryStat>
         log.debug(String.format("value 0x%04x, pos %d", val, pos));
         for(CharacterTemporaryStat cts : values()) {
             if(cts.getVal() == val && cts.getPos() == pos) {
-                log.debug("Corresponds to " + cts);
+                log.debug("Corresponds to {}", cts);
             }
         }
 //        for (CharacterTemporaryStat cts : values()) {

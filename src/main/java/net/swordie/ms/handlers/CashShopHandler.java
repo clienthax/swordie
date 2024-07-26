@@ -44,7 +44,7 @@ public class CashShopHandler {
         CashItemType cit = CashItemType.getRequestTypeByVal(type);
         CashShop cs = Server.getInstance().getCashShop();
         if (cit == null) {
-            log.error("Unhandled cash shop cash item request " + type);
+            log.error("Unhandled cash shop cash item request {}", type);
             c.write(CCashShop.error());
             return;
         }
@@ -87,7 +87,7 @@ public class CashShopHandler {
                 }
                 if (notEnoughMoney) {
                     c.write(CCashShop.error());
-                    log.error("Character does not have enough to pay for this item (Paying with " + paymentMethod + ")");
+                    log.error("Character does not have enough to pay for this item (Paying with {})", paymentMethod);
                     return;
                 }
                 CashItemInfo cii = csi.toCashItemInfo(account, chr);
@@ -210,7 +210,7 @@ public class CashShopHandler {
                 break;
             default:
                 c.write(CCashShop.error());
-                log.error("Unhandled cash shop cash item request " + cit);
+                log.error("Unhandled cash shop cash item request {}", cit);
                 chr.dispose();
                 break;
         }
@@ -222,7 +222,7 @@ public class CashShopHandler {
         byte type = inPacket.decodeByte();
         CashShopActionType csat = CashShopActionType.getByVal(type);
         if (csat == null) {
-            log.error("Unhandled cash shop cash action request " + type);
+            log.error("Unhandled cash shop cash action request {}", type);
             chr.write(CCashShop.error());
             return;
         }
@@ -237,7 +237,7 @@ public class CashShopHandler {
 
             default:
                 chr.write(CCashShop.error());
-                log.error("Unhandled cash shop cash action request " + csat);
+                log.error("Unhandled cash shop cash action request {}", csat);
                 chr.dispose();
                 break;
         }

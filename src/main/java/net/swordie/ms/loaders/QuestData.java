@@ -26,16 +26,16 @@ import java.util.stream.Collectors;
  * Created on 3/2/2018.
  */
 public class QuestData implements DataCreator {
-    private static final Set<QuestInfo> baseQuests = new HashSet<>();
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
-    private static final boolean LOG_UNKS = false;
+    private final Set<QuestInfo> baseQuests = new HashSet<>();
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final boolean LOG_UNKS = false;
 
-    public static void loadQuestsFromWZ() {
+    public void loadQuestsFromWZ() {
         String wzDir = String.format("%s/Quest.wz/", ServerConstants.WZ_DIR);
         String checkDir = wzDir + "Check.img.xml";
         File file = new File(checkDir);
         if (!file.exists()) {
-            log.error(checkDir + " does not exist.");
+            log.error("{} does not exist.", checkDir);
             return;
         }
 
@@ -103,10 +103,7 @@ public class QuestData implements DataCreator {
                         case "completeNpcAutoGuide":
                             quest.setCompleteNpcAutoGuide(Integer.parseInt(value) != 0);
                             break;
-                        case "autoStart":
-                            quest.setAutoStart(Integer.parseInt(value) != 0);
-                            break;
-                        case "scenarioQuest":
+                        case "autoStart", "scenarioQuest":
                             quest.setAutoStart(Integer.parseInt(value) != 0);
                             break;
                         case "secret":
@@ -331,9 +328,7 @@ public class QuestData implements DataCreator {
                                                 qpir.setRequiredCount(Integer.parseInt(questValue));
                                             }
                                             break;
-                                        case "order":
-                                            break;
-                                        case "secret":
+                                        case "order", "secret":
                                             break;
                                         default:
                                             if (LOG_UNKS) {
@@ -512,11 +507,11 @@ public class QuestData implements DataCreator {
         }
     }
 
-    public static Set<QuestInfo> getBaseQuests() {
+    public Set<QuestInfo> getBaseQuests() {
         return baseQuests;
     }
 
-    public static void linkMobData() {
+    public void linkMobData() {
         if (getBaseQuests().isEmpty()) {
             loadQuestsFromWZ();
         }
@@ -527,7 +522,7 @@ public class QuestData implements DataCreator {
                             .filter(q -> q instanceof QuestProgressMobRequirement)
                             .map(q -> (QuestProgressMobRequirement) q)
                             .collect(Collectors.toSet())) { // readability is overrated
-                Mob m = MobData.getMobById(qpmr.getMobID());
+                Mob m = Loaders.getInstance().getMobData().getMobById(qpmr.getMobID());
                 if (m != null) {
                     m.addQuest(qi.getQuestID());
                 }
@@ -535,7 +530,7 @@ public class QuestData implements DataCreator {
         }
     }
 
-    public static void linkItemData() {
+    public void linkItemData() {
         if (getBaseQuests().isEmpty()) {
             loadQuestsFromWZ();
         }
@@ -554,9 +549,9 @@ public class QuestData implements DataCreator {
                     ii.setItemId(itemID);
                     ii.setInvType(InvType.EQUIP);
                     ii.addQuest(qi.getQuestID());
-                    ItemData.addItemInfo(ii);
+                    Loaders.getInstance().getItemData().addItemInfo(ii);
                 } else {
-                    ItemInfo item = ItemData.getItemInfoByID(qpmr.getItemID());
+                    ItemInfo item = Loaders.getInstance().getItemData().getItemInfoByID(qpmr.getItemID());
                     if (item != null) {
                         item.addQuest(qi.getQuestID());
                     }
@@ -565,7 +560,7 @@ public class QuestData implements DataCreator {
         }
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating quest data.");
         long start = System.currentTimeMillis();
         if (getBaseQuests().isEmpty()) {
@@ -575,7 +570,7 @@ public class QuestData implements DataCreator {
         log.info(String.format("Completed generating quest data in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveAllQuestInfos(String dir) {
+    private void saveAllQuestInfos(String dir) {
         Util.makeDirIfAbsent(dir);
         for (QuestInfo qi : getBaseQuests()) {
             File file = new File(String.format("%s/%d.dat", dir, qi.getQuestID()));
@@ -638,22 +633,22 @@ public class QuestData implements DataCreator {
         }
     }
 
-    private static QuestInfo getQuestInfo(int id) {
+    private QuestInfo getQuestInfo(int id) {
         return getBaseQuests().stream().filter(qi -> qi.getQuestID() == id).findFirst().orElse(null);
     }
 
-    public static QuestInfo getQuestInfoById(int id) {
+    public QuestInfo getQuestInfoById(int id) {
         QuestInfo qi = getQuestInfo(id);
         return qi == null ? loadQuestInfoById(id) : qi;
     }
 
-    private static QuestInfo loadQuestInfoById(int id) {
+    private QuestInfo loadQuestInfoById(int id) {
         File file = new File(String.format("%s/quests/%d.dat", ServerConstants.DAT_DIR, id));
         boolean exists = file.exists();
         return exists ? loadQuestInfoByFile(file) : null;
     }
 
-    private static QuestInfo loadQuestInfoByFile(File file) {
+    private QuestInfo loadQuestInfoByFile(File file) {
         QuestInfo qi = null;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
             qi = new QuestInfo();
@@ -717,7 +712,7 @@ public class QuestData implements DataCreator {
         return qi;
     }
 
-    public static Quest createQuestFromId(int questID) {
+    public Quest createQuestFromId(int questID) {
         QuestInfo qi = getQuestInfoById(questID);
         Quest quest = new Quest();
         quest.setQRKey(questID);
@@ -737,11 +732,7 @@ public class QuestData implements DataCreator {
         return quest;
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    public static void clear() {
+    public void clear() {
         getBaseQuests().clear();
     }
 }

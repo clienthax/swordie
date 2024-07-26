@@ -152,7 +152,7 @@ public class UserLocal {
                 outPacket.encodeInt(stealSkillMaxLv);   //StealSkill Max Lv
                 break;
             case NO_TARGETS:
-            case FAILED_UNK_REASON:
+            case FAILED_UNK_REASON, REMOVE_ALL_MEMORY:
                 break;
             case REMOVE_STEAL_MEMORY:
                 outPacket.encodeInt(stealManagerJobID);
@@ -161,8 +161,6 @@ public class UserLocal {
                 break;
             case REMOVE_MEMORY_ALL_SLOT:
                 outPacket.encodeInt(skillid);
-                break;
-            case REMOVE_ALL_MEMORY:
                 break;
         }
 

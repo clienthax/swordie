@@ -17,8 +17,7 @@ import net.swordie.ms.enums.*;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.handlers.header.OutHeader;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.QuestData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.util.Util;
 import org.apache.logging.log4j.LogManager;
@@ -60,7 +59,7 @@ public class ItemUpgradeHandler {
             return;
         }
 
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(flame.getItemId()).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(flame.getItemId()).getScrollStats();
         if (!vals.isEmpty()) {
             int reqEquipLevelMax = vals.getOrDefault(ScrollStat.reqEquipLevelMax, 250);
 
@@ -130,7 +129,7 @@ public class ItemUpgradeHandler {
         short maxHammers = ItemConstants.MAX_HAMMER_SLOTS;
 
         if (equip != null) {
-            Equip defaultEquip = ItemData.getEquipById(equip.getItemId());
+            Equip defaultEquip = Loaders.getInstance().getItemData().getEquipById(equip.getItemId());
             if (defaultEquip.isHasIUCMax()) {
                 maxHammers = defaultEquip.getIUCMax();
             }
@@ -144,7 +143,7 @@ public class ItemUpgradeHandler {
             return;
         }
 
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(hammer.getItemId()).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(hammer.getItemId()).getScrollStats();
 
         if (!vals.isEmpty()) {
             if (equip.getIuc() >= maxHammers) {
@@ -247,7 +246,7 @@ public class ItemUpgradeHandler {
         Item scroll = chr.getInventoryByType(InvType.CONSUME).getItemBySlot(uPos);
         InvType invType = ePos < 0 ? EQUIPPED : EQUIP;
         Equip equip = (Equip) chr.getInventoryByType(invType).getItemBySlot(ePos);
-        ItemInfo ii = ItemData.getItemInfoByID(scroll.getItemId());
+        ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(scroll.getItemId());
         Equip zeroWeapon = null;
         if (ItemConstants.isLongOrBigSword(equip.getItemId())) {
             zeroWeapon = (Equip) chr.getEquippedInventory().getItemBySlot(11);
@@ -264,7 +263,7 @@ public class ItemUpgradeHandler {
         }
         int scrollID = scroll.getItemId();
         boolean success = true;
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(scrollID).getScrollStats();
         if (!vals.isEmpty()) {
             int chance = vals.getOrDefault(ScrollStat.success, 100);
             success = Util.succeedProp(chance);
@@ -322,7 +321,7 @@ public class ItemUpgradeHandler {
             return;
         }
         int scrollID = scroll.getItemId();
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(scrollID).getScrollStats();
         int chance = vals.getOrDefault(ScrollStat.success, 100);
         int curse = vals.getOrDefault(ScrollStat.cursed, 0);
         boolean success = Util.succeedProp(chance);
@@ -360,7 +359,7 @@ public class ItemUpgradeHandler {
                 default:
                     chr.chatMessage(Mob, "Unhandled scroll " + scrollID);
                     chr.dispose();
-                    log.error("Unhandled scroll " + scrollID);
+                    log.error("Unhandled scroll {}", scrollID);
                     return;
             }
         }
@@ -382,7 +381,7 @@ public class ItemUpgradeHandler {
         }
         int itemID = item.getItemId();
         Equip equip = (Equip) equipItem;
-        int successChance = ItemData.getItemInfoByID(itemID).getScrollStats().getOrDefault(ScrollStat.success, 100);
+        int successChance = Loaders.getInstance().getItemData().getItemInfoByID(itemID).getScrollStats().getOrDefault(ScrollStat.success, 100);
         boolean success = Util.succeedProp(successChance);
         if (success) {
             switch (itemID) {
@@ -392,7 +391,7 @@ public class ItemUpgradeHandler {
                             ItemConstants.getAdditionalPrimeCountForCube(ItemConstants.SYSTEM_DEFAULT_CUBE_INDICATOR)), false);
                     break;
                 default:
-                    log.error("Unhandled slot extend item " + itemID);
+                    log.error("Unhandled slot extend item {}", itemID);
                     chr.chatMessage("Unhandled slot extend item " + itemID);
                     return;
             }
@@ -423,7 +422,7 @@ public class ItemUpgradeHandler {
         }
         int scrollID = scroll.getItemId();
         boolean success;
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(scrollID).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(scrollID).getScrollStats();
         int chance = vals.getOrDefault(ScrollStat.success, 100);
         int curse = vals.getOrDefault(ScrollStat.cursed, 0);
         success = Util.succeedProp(chance);
@@ -511,7 +510,7 @@ public class ItemUpgradeHandler {
         if(scroll == null) {
             return;
         }
-        ItemInfo scrollInfo = ItemData.getItemInfoByID(scroll.getItemId());
+        ItemInfo scrollInfo = Loaders.getInstance().getItemData().getItemInfoByID(scroll.getItemId());
         int setId = scrollInfo.getScrollStats().getOrDefault(ScrollStat.setItemCategory, 0);
         boolean success = Util.succeedProp(scrollInfo.getScrollStats().getOrDefault(ScrollStat.success, 100), 100);
         if (setId != 0 && success) {
@@ -519,7 +518,7 @@ public class ItemUpgradeHandler {
             if(qm.hasQuestInProgress(QuestConstants.ZERO_SET_QUEST) || qm.hasQuestCompleted(QuestConstants.ZERO_SET_QUEST)){
                 qm.removeQuest(QuestConstants.ZERO_SET_QUEST);
             }
-            Quest q = QuestData.createQuestFromId(QuestConstants.ZERO_SET_QUEST);
+            Quest q = Loaders.getInstance().getQuestData().createQuestFromId(QuestConstants.ZERO_SET_QUEST);
             q.setQrValue(String.valueOf(setId));
             qm.addQuest(q);
         }

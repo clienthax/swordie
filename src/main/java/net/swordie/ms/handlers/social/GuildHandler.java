@@ -25,7 +25,7 @@ import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.enums.AllianceType;
 import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Util;
 import net.swordie.ms.world.World;
@@ -183,7 +183,7 @@ public class GuildHandler {
                         chr.write(WvsContext.guildResult(GuildResult.msg(GuildType.Res_SetSkill_LevelSet_Unknown)));
                         return;
                     }
-                    SkillInfo si = SkillData.getSkillInfoById(skillID);
+                    SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
                     if (spentSp < si.getReqTierPoint()) {
                         chr.getOffenseManager().addOffense(String.format("Character %d tried to add a guild skill without enough sp spent (spent %d, needed %d).",
                                 chr.getId(), spentSp, si.getReqTierPoint()));
@@ -258,8 +258,8 @@ public class GuildHandler {
                     chr.write(WvsContext.guildResult(GuildResult.msg(GuildType.Res_SetSkill_LevelSet_Unknown)));
                     return;
                 }
-                SkillInfo si = SkillData.getSkillInfoById(skillID);
-                chr.getSkillCoolTimes().put(skillID, System.currentTimeMillis() + 1000 * si.getValue(SkillStat.cooltime, gs.getLevel()));
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
+                chr.getSkillCoolTimes().put(skillID, System.currentTimeMillis() + 1000L * si.getValue(SkillStat.cooltime, gs.getLevel()));
                 chr.getJobHandler().handleJoblessBuff(c, inPacket, skillID, (byte) gs.getLevel());
                 break;
             case Req_Search:
@@ -451,7 +451,7 @@ public class GuildHandler {
                 }
                 // select all records that are on the requested page
                 int start = page * PAGE_SIZE;
-                int end = start + PAGE_SIZE >= records.size() ? records.size() : start + PAGE_SIZE;
+                int end = Math.min(start + PAGE_SIZE, records.size());
                 List<BBSRecord> pageRecords = records.subList(start, end);
                 chr.write(WvsContext.guildBBSResult(GuildBBSPacket.loadPages(guild.getBbsNotice(), records.size(), pageRecords)));
                 break;

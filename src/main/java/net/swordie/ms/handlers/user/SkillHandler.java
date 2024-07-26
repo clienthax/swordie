@@ -26,8 +26,7 @@ import net.swordie.ms.handlers.Handler;
 import net.swordie.ms.handlers.header.InHeader;
 import net.swordie.ms.life.AffectedArea;
 import net.swordie.ms.life.mob.Mob;
-import net.swordie.ms.loaders.ItemData;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.MakingSkillRecipe;
 import net.swordie.ms.util.FileTime;
 import net.swordie.ms.util.Position;
@@ -87,7 +86,7 @@ public class SkillHandler {
         short skinId = inPacket.decodeShort();
         DamageSkinType dst = DamageSkinType.getByVal(typeVal);
         if (dst == null || dst.getVal() >= DamageSkinType.Res_Success.getVal()) {
-            log.error("Unknown DamageSkinType " + dst);
+            log.error("Unknown DamageSkinType {}", dst);
             return;
         }
         DamageSkinSaveData curSkin = chr.getDamageSkin();
@@ -129,7 +128,7 @@ public class SkillHandler {
         }
         Position position = inPacket.decodePosition();
         byte isLeft = inPacket.decodeByte();
-        SkillInfo fci = SkillData.getSkillInfoById(skillID);
+        SkillInfo fci = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         int slv = chr.getSkill(skillID).getCurrentLevel();
         AffectedArea aa = AffectedArea.getPassiveAA(chr, skillID, (byte) slv);
         aa.setPosition(position);
@@ -154,10 +153,10 @@ public class SkillHandler {
         byte slv = inPacket.decodeByte();
         if (chr.applyBulletCon(skillID, slv) && chr.applyMpCon(skillID, slv) && (chr.checkAndSetSkillCooltime(skillID) || chr.hasSkillCDBypass())) {
             chr.getField().broadcastPacket(UserRemote.effect(chr.getId(), Effect.skillUse(skillID, slv, 0)));
-            log.debug("SkillID: " + skillID);
+            log.debug("SkillID: {}", skillID);
             c.getChr().dbgChatMsg("SkillID: " + skillID);
             Job sourceJobHandler = c.getChr().getJobHandler();
-            SkillInfo si = SkillData.getSkillInfoById(skillID);
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
             if (si.isMassSpell() && sourceJobHandler.isBuff(skillID) && chr.getParty() != null) {
                 Rect r = si.getFirstRect();
                 if (r != null) {
@@ -222,7 +221,7 @@ public class SkillHandler {
         Skill skill = chr.getSkill(SkillConstants.getLinkedSkill(skillID));
         int slv = skill == null ? 0 : skill.getCurrentLevel();
         boolean success = true;
-        if (SkillData.getSkillInfoById(SkillConstants.getActualSkillIDfromSkillID(skillID)).hasCooltime()) {
+        if (Loaders.getInstance().getSkillData().getSkillInfoById(SkillConstants.getActualSkillIDfromSkillID(skillID)).hasCooltime()) {
             if (chr.hasSkillOnCooldown(skillID)) {
                 success = false;
             } else {
@@ -263,7 +262,7 @@ public class SkillHandler {
     @Handler(op = InHeader.MAKING_SKILL_REQUEST)
     public static void handleMakingSkillRequest(Char chr, InPacket inPacket) {
         int recipeID = inPacket.decodeInt();
-        MakingSkillRecipe msr = SkillData.getRecipeById(recipeID);
+        MakingSkillRecipe msr = Loaders.getInstance().getSkillData().getRecipeById(recipeID);
         if (chr == null || msr == null || !msr.isAbleToBeUsedBy(chr)) {
             return;
         }
@@ -294,7 +293,7 @@ public class SkillHandler {
                     rand = Randomizer.nextInt(100);
                 }
             }
-            crafted = ItemData.getItemDeepCopy(target.getItemID(), Randomizer.isSuccess(chr.getMakingSkillLevel(reqSkillID) * 2));
+            crafted = Loaders.getInstance().getItemData().getItemDeepCopy(target.getItemID(), Randomizer.isSuccess(chr.getMakingSkillLevel(reqSkillID) * 2));
             if (crafted == null) {
                 chr.getField().broadcastPacket(FieldPacket.makingSkillResult(chr.getId(), recipeID, MakingSkillResult.UNKNOWN_ERROR, target, 0));
                 return;

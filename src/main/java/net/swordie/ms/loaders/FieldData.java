@@ -30,16 +30,12 @@ import java.util.Objects;
  */
 public class FieldData implements DataCreator {
 
-    private static final List<Field> fields = new ArrayList<>();
-    private static final List<Integer> worldMapFields = new ArrayList<>();
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
-    private static final boolean LOG_UNKS = false;
+    private final List<Field> fields = new ArrayList<>();
+    private final List<Integer> worldMapFields = new ArrayList<>();
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final boolean LOG_UNKS = false;
 
-    public static void main(String[] args) {
-        generateDatFiles();
-    }
-
-    private static void saveFields(String dir) {
+    private void saveFields(String dir) {
         Util.makeDirIfAbsent(dir);
         for (Field field : getFields()) {
             File file = new File(String.format("%s/%d.dat", dir, field.getId()));
@@ -140,7 +136,7 @@ public class FieldData implements DataCreator {
         }
     }
 
-    public static void loadNPCFromSQL() {
+    public void loadNPCFromSQL() {
 
         Session session = DatabaseManager.getSession();
         Transaction transaction = session.beginTransaction();
@@ -151,7 +147,7 @@ public class FieldData implements DataCreator {
         List<Object[]> results = loadNpcQuery.getResultList();
 
         for(Object[] r : results) {
-            Npc n = NpcData.getNpcDeepCopyById((Integer)r[1]);
+            Npc n = Loaders.getInstance().getNpcData().getNpcDeepCopyById((Integer)r[1]);
             Field f = getFieldById( (Integer)r[2] );
 
             Position p = new Position();
@@ -173,11 +169,11 @@ public class FieldData implements DataCreator {
 
     }
 
-    private static void loadFieldInfoFromWz() {
+    private void loadFieldInfoFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Map.wz/Map";
         File dir = new File(wzDir);
         if (!dir.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -472,7 +468,7 @@ public class FieldData implements DataCreator {
                                     break;
                                 default:
                                     if (LOG_UNKS) {
-                                        log.warn("unknown life property " + name + " with value " + value);
+                                        log.warn("unknown life property {} with value {}", name, value);
                                     }
                                     break;
                             }
@@ -553,13 +549,13 @@ public class FieldData implements DataCreator {
         }
     }
 
-    public static List<Field> getFields() {
+    public List<Field> getFields() {
         return fields;
     }
 
-    public static List<Integer> getWorldMapFields() { return worldMapFields; }
+    public List<Integer> getWorldMapFields() { return worldMapFields; }
 
-    public static Field getFieldById(int id) {
+    public Field getFieldById(int id) {
         for (Field f : getFields()) {
             if (f.getId() == id) {
                 return f;
@@ -568,18 +564,18 @@ public class FieldData implements DataCreator {
         return getFieldFromFile(id);
     }
 
-    private static Field getFieldFromFile(int id) {
+    private Field getFieldFromFile(int id) {
         String fieldDir = ServerConstants.DAT_DIR + "/fields/" + id + ".dat";
         File file = new File(fieldDir);
         if (!file.exists()) {
-            log.error("Could not find a field with id " + id);
+            log.error("Could not find a field with id {}", id);
             return null;
         } else {
             return readFieldFromFile(file);
         }
     }
 
-    private static Field readFieldFromFile(File file) {
+    private Field readFieldFromFile(File file) {
         Field field = null;
         try(DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             field = new Field(dataInputStream.readInt());
@@ -697,11 +693,11 @@ public class FieldData implements DataCreator {
         return field;
     }
 
-    private static void loadWorldMapFromWz() {
+    private void loadWorldMapFromWz() {
         String wzDir = ServerConstants.WZ_DIR + "/Map.wz/WorldMap";
         File dir = new File(wzDir);
         if (!dir.exists()) {
-            log.fatal(wzDir + " does not exist.");
+            log.fatal("{} does not exist.", wzDir);
             return;
         }
 
@@ -726,7 +722,7 @@ public class FieldData implements DataCreator {
         }
     }
 
-    private static void saveWorldMap(String dir) {
+    private void saveWorldMap(String dir) {
         File file = new File(dir);
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
             dataOutputStream.writeInt(worldMapFields.size());
@@ -738,11 +734,11 @@ public class FieldData implements DataCreator {
         }
     }
 
-    public static void loadWorldMap() {
+    public void loadWorldMap() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/worldMap.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -757,7 +753,7 @@ public class FieldData implements DataCreator {
         log.info(String.format("Loaded world map fields from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating field data.");
         long start = System.currentTimeMillis();
         loadFieldInfoFromWz();
@@ -767,7 +763,7 @@ public class FieldData implements DataCreator {
         log.info(String.format("Completed generating field data in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static Field getFieldCopyById(int id) {
+    public Field getFieldCopyById(int id) {
         Field field = getFieldById(id);
         if (field == null) {
             return null;
@@ -822,7 +818,7 @@ public class FieldData implements DataCreator {
         return copy;
     }
 
-    public static void clear() {
+    public void clear() {
         getFields().clear();
         getWorldMapFields().clear();
     }

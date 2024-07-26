@@ -26,7 +26,7 @@ import net.swordie.ms.life.Summon;
 import net.swordie.ms.life.mob.Mob;
 import net.swordie.ms.life.mob.MobStat;
 import net.swordie.ms.life.mob.MobTemporaryStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.util.Position;
 import net.swordie.ms.util.Rect;
 import net.swordie.ms.util.Util;
@@ -138,7 +138,7 @@ public class Archer extends Beginner {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -157,7 +157,7 @@ public class Archer extends Beginner {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -255,7 +255,7 @@ public class Archer extends Beginner {
             case SHARP_EYES_XBOW:
                 int cr = si.getValue(x, slv);
                 int crDmg = si.getValue(y, slv);
-                cr += SkillData.getSkillInfoById(SHARP_EYES_BOW_CR_H).getValue(x, chr.getSkillLevel(SHARP_EYES_BOW_CR_H)) + SkillData.getSkillInfoById(SHARP_EYES_XBOW_CR_H).getValue(x, chr.getSkillLevel(SHARP_EYES_XBOW_CR_H));
+                cr += Loaders.getInstance().getSkillData().getSkillInfoById(SHARP_EYES_BOW_CR_H).getValue(x, chr.getSkillLevel(SHARP_EYES_BOW_CR_H)) + Loaders.getInstance().getSkillData().getSkillInfoById(SHARP_EYES_XBOW_CR_H).getValue(x, chr.getSkillLevel(SHARP_EYES_XBOW_CR_H));
                 o2.nOption = (cr << 8) + crDmg;
                 o2.nValue = si.getValue(y, slv);
                 o2.rOption = skillID;
@@ -368,7 +368,7 @@ public class Archer extends Beginner {
         }
         Skill skill = chr.hasSkill(ENCHANTED_QUIVER) ? chr.getSkill(ENCHANTED_QUIVER)
                 : chr.getSkill(QUIVER_CARTRIDGE);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
             Mob mob = (Mob) chr.getField().getLifeByObjectID(mai.mobId);
             if (mob == null) {
@@ -517,7 +517,7 @@ public class Archer extends Beginner {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -660,7 +660,7 @@ public class Archer extends Beginner {
         }
 
         Skill skill = chr.getSkill(ARMOR_BREAK);
-        SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
         byte slv = (byte) skill.getCurrentLevel();
 
         int pdr = 0;
@@ -673,7 +673,7 @@ public class Archer extends Beginner {
         }
 
         int finalDmgRate = si.getValue(x, slv);
-        if(lastArmorBreak + (si.getValue(y, slv) * 1000) < System.currentTimeMillis()) {
+        if(lastArmorBreak + (si.getValue(y, slv) * 1000L) < System.currentTimeMillis()) {
             if(pdr > 0) {
                 if (tsm.getOptByCTSAndSkill(IndieIgnoreMobpdpR, ARMOR_BREAK) == null) {
                     o.nReason = ARMOR_BREAK;
@@ -703,7 +703,7 @@ public class Archer extends Beginner {
         }
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Skill skill = chr.getSkill(AGGRESSIVE_RESISTANCE);
-        SkillInfo si = SkillData.getSkillInfoById(AGGRESSIVE_RESISTANCE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(AGGRESSIVE_RESISTANCE);
         byte slv = (byte) skill.getCurrentLevel();
         Option o = tsm.getOptByCTSAndSkill(DamAbsorbShield, AGGRESSIVE_RESISTANCE);
         Option o1 = new Option();
@@ -730,7 +730,7 @@ public class Archer extends Beginner {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         Skill skill = chr.getSkill(AGGRESSIVE_RESISTANCE);
-        SkillInfo si = SkillData.getSkillInfoById(AGGRESSIVE_RESISTANCE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(AGGRESSIVE_RESISTANCE);
         byte slv = (byte) skill.getCurrentLevel();
         o.nOption = 1;
         o.rOption = AGGRESSIVE_RESISTANCE;
@@ -767,7 +767,7 @@ public class Archer extends Beginner {
         }
         Skill skill = chr.getSkill(FOCUSED_FURY);
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(FOCUSED_FURY);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(FOCUSED_FURY);
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o2 = new Option();
         int amount = 0;
@@ -793,7 +793,7 @@ public class Archer extends Beginner {
     public int getFinalAttackSkill() {
         Skill faSkill = getFinalAtkSkill();
         if(faSkill != null) {
-            SkillInfo si = SkillData.getSkillInfoById(faSkill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(faSkill.getSkillId());
             byte slv = (byte) faSkill.getCurrentLevel();
             int proc = si.getValue(prop, slv);
             if (Util.succeedProp(proc)) {
@@ -829,7 +829,7 @@ public class Archer extends Beginner {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         if (isBuff(skillID)) {
             handleBuff(c, inPacket, skillID, slv);
@@ -863,7 +863,7 @@ public class Archer extends Beginner {
                     skill = chr.getSkill(EVASION_BOOST_XBOW);
                 }
                 byte slv = (byte) skill.getCurrentLevel();
-                SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+                SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
                 TemporaryStatManager tsm = chr.getTemporaryStatManager();
                 Option o = new Option();
                 o.nOption = 100;

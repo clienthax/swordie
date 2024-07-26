@@ -6,8 +6,7 @@ import net.swordie.ms.connection.db.DatabaseManager;
 import net.swordie.ms.enums.*;
 import net.swordie.ms.life.drop.DropInfo;
 import net.swordie.ms.life.pet.PetSkill;
-import net.swordie.ms.loaders.EtcData;
-import net.swordie.ms.loaders.ItemData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.loaders.containerclasses.EquipDrop;
 import net.swordie.ms.loaders.containerclasses.ItemInfo;
 import net.swordie.ms.util.Util;
@@ -437,14 +436,14 @@ public class ItemConstants {
                             bodyPartList.add(BodyPart.ZeroWeapon.getVal());
                         }
                     } else {
-                        log.debug("Unknown type? id = " + itemID);
+                        log.debug("Unknown type? id = {}", itemID);
                     }
                     break;
             }
         }
         else
         {
-            log.debug("Unknown type? id = " + itemID);
+            log.debug("Unknown type? id = {}", itemID);
         }
         return bodyPartList;
 
@@ -632,7 +631,7 @@ public class ItemConstants {
         return !equip.isCash() &&
                 canEquipTypeHavePotential(equip.getItemId()) &&
                 !equip.isNoPotential() &&
-                (ItemData.getEquipById(equip.getItemId()).getTuc() >= 1 || isTucIgnoreItem(equip.getItemId()));
+                (Loaders.getInstance().getItemData().getEquipById(equip.getItemId()).getTuc() >= 1 || isTucIgnoreItem(equip.getItemId()));
     }
 
     public static boolean canEquipHaveFlame(Equip equip) {
@@ -654,7 +653,7 @@ public class ItemConstants {
     }
 
     public static boolean canEquipGoldHammer(Equip equip) {
-        Equip defaultEquip = ItemData.getEquipById(equip.getItemId());
+        Equip defaultEquip = Loaders.getInstance().getItemData().getEquipById(equip.getItemId());
         return !(Arrays.asList(HORNTAIL_NECKLACE).contains(equip.getItemId()) ||
                 equip.getIuc() >= defaultEquip.getIUCMax() ||
                 defaultEquip.getTuc() <= 0); // No upgrade slots by default
@@ -727,7 +726,7 @@ public class ItemConstants {
      */
     public static boolean nebuliteFitsEquip(Equip equip, Item nebulite) {
         int nebuliteId = nebulite.getItemId();
-        Map<ScrollStat, Integer> vals = ItemData.getItemInfoByID(nebuliteId).getScrollStats();
+        Map<ScrollStat, Integer> vals = Loaders.getInstance().getItemData().getItemInfoByID(nebuliteId).getScrollStats();
         if (vals.isEmpty()) {
             return false;
         }
@@ -747,13 +746,12 @@ public class ItemConstants {
             case Bottom -> isBottom(equipId) || isOverall(equipId);
             case Glove -> isGlove(equipId);
             case Shoes -> isShoe(equipId);
-            default -> false;
         };
     }
 
     public static List<ItemOption> getOptionsByEquip(Equip equip, boolean bonus, int line, int cubeId, int additionalPrimes) {
         int id = equip.getItemId();
-        Collection<ItemOption> data = ItemData.getFilteredItemOptions();
+        Collection<ItemOption> data = Loaders.getInstance().getItemData().getFilteredItemOptions();
         ItemGrade grade = getLineTier(line, getGradeByVal(bonus ? equip.getBonusGrade() : equip.getBaseGrade()), additionalPrimes);
         // need a list, as we take a random item from it later on
         List<ItemOption> res = data.stream().filter(
@@ -767,20 +765,20 @@ public class ItemConstants {
                             &&  io.hasMatchingGrade(grade.getVal())
                             && io.isBonus() == bonus
                             && io.getId() != 42060 //Armor's Crit Damage (Secondary Specific Filter)
-            ).collect(Collectors.toList()));
+            ).toList());
         } else if (isWeapon(id)) {
             res.addAll(data.stream().filter(
                     io -> io.getOptionType() == ItemOptionType.Weapon.getVal()
                             &&  io.hasMatchingGrade(grade.getVal())
                             && io.isBonus() == bonus
-            ).collect(Collectors.toList()));
+            ).toList());
         } else if(isEmblem(id)){
             res.addAll(data.stream().filter(
                     io -> io.getOptionType() == ItemOptionType.Weapon.getVal()
                             &&  io.hasMatchingGrade(grade.getVal())
                             && io.isBonus() == bonus
                             && !io.getString().contains("Boss") //(Emblem Specific Filter)
-            ).collect(Collectors.toList()));
+            ).toList());
         }
 
         else {
@@ -788,42 +786,42 @@ public class ItemConstants {
                     io -> io.getOptionType() == ItemOptionType.AnyExceptWeapon.getVal()
                             && io.hasMatchingGrade(grade.getVal())
                             && io.isBonus() == bonus
-            ).collect(Collectors.toList()));
+            ).toList());
 
             if (isRing(id) || isPendant(id) || isFaceAccessory(id) || isEyeAccessory(id) || isEarrings(id)) {
                 res.addAll(data.stream().filter(
                         io -> io.getOptionType() == ItemOptionType.Accessory.getVal()
                                 && io.hasMatchingGrade(grade.getVal())
                                 && io.isBonus() == bonus
-                ).collect(Collectors.toList()));
+                ).toList());
             } else {
                 if (isHat(id)) {
                     res.addAll(data.stream().filter(
                             io -> io.getOptionType() == ItemOptionType.Hat.getVal()
                                     && io.hasMatchingGrade(grade.getVal())
                                     && io.isBonus() == bonus
-                    ).collect(Collectors.toList()));
+                    ).toList());
                 }
                 if (isTop(id) || isOverall(id)) {
                     res.addAll(data.stream().filter(
                             io -> io.getOptionType() == ItemOptionType.Top.getVal()
                                     && io.hasMatchingGrade(grade.getVal())
                                     && io.isBonus() == bonus
-                    ).collect(Collectors.toList()));
+                    ).toList());
                 }
                 if (isBottom(id)) {
                     res.addAll(data.stream().filter(
                             io -> io.getOptionType() == ItemOptionType.Bottom.getVal()
                                     && io.hasMatchingGrade(grade.getVal())
                                     && io.isBonus() == bonus
-                    ).collect(Collectors.toList()));
+                    ).toList());
                 }
                 if (isShoe(id)) {
                     res.addAll(data.stream().filter(
                             io -> io.getOptionType() == ItemOptionType.Shoes.getVal()
                                     && io.hasMatchingGrade(grade.getVal())
                                     && io.isBonus() == bonus
-                    ).collect(Collectors.toList()));
+                    ).toList());
                 }
                 if(isGlove(id)){
                     if(grade == HiddenUnique || grade == Unique || grade == HiddenLegendary || grade == Legendary || grade == UniqueBonusHidden || grade == LegendaryBonusHidden){
@@ -831,7 +829,7 @@ public class ItemConstants {
                                 (io.getOptionType() == ItemOptionType.Glove.getVal() || io.getOptionType() == ItemOptionType.Armor.getVal())
                                         && io.hasMatchingGrade(grade.getVal()) && io.isBonus() == bonus
                                         && io.getId() != 42060 //Bonus - Armor's 1% Crit Damage (Glove Specific Filter)
-                        ).collect(Collectors.toList()));
+                        ).toList());
                         if(!MEISTERS_CUBES.contains(cubeId) && !MASTER_CRAFTSMANS_CUBES.contains(cubeId) && (cubeId != SYSTEM_DEFAULT_CUBE_INDICATOR)){
                             res = res.stream().filter(
                                     io -> !io.getString().contains("Auto Steal")) //(Glove Specific Filter)
@@ -842,14 +840,14 @@ public class ItemConstants {
                                 io -> io.getOptionType() == ItemOptionType.Glove.getVal()
                                         && io.hasMatchingGrade(grade.getVal())
                                         && io.isBonus() == bonus
-                        ).collect(Collectors.toList()));
+                        ).toList());
                     }
                 } else if (isArmor(id) || isShoulder(id) || isBelt(id)) {
                     res.addAll(data.stream().filter(
                             io -> io.getOptionType() == ItemOptionType.Armor.getVal()
                                     && io.hasMatchingGrade(grade.getVal())
                                     && io.isBonus() == bonus
-                    ).collect(Collectors.toList()));
+                    ).toList());
                 }
             }
         }
@@ -944,7 +942,7 @@ public class ItemConstants {
         if(isEquip(itemID)) {
             return EQUIP;
         } else {
-            ItemInfo ii = ItemData.getItemInfoByID(itemID);
+            ItemInfo ii = Loaders.getInstance().getItemData().getItemInfoByID(itemID);
             if(ii == null) {
                 return null;
             }
@@ -1437,7 +1435,7 @@ public class ItemConstants {
 
     public static int getSoulSkillFromSoulID(int soulID) {
         int itemId = soulID + SOUL_ITEM_BASE_ID - 1;
-        return EtcData.getSkillBySoulItem(itemId);
+        return Loaders.getInstance().getEtcData().getSkillBySoulItem(itemId);
     }
 
     public static boolean isMobCard(int itemID) {
@@ -1610,9 +1608,9 @@ public class ItemConstants {
 
     public static PetSkill getPetSkillFromID(int itemID) {
         return switch (itemID) {
-            case 5190000 -> PetSkill.ITEM_PICKUP;
-            case 5190001 -> PetSkill.AUTO_HP;
-            case 5190002 -> PetSkill.EXPANDED_AUTO_MOVE;
+            case 5190000, 5191003, 5191000 -> PetSkill.ITEM_PICKUP;
+            case 5190001, 5191001 -> PetSkill.AUTO_HP;
+            case 5190002, 5191002 -> PetSkill.EXPANDED_AUTO_MOVE;
             case 5190003 -> PetSkill.AUTO_MOVE;
             case 5190004 -> PetSkill.EXPIRED_PICKUP;
             case 5190005 -> PetSkill.IGNORE_ITEM;
@@ -1622,13 +1620,8 @@ public class ItemConstants {
             case 5190009 -> PetSkill.AUTO_ALL_CURE;
             case 5190010 -> PetSkill.AUTO_BUFF;
             case 5190011 -> PetSkill.AUTO_FEED;
-            case 5190012 -> PetSkill.FATTEN_UP;
+            case 5190012, 5190014 -> PetSkill.FATTEN_UP;
             case 5190013 -> PetSkill.PET_SHOP;
-            case 5190014 -> PetSkill.FATTEN_UP;
-            case 5191000 -> PetSkill.ITEM_PICKUP;
-            case 5191001 -> PetSkill.AUTO_HP;
-            case 5191002 -> PetSkill.EXPANDED_AUTO_MOVE;
-            case 5191003 -> PetSkill.ITEM_PICKUP;
             default -> null;
         };
     }

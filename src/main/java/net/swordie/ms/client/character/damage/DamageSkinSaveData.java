@@ -2,7 +2,7 @@ package net.swordie.ms.client.character.damage;
 
 import net.swordie.ms.connection.OutPacket;
 import net.swordie.ms.constants.ItemConstants;
-import net.swordie.ms.loaders.StringData;
+import net.swordie.ms.loaders.Loaders;
 
 import jakarta.persistence.*;
 
@@ -83,6 +83,6 @@ public class DamageSkinSaveData {
 
     public static DamageSkinSaveData getByItemID(int itemID) {
         return new DamageSkinSaveData(ItemConstants.getDamageSkinIDByItemID(itemID), itemID, false,
-                StringData.getItemStringById(itemID));
+                Loaders.getInstance().getStringData().getItemStringById(itemID));
     }
 }

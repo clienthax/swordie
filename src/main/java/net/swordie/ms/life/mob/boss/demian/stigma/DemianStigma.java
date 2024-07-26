@@ -51,7 +51,7 @@ public class DemianStigma {
         o.bOption = BossConstants.DEMIAN_MAX_STIGMA;
         o.nOption = getStigmaCount(chr);
         o.rOption = 237;
-        o.xOption = newCorruption > maxCorruption ? maxCorruption : newCorruption < 0 ? 0 : newCorruption;
+        o.xOption = newCorruption > maxCorruption ? maxCorruption : Math.max(newCorruption, 0);
         tsm.putCharacterStatValue(Stigma, o);
         tsm.sendSetStatPacket();
         chr.write(DemianFieldPacket.corruptionChange(false, o.xOption));
@@ -62,7 +62,7 @@ public class DemianStigma {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         o.bOption = BossConstants.DEMIAN_MAX_STIGMA;
-        o.nOption = newStigma > o.bOption ? o.bOption : newStigma < 0 ? 0 : newStigma;
+        o.nOption = newStigma > o.bOption ? o.bOption : Math.max(newStigma, 0);
         o.rOption = 237;
         o.xOption = getCorruptionCount(chr);
         tsm.putCharacterStatValue(Stigma, o);

@@ -22,16 +22,16 @@ import java.util.*;
  * Created on 7/23/2018.
  */
 public class MonsterCollectionData {
-    private static final Logger log = LogManager.getLogger(MonsterCollectionData.class);
+    private final Logger log = LogManager.getLogger(MonsterCollectionData.class);
 
-    private static final Map<Integer, MonsterCollectionRegion> monsterCollectionInfo = new HashMap<>();
-    private static final Map<Integer, Triple<Integer, Integer, Integer>> monsterInfo = new HashMap<>();
+    private final Map<Integer, MonsterCollectionRegion> monsterCollectionInfo = new HashMap<>();
+    private final Map<Integer, Triple<Integer, Integer, Integer>> monsterInfo = new HashMap<>();
     // reward from group -> hours for exploration
-    private static final Map<Integer, Integer> rewardToMinutes = new HashMap<>();
+    private final Map<Integer, Integer> rewardToMinutes = new HashMap<>();
     // reward from group -> (reward id, chance)
-    private static final Map<Integer, Tuple<Integer, Integer>> explorationRewards = new HashMap<>();
+    private final Map<Integer, Tuple<Integer, Integer>> explorationRewards = new HashMap<>();
 
-    static {
+    {
         rewardToMinutes.put(2434929, 30);
         rewardToMinutes.put(2434930, 60 * 3);
         rewardToMinutes.put(2434931, 60 * 12);
@@ -40,7 +40,7 @@ public class MonsterCollectionData {
         rewardToMinutes.put(2434959, 60 * 3);
     }
 
-    public static void loadFromSQL() {
+    public void loadFromSQL() {
         long start = System.currentTimeMillis();
         Session session = DatabaseManager.getSession();
         Transaction t = session.beginTransaction();
@@ -70,10 +70,10 @@ public class MonsterCollectionData {
                     .getMonsterCollectionGroups().get(mcgri.getGroupID())
                     .setRewardQuantity(mcgri.getQuantity());
         }
-        log.info("Loaded MonsterCollectionData in " + (System.currentTimeMillis() - start) + "ms.");
+        log.info("Loaded MonsterCollectionData in {}ms.", System.currentTimeMillis() - start);
     }
 
-    public static void put(MonsterCollectionMobInfo mcmi) {
+    public void put(MonsterCollectionMobInfo mcmi) {
         if (!monsterCollectionInfo.containsKey(mcmi.getRegion())) {
             monsterCollectionInfo.put(mcmi.getRegion(), new MonsterCollectionRegion());
         }
@@ -81,7 +81,7 @@ public class MonsterCollectionData {
     }
 
 
-    public static MonsterCollectionMobInfo getMobInfoByID(int templateID) {
+    public MonsterCollectionMobInfo getMobInfoByID(int templateID) {
         Triple<Integer, Integer, Integer> info = monsterInfo.get(templateID);
         if (info == null) {
             return null;
@@ -89,20 +89,20 @@ public class MonsterCollectionData {
         return new MonsterCollectionMobInfo(templateID, info.getLeft(), info.getMiddle(), info.getRight());
     }
 
-    public static int getRequiredMobs(int region, int session, int group) {
+    public int getRequiredMobs(int region, int session, int group) {
         return monsterCollectionInfo.get(region).getMonsterCollectionSessions().get(session)
                 .getMonsterCollectionGroups().get(group).getMobs().size();
     }
 
-    private static MonsterCollectionSession getSession(int region, int session) {
+    private MonsterCollectionSession getSession(int region, int session) {
         return monsterCollectionInfo.get(region).getMonsterCollectionSessions().get(session);
     }
 
-    private static MonsterCollectionGroup getGroup(int region, int session, int group) {
+    private MonsterCollectionGroup getGroup(int region, int session, int group) {
         return getSession(region, session).getMonsterCollectionGroups().get(group);
     }
 
-    public static Tuple<Integer, Integer> getReward(int region, int session, int group) {
+    public Tuple<Integer, Integer> getReward(int region, int session, int group) {
         if (group == -1) {
             MonsterCollectionSession mcs = getSession(region, session);
             return new Tuple<>(mcs.getReward(), mcs.getRewardQuantity());
@@ -111,7 +111,7 @@ public class MonsterCollectionData {
         return new Tuple<>(mcg.getReward(), mcg.getRewardQuantity());
     }
 
-    public static int getExplorationMinutes(int region, int session, int group) {
+    public int getExplorationMinutes(int region, int session, int group) {
         int reward = getGroup(region, session, group).getReward();
         return rewardToMinutes.get(reward);
     }

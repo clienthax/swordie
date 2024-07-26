@@ -19,9 +19,9 @@ import java.util.*;
 public class DropData {
     private static final Logger log = LogManager.getLogger(DropData.class);
 
-    private static final Map<Integer, Set<DropInfo>> drops = new HashMap<>();
+    private final Map<Integer, Set<DropInfo>> drops = new HashMap<>();
 
-    public static void loadCompleteDropsFromTxt(File file) {
+    public void loadCompleteDropsFromTxt(File file) {
         try (Scanner scanner = new Scanner(new FileInputStream(file))) {
             int mobID = 0;
             while(scanner.hasNextLine()) {
@@ -74,7 +74,8 @@ public class DropData {
             e.printStackTrace();
         }
     }
-    public static Set<DropInfo> getDropInfoByID(int mobID) {
+
+    public Set<DropInfo> getDropInfoByID(int mobID) {
         Set<DropInfo> drops = getCachedDropInfoById(mobID);
         if (drops == null) {
             drops = getDropInfoByIdFromDB(mobID);
@@ -86,41 +87,41 @@ public class DropData {
         return drops;
     }
 
-    private static Set<DropInfo> getDropInfoByIdFromDB(int mobID) {
-        List l;
+    private Set<DropInfo> getDropInfoByIdFromDB(int mobID) {
+        List<DropInfo> l;
         try(Session session = DatabaseManager.getSession()) {
             Transaction transaction = session.beginTransaction();
             // String.format for query, just to fill in the class
             // Can't set the FROM clause with a parameter it seems
-            Query query = session.createQuery("FROM DropInfo WHERE mobid = :mobid");
+            Query<DropInfo> query = session.createQuery("FROM DropInfo WHERE mobid = :mobid", DropInfo.class);
             query.setParameter("mobid", mobID);
-            l = ((org.hibernate.query.Query) query).list();
+            l = query.list();
             transaction.commit();
             session.close();
         }
         return l == null ? null : new HashSet<>(l);
     }
 
-    private static Set<DropInfo> getCachedDropInfoById(int mobID) {
+    private Set<DropInfo> getCachedDropInfoById(int mobID) {
         return getDrops().getOrDefault(mobID, null);
     }
 
-    private static void addDrop(int mobID, DropInfo dropInfo) {
+    private void addDrop(int mobID, DropInfo dropInfo) {
         if(!getDrops().containsKey(mobID)) {
             getDrops().put(mobID, new HashSet<>());
         }
         getDrops().get(mobID).add(dropInfo);
     }
 
-    private static Map<Integer, Set<DropInfo>> getDrops() {
+    private Map<Integer, Set<DropInfo>> getDrops() {
         return drops;
     }
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         loadCompleteDropsFromTxt(new File(ServerConstants.RESOURCES_DIR + "/mobDrops.txt"));
     }
 
-    public static void clear() {
+    public void clear() {
         getDrops().clear();
     }
 }

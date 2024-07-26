@@ -18,7 +18,7 @@ import net.swordie.ms.connection.InPacket;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.enums.ChatType;
 import net.swordie.ms.life.mob.MobStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 import net.swordie.ms.connection.packet.UserLocal;
 import net.swordie.ms.util.Util;
 
@@ -102,7 +102,7 @@ public class Hayato extends Job {
         if(chr.getId() != 0 && isHandlerOfJob(chr.getJob())) {
             for (int id : addedSkills) {
                 if (!chr.hasSkill(id)) {
-                    Skill skill = SkillData.getSkillDeepCopyById(id);
+                    Skill skill = Loaders.getInstance().getSkillData().getSkillDeepCopyById(id);
                     skill.setCurrentLevel(skill.getMasterLevel());
                     chr.addSkill(skill);
                 }
@@ -121,7 +121,7 @@ public class Hayato extends Job {
 
     public void handleBuff(Client c, InPacket inPacket, int skillID, byte slv) {
         Char chr = c.getChr();
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         TemporaryStatManager tsm = c.getChr().getTemporaryStatManager();
         Option o1 = new Option();
         Option o2 = new Option();
@@ -377,7 +377,7 @@ public class Hayato extends Job {
         boolean hasHitMobs = !attackInfo.mobAttackInfo.isEmpty();
         int slv = 0;
         if (skill != null) {
-            si = SkillData.getSkillInfoById(skill.getSkillId());
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             slv = skill.getCurrentLevel();
             skillID = skill.getSkillId();
         }
@@ -466,7 +466,7 @@ public class Hayato extends Job {
         if(chr.hasSkill(BLOODLETTER)) {
             Skill skill = chr.getSkill(BLOODLETTER);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if(Util.succeedProp(proc)) {
@@ -482,7 +482,7 @@ public class Hayato extends Job {
         if(chr.hasSkill(MERCILESS_BLADE)) {
             Skill skill = chr.getSkill(MERCILESS_BLADE);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             for (MobAttackInfo mai : attackInfo.mobAttackInfo) {
                 if (Util.succeedProp(proc)) {
@@ -501,7 +501,7 @@ public class Hayato extends Job {
         if(chr.hasSkill(WARRIOR_HEART)) {
             Skill skill = chr.getSkill(WARRIOR_HEART);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(prop, slv);
             int healrate = si.getValue(x, slv);
             int healhp = (int) ((chr.getMaxHP() / ((double) 100 / healrate)));
@@ -597,7 +597,7 @@ public class Hayato extends Job {
         Skill skill = chr.getSkill(skillID);
         SkillInfo si = null;
         if(skill != null) {
-            si = SkillData.getSkillInfoById(skillID);
+            si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         }
         chr.chatMessage(ChatType.Mob, "SkillID: " + skillID);
         if (isBuff(skillID)) {
@@ -635,7 +635,7 @@ public class Hayato extends Job {
             return;
         }
         byte slv = (byte) skill.getCurrentLevel();
-        SkillInfo si = SkillData.getSkillInfoById(WILLOW_DODGE);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(WILLOW_DODGE);
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         Option o = new Option();
         Option o1 = new Option();
@@ -663,7 +663,7 @@ public class Hayato extends Job {
         if(chr.hasSkill(JINSOKU)) {
             Skill skill = chr.getSkill(JINSOKU);
             byte slv = (byte) skill.getCurrentLevel();
-            SkillInfo si = SkillData.getSkillInfoById(skill.getSkillId());
+            SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skill.getSkillId());
             int proc = si.getValue(t, slv);
             if(Util.succeedProp(proc)) {
                 o.nOption = si.getValue(y, slv);

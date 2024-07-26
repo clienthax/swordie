@@ -65,7 +65,7 @@ public class WvsContext {
             mask |= stat.getVal();
         }
         outPacket.encodeLong(mask);
-        Comparator statComper = Comparator.comparingInt(o -> ((Stat) o).getVal());
+        Comparator<Stat> statComper = Comparator.comparingInt(Stat::getVal);
         TreeMap<Stat, Object> sortedStats = new TreeMap<>(statComper);
         sortedStats.putAll(stats);
         for (Map.Entry<Stat, Object> entry : sortedStats.entrySet()) {
@@ -162,7 +162,7 @@ public class WvsContext {
         outPacket.encodeByte(invType.getVal());
         outPacket.encodeShort(oldPos);
         switch (type) {
-            case Add:
+            case Add, BagNewItem:
                 item.encode(outPacket);
                 break;
             case UpdateQuantity:
@@ -185,9 +185,6 @@ public class WvsContext {
                 break;
             case UpdateBagQuantity:
                 outPacket.encodeShort(newPos);
-                break;
-            case BagNewItem:
-                item.encode(outPacket);
                 break;
             case BagRemoveSlot:
                 break;
@@ -787,12 +784,10 @@ public class WvsContext {
                 outPacket.encodeString(existingParentName);
                 outPacket.encodeString(sonName);
                 break;
-            case SetSonOfLinkedSkillResult_Fail_Unknown:
+            case SetSonOfLinkedSkillResult_Fail_Unknown, SetSonOfLinkedSkillResult_Fail_DBRequestFail:
                 break;
             case SetSonOfLinkedSkillResult_Fail_MaxCount:
                 outPacket.encodeString(existingParentName);
-                break;
-            case SetSonOfLinkedSkillResult_Fail_DBRequestFail:
                 break;
         }
 

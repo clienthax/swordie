@@ -10,7 +10,7 @@ import net.swordie.ms.constants.ItemConstants;
 import net.swordie.ms.constants.JobConstants;
 import net.swordie.ms.constants.SkillConstants;
 import net.swordie.ms.enums.BaseStat;
-import net.swordie.ms.loaders.SkillData;
+import net.swordie.ms.loaders.Loaders;
 
 import java.util.Map;
 
@@ -51,7 +51,7 @@ public class DamageCalc {
     public long calcPDamageForPvM(int skillID, byte slv) {
         TemporaryStatManager tsm = chr.getTemporaryStatManager();
         int weaponType = ItemConstants.getWeaponType(chr.getEquippedItemByBodyPart(BodyPart.Weapon).getItemId());
-        SkillInfo si = SkillData.getSkillInfoById(skillID);
+        SkillInfo si = Loaders.getInstance().getSkillData().getSkillInfoById(skillID);
         double mult = (si == null ? 100 : si.getValue(SkillStat.damage, slv)) / 100D;
         mult = mult == 0 ? si.getValue(SkillStat.dot, slv) / 100D : mult;
         BaseStat mainStat = GameConstants.getMainStatForJob(chr.getJob());
@@ -78,7 +78,7 @@ public class DamageCalc {
         } else {
             if (JobConstants.getJobCategory(job) != 2 || JobConstants.isLuminous(job) || JobConstants.isKinesis(job)) {
                 switch (wt) {
-                    case 21:
+                    case 21, 26:
                         dmg = calcBaseDamage(stats.get(inte), stats.get(luk), 0, stats.get(mad), jobConst + 1.2);
                         break;
                     case 22:
@@ -87,14 +87,7 @@ public class DamageCalc {
                     case 24:
                         dmg = calcHybridBaseDamage(stats.get(str), stats.get(dex), stats.get(luk), 0, stats.get(pad), jobConst + 1.5);
                         break;
-                    case 26:
-                        dmg = calcBaseDamage(stats.get(inte), stats.get(luk), 0, stats.get(mad), jobConst + 1.2);
-                        break;
-                    case 30:
-                        dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.2);
-                        break;
-                    case 31:
-                    case 32:
+                    case 30, 31, 32:
                         dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.2);
                         break;
                     case 33:
@@ -113,11 +106,7 @@ public class DamageCalc {
                         dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, 1, jobConst + 1.43);
                         break;
                     case 40:
-                    case 57:
-                        dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.34);
-                        break;
-                    case 41:
-                    case 42:
+                    case 57, 41, 42:
                         dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.34);
                         break;
                     case 43:
@@ -125,7 +114,7 @@ public class DamageCalc {
                     case 56:
                         dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.49);
                         break;
-                    case 45:
+                    case 45, 52:
                         dmg = calcBaseDamage(stats.get(dex), stats.get(str), 0, stats.get(pad), jobConst + 1.3);
                         break;
                     case 46:
@@ -134,14 +123,11 @@ public class DamageCalc {
                     case 47:
                         dmg = calcBaseDamage(stats.get(luk), stats.get(dex), 0, stats.get(pad), jobConst + 1.75);
                         break;
-                    case 48:
+                    case 48, 58:
                         dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.7);
                         break;
                     case 49:
                         dmg = calcBaseDamage(stats.get(dex), stats.get(str), 0, stats.get(pad), jobConst + 1.5);
-                        break;
-                    case 52:
-                        dmg = calcBaseDamage(stats.get(dex), stats.get(str), 0, stats.get(pad), jobConst + 1.3);
                         break;
                     case 53:
                         int dexNum = stats.get(dex);
@@ -153,10 +139,7 @@ public class DamageCalc {
                         }
                         dmg = calcBaseDamage(dexNum, strNum, 0, stats.get(pad), jobConst + 1.5);
                         break;
-                    case 58:
-                        dmg = calcBaseDamage(stats.get(str), stats.get(dex), 0, stats.get(pad), jobConst + 1.7);
-                        break;
-                        // TODO: Add GMS only WTs
+                    // TODO: Add GMS only WTs
 //                    case 21:
 //                        dmg = calcBaseDamage(stats.get(luk), stats.get(inte), 0, stats.get(pad), jobConst + 1.0);
 //                        break;
@@ -174,7 +157,7 @@ public class DamageCalc {
     }
 
     private long calcBaseDamage(int mainStat, int secStat, int tertStat, int att, double finalDamage) {
-        long dmg = (long) ((tertStat + secStat + 4 * mainStat) / 100.0 * (att * finalDamage) + 0.5);
+        long dmg = (long) ((tertStat + secStat + 4L * mainStat) / 100.0 * (att * finalDamage) + 0.5);
         return dmg;
     }
 }

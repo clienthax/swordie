@@ -46,7 +46,6 @@ public enum QuestRewardType {
             case MONEY -> (QuestReward) new QuestMoneyReward().load(dis);
             case POP -> (QuestReward) new QuestPopReward().load(dis);
             case BUFFITEM -> (QuestReward) new QuestBuffItemReward().load(dis);
-            default -> null;
         };
     }
 }

@@ -21,25 +21,25 @@ public class StringData implements DataCreator {
     public static Map<Integer, String> mobStrings = new HashMap<>(); // name + health
     public static Map<Integer, String> npcStrings = new HashMap<>();
 
-    private static final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
+    private final org.apache.logging.log4j.Logger log = LogManager.getRootLogger();
 
-    public static Map<Integer, String> getItemStrings() {
+    public Map<Integer, String> getItemStrings() {
         return itemStrings;
     }
 
-    public static Map<Integer, String> getMapStrings() {
+    public Map<Integer, String> getMapStrings() {
         return mapStrings;
     }
 
-    public static Map<Integer, String> getMobStrings() {
+    public Map<Integer, String> getMobStrings() {
         return mobStrings;
     }
 
-    public static Map<Integer, String> getNpcStrings() {
+    public Map<Integer, String> getNpcStrings() {
         return npcStrings;
     }
 
-    public static void loadItemStringsFromWz() {
+    public void loadItemStringsFromWz() {
         log.info("Started loading item strings from wz.");
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/";
@@ -47,7 +47,7 @@ public class StringData implements DataCreator {
         for(String fileDir : files) {
             File file = new File(wzDir + fileDir + ".img.xml");
             if (!file.exists()) {
-                log.error(wzDir + " does not exist.");
+                log.error("{} does not exist.", wzDir);
                 continue;
             }
 
@@ -88,13 +88,13 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded item strings from wz in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void loadSkillStringsFromWz() {
+    public void loadSkillStringsFromWz() {
         log.info("Started loading skill strings from wz.");
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Skill.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -131,13 +131,13 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded skill strings in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void loadMobStringsFromWz() {
+    public void loadMobStringsFromWz() {
         log.info("Started loading mob strings from wz.");
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Mob.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(wzDir + " does not exist.");
+            log.error("{} does not exist.", wzDir);
             return;
         }
 
@@ -160,13 +160,13 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded mob strings in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void loadNpcStringsFromWz() {
+    public void loadNpcStringsFromWz() {
         log.info("Started loading npc strings from wz.");
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Npc.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -189,13 +189,13 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded npc strings in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void loadMapStringsFromWz() {
+    public void loadMapStringsFromWz() {
         log.info("Started loading map strings from wz.");
         long start = System.currentTimeMillis();
         String wzDir = ServerConstants.WZ_DIR + "/String.wz/Map.img.xml";
         File file = new File(wzDir);
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -226,11 +226,11 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded map strings in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static Map<Integer, SkillStringInfo> getSkillString() {
+    public Map<Integer, SkillStringInfo> getSkillString() {
         return skillString;
     }
 
-    public static void generateDatFiles() {
+    public void generateDatFiles() {
         log.info("Started generating string data.");
         long start = System.currentTimeMillis();
         loadSkillStringsFromWz();
@@ -246,7 +246,7 @@ public class StringData implements DataCreator {
         log.info(String.format("Completed generating string data in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveSkillStrings(String dir) {
+    private void saveSkillStrings(String dir) {
         Util.makeDirIfAbsent(dir);
 //        String fileDir = dir + "/skills";
 //        Util.makeDirIfAbsent(fileDir);
@@ -266,11 +266,11 @@ public class StringData implements DataCreator {
         }
     }
 
-    public static void loadSkillStrings() {
+    public void loadSkillStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/skills.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -290,7 +290,7 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded skill strings from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveItemStrings(String dir) {
+    private void saveItemStrings(String dir) {
         Util.makeDirIfAbsent(dir);
         File file = new File(dir + "/items.dat");
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
@@ -306,11 +306,11 @@ public class StringData implements DataCreator {
         }
     }
 
-    public static void loadItemStrings() {
+    public void loadItemStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/items.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -327,7 +327,7 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded item strings from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveMobStrings(String dir) {
+    private void saveMobStrings(String dir) {
         Util.makeDirIfAbsent(dir);
         File file = new File(dir + "/mobs.dat");
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
@@ -343,11 +343,11 @@ public class StringData implements DataCreator {
         }
     }
 
-    public static void loadMobStrings() {
+    public void loadMobStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/mobs.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -364,7 +364,7 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded mob strings from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveNpcStrings(String dir) {
+    private void saveNpcStrings(String dir) {
         Util.makeDirIfAbsent(dir);
         File file = new File(dir + "/npcs.dat");
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
@@ -380,11 +380,11 @@ public class StringData implements DataCreator {
         }
     }
 
-    public static void loadNpcStrings() {
+    public void loadNpcStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/npcs.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -401,7 +401,7 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded npc strings from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    private static void saveMapStrings(String dir) {
+    private void saveMapStrings(String dir) {
         Util.makeDirIfAbsent(dir);
         File file = new File(dir + "/maps.dat");
 
@@ -418,11 +418,11 @@ public class StringData implements DataCreator {
         }
     }
 
-    public static void loadMapStrings() {
+    public void loadMapStrings() {
         long start = System.currentTimeMillis();
         File file = new File(ServerConstants.DAT_DIR + "/strings/maps.dat");
         if (!file.exists()) {
-            log.error(file + " does not exist.");
+            log.error("{} does not exist.", file);
             return;
         }
 
@@ -439,33 +439,28 @@ public class StringData implements DataCreator {
         log.info(String.format("Loaded item strings from data file in %dms.", System.currentTimeMillis() - start));
     }
 
-    public static void main(String[] args) {
-        generateDatFiles();
-//        generateTextFiles();
-    }
 
-
-    public static SkillStringInfo getSkillStringById(int id) {
+    public SkillStringInfo getSkillStringById(int id) {
         return getSkillString().getOrDefault(id, null);
     }
 
-    public static String getItemStringById(int id) {
+    public String getItemStringById(int id) {
         return getItemStrings().getOrDefault(id, null);
     }
 
-    public static String getMobStringById(int id) {
+    public String getMobStringById(int id) {
         return getMobStrings().getOrDefault(id, null);
     }
 
-    public static String getNpcStringById(int id) {
+    public String getNpcStringById(int id) {
         return getNpcStrings().getOrDefault(id, null);
     }
 
-    public static String getMapStringById(int id) {
+    public String getMapStringById(int id) {
         return getMapStrings().getOrDefault(id, null);
     }
 
-    public static Map<Integer, String> getItemStringByName(String query) {
+    public Map<Integer, String> getItemStringByName(String query) {
         query = query.toLowerCase();
         Map<Integer, String> res = new HashMap<>();
         for (Map.Entry<Integer, String> entry : itemStrings.entrySet()) {
@@ -483,9 +478,9 @@ public class StringData implements DataCreator {
     }
 
 
-    public static Map<Integer, SkillStringInfo> getSkillStringByName(String query) {
+    public Map<Integer, SkillStringInfo> getSkillStringByName(String query) {
         Map<Integer, SkillStringInfo> res = new HashMap<>();
-        for (Map.Entry<Integer, SkillStringInfo> entry : StringData.getSkillString().entrySet()) {
+        for (Map.Entry<Integer, SkillStringInfo> entry : getSkillString().entrySet()) {
             int id = entry.getKey();
             SkillStringInfo ssi = entry.getValue();
             if(ssi.getName() == null) {
@@ -499,7 +494,7 @@ public class StringData implements DataCreator {
         return res;
     }
 
-    public static Map<Integer, String> getMobStringByName(String query) {
+    public Map<Integer, String> getMobStringByName(String query) {
         query = query.toLowerCase();
         Map<Integer, String> res = new HashMap<>();
         for (Map.Entry<Integer, String> entry : getMobStrings().entrySet()) {
@@ -516,7 +511,7 @@ public class StringData implements DataCreator {
         return res;
     }
 
-    public static Map<Integer, String> getNpcStringByName(String query) {
+    public Map<Integer, String> getNpcStringByName(String query) {
         query = query.toLowerCase();
         Map<Integer, String> res = new HashMap<>();
         for (Map.Entry<Integer, String> entry : getNpcStrings().entrySet()) {
@@ -533,7 +528,7 @@ public class StringData implements DataCreator {
         return res;
     }
 
-    public static Map<Integer, String> getMapStringByName(String query) {
+    public Map<Integer, String> getMapStringByName(String query) {
         query = query.toLowerCase();
         Map<Integer, String> res = new HashMap<>();
         for (Map.Entry<Integer, String> entry : getMapStrings().entrySet()) {
@@ -550,7 +545,7 @@ public class StringData implements DataCreator {
         return res;
     }
 
-    public static void clear() {
+    public void clear() {
         getSkillString().clear();
         getItemStrings().clear();
         getMobStrings().clear();
@@ -558,7 +553,7 @@ public class StringData implements DataCreator {
         getMapStrings().clear();
     }
 
-    public static void load() {
+    public void load() {
         loadItemStrings();
         loadSkillStrings();
         loadMobStrings();
@@ -566,7 +561,7 @@ public class StringData implements DataCreator {
         loadMapStrings();
     }
 
-    public static void generateTextFiles() {
+    public void generateTextFiles() {
         // big hack, but that's okay
         load();
         StringBuilder sb = new StringBuilder();
@@ -580,7 +575,7 @@ public class StringData implements DataCreator {
         for (Map.Entry<Integer, SkillStringInfo> entry : sortedSkillTree.entrySet()) {
             sb.append(entry.getKey()).append(" - ").append(entry.getValue().getName()).append("\r\n");
         }
-        try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/Skill.txt")))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ServerConstants.RESOURCES_DIR + "/Skill.txt"))) {
             pw.println(sb);
         } catch (IOException e) {
             e.printStackTrace();
@@ -595,7 +590,7 @@ public class StringData implements DataCreator {
             for (Map.Entry<Integer, String> entry : sortedTree.entrySet()) {
                 sb.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\r\n");
             }
-            try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/" + fileName)))) {
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ServerConstants.RESOURCES_DIR + "/" + fileName))) {
                 pw.println(sb);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -617,7 +612,7 @@ public class StringData implements DataCreator {
             for (Map.Entry<Integer, String> entry : map.entrySet()) {
                 sb.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\r\n");
             }
-            try (PrintWriter pw = new PrintWriter(new FileWriter(new File(ServerConstants.RESOURCES_DIR + "/" + fileName)))) {
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ServerConstants.RESOURCES_DIR + "/" + fileName))) {
                 pw.println(sb);
             } catch (IOException e) {
                 e.printStackTrace();
